@@ -1,5 +1,5 @@
 //Department Table
-CREATE TABLE `clinic_db`.`department'
+CREATE TABLE `clinic_db`.`department`
  (`id` INT NOT NULL AUTO_INCREMENT , `city` VARCHAR(25) NOT NULL , `details` TEXT NULL , `room` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 //Doctor
