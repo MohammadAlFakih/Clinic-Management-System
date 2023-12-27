@@ -8,6 +8,11 @@
 <?php
 	
 	include "DB_Functions.php";
+	if($dbc=connectServer('localhost','root','','mhamad')){
+		mysqli_close($dbc);
+		header("location: ../index.php");
+	}
+
 	include "createdb.php";
 	
 	$dbc=connectServer('localhost','root','',1);
@@ -108,6 +113,8 @@
 	$query='ALTER TABLE `black_list` ADD CONSTRAINT `doctor_block` FOREIGN KEY (`doctor_id`)
 	REFERENCES `doctor`(`id`) ON DELETE CASCADE ON UPDATE CASCADE';
 	executeQuery($dbc,$query);
+
+	header('location:../index.php');
 
 	mysqli_close($dbc); // Close the connection.
 ?>
