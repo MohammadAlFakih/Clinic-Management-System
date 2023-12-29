@@ -11,27 +11,29 @@
     padding: 1%;
     background-color: rgb(60, 60, 221);
     align-items: center;
-    justify-content: right;
+    justify-content: space-between;
 }
 
 .actions{
-    display: flex;
     width: 50%;
-    justify-content: space-between;
+    display: flex;
+    justify-content: end;
     align-items: center;
 }
 
 .action{
-    padding-left: 5%;
-    padding-right: 2%;
+    padding: 2%;
     text-decoration: none;
     font-size: 2.5vw;
     color: cornsilk;
 }
 
-.appointment{
+.home_app{
     position: relative;
     display: flex;
-    justify-content: left;
-    width: 100%;
+    justify-content: start;
+}
+
+.app{
+    margin-right: 25%;
 }

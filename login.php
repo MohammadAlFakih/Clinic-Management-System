@@ -41,6 +41,8 @@ selectDB($dbc, $db, 1);
                         $password = $_POST['password'];
                         $result = login($email, $password, $dbc);
                         if ($result != null) {
+                            session_start();
+                            $_SESSION['role']='patient';
                             header('location:index.php');
                         } else {
                             echo "Invalid email or password";
