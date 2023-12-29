@@ -11,6 +11,7 @@
 	if($dbc=connectServer('localhost','root','','mhamad')){
 		mysqli_close($dbc);
 		header("location: ../index.php");
+		die();
 	}
 
 	include "createdb.php";
@@ -36,7 +37,7 @@
 
 	//Schedule
 	$query='CREATE TABLE `mhamad`.`schedule` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NOT NULL ,
-	`start_date` DATE NOT NULL , `end_date` DATE NOT NULL , `sequence` VARCHAR(30) NOT NULL DEFAULT "FFFFFFFFFFFFFFFFFFFF" ,
+	`date` DATE NOT NULL,`sequence` VARCHAR(30) NOT NULL DEFAULT "FFFFFFFFFFFFFFFFFFFF" ,
 	PRIMARY KEY (`id`)) ENGINE = InnoDB';
 	executeQuery($dbc,$query);
 

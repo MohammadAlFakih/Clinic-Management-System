@@ -63,4 +63,28 @@
         //     }
         // }
     }
+
+    function get_doctors($data,$dbc){
+        $city = $data['city'];
+        $specialization = $data['specialization'];
+        $date = $data['date'];
+        $query = "SELECT doc.id, doc.first_name,doc.last_name,dep.city,
+                 COALESCE(sc.sequence, 'No Schedule') AS sq
+                 FROM doctor doc
+                 JOIN department dep ON doc.department_id = dep.id
+                 LEFT JOIN schedule sc ON doc.id = sc.doctor_id AND sc.date = ? 
+                 WHERE dep.city = ? AND doc.specialization = ? ";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("sss",$date,$city,$specialization);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result->num_rows == 0){
+            echo "<h1>Empty result</h1>";
+        }
+        $doctors = [];
+        while($row = $result->fetch_assoc()){
+            $doctors[] = $row;
+        }
+        return $doctors;
+    }
 ?>

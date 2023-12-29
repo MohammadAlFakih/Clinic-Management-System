@@ -1,6 +1,7 @@
 <?php
     session_start();
     include($_SERVER['DOCUMENT_ROOT'] . '/Clinic-Management-System/includes/functions.php');
+    include($_SERVER['DOCUMENT_ROOT'] . '/Clinic-Management-System/db_utils/DB_Functions.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
