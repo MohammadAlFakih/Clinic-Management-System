@@ -9,7 +9,6 @@
 </head>
 <?php
 include "includes/header.php";
-include "db_utils/DB_Functions.php";
 $dbc = connectServer('localhost', 'root', '', 1);
 $db = "mhamad";
 selectDB($dbc, $db, 1);
@@ -41,8 +40,7 @@ selectDB($dbc, $db, 1);
                         $password = $_POST['password'];
                         $result = login($email, $password, $dbc);
                         if ($result != null) {
-                            session_start();
-                            $_SESSION['role']='patient';
+                            $_SESSION['role']=$result['role'];
                             header('location:index.php');
                         } else {
                             echo "Invalid email or password";
@@ -56,3 +54,6 @@ selectDB($dbc, $db, 1);
 </body>
 
 </html>
+<?php 
+    mysqli_close($dbc);
+?>

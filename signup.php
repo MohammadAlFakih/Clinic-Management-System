@@ -10,7 +10,6 @@
     <?php 
         include "classes/patient.php";
         include "includes/header.php";
-        include "db_utils/DB_Functions.php";
         $dbc=connectServer('localhost','root','',1);
         $db="mhamad";
         selectDB($dbc,$db,1);
@@ -81,5 +80,5 @@
 </body>
 </html>
 <?php
-    $dbc->close();
+    mysqli_close($dbc);
 ?>

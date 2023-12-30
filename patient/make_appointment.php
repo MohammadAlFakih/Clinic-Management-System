@@ -60,7 +60,7 @@
                     die();
                 }
                 else{
-                    header("Location:available_doctores.php?city=".$_POST['cities'].
+                    header("Location:available_doctors.php?city=".$_POST['cities'].
                     '&specialization='.$_POST['specialization'].'&date='.$_POST['date']);
                 }
             }

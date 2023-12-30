@@ -14,10 +14,12 @@
 
     <?php
     //<------MAKE APPOINTMENT------>
-    if(isset($_SESSION['role'])){
+    if (isset($_SESSION['role'])) {
     ?>
-    <div class="contain_make_app"><a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment.php">New Appointment</a></div>
-    <?php }?>
+        <div class="contain_make_app">
+            <a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment.php">New Appointment</a>
+        </div>
+    <?php } ?>
 </body>
 
 </html>
