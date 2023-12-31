@@ -91,7 +91,8 @@
 	//Appointment
 	$query = 'CREATE TABLE `mhamad`. `appointment` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NOT NULL , `patient_id` INT NOT NULL ,
 	`department_id` INT NOT NULL , `start_date` DATE NOT NULL , `end_date` DATE NOT NULL , `bill` INT NOT NULL ,
-	`status` VARCHAR(30) NOT NULL DEFAULT "upcoming" , PRIMARY KEY (`id`))';
+	`status` VARCHAR(30) NOT NULL DEFAULT "upcoming" ,`book_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	 PRIMARY KEY (`id`))';
 	executeQuery($dbc, $query);
 
 	//Appointment with doctor and patient in department
@@ -126,20 +127,6 @@
 	executeQuery($dbc, $query);
 	$query = 'ALTER TABLE `black_list` ADD CONSTRAINT `doctor_block` FOREIGN KEY (`doctor_id`)
 	REFERENCES `doctor`(`id`) ON DELETE CASCADE ON UPDATE CASCADE';
-	executeQuery($dbc, $query);
-
-	//Appointment Queue
-	$query = "CREATE TABLE `mhamad`.`appointment_queue` (`id` INT NOT NULL AUTO_INCREMENT , `appointment_id`
-	 INT NOT NULL , `patient_id` INT NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-	PRIMARY KEY (`id`))";
-	executeQuery($dbc, $query);
-
-	//Queue foreign keys
-	$query = "ALTER TABLE `appointment_queue` ADD CONSTRAINT `queue_appointment_id` FOREIGN KEY (`appointment_id`)
-	 REFERENCES `appointment`(`id`) ON DELETE CASCADE ON UPDATE CASCADE";
-	executeQuery($dbc, $query);
-	$query = "ALTER TABLE `appointment_queue` ADD CONSTRAINT
-	`queue_patient_id` FOREIGN KEY (`patient_id`) REFERENCES `patient`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
 	executeQuery($dbc, $query);
 
 	//Week_schedule
