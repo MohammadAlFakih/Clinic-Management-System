@@ -142,6 +142,33 @@
 	`queue_patient_id` FOREIGN KEY (`patient_id`) REFERENCES `patient`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
 	executeQuery($dbc, $query);
 
+	//Week_schedule
+	$query="CREATE TABLE `week_schedule` (
+		`day` varchar(12) NOT NULL,
+		`doctor_id` int(11) NOT NULL,
+		`start_hour` FLOAT NOT NULL,
+		`end_hour` FLOAT NOT NULL
+	  )";
+	executeQuery($dbc, $query);
+	$query="ALTER TABLE `week_schedule`
+	ADD CONSTRAINT `doctor_week_schedule` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`)
+	ON DELETE CASCADE ON UPDATE CASCADE;";
+	executeQuery($dbc, $query);
+
+
+	//Trigger on week_schedule to add default values
+	$query="CREATE TRIGGER `Default_week_schedule` AFTER INSERT ON `doctor`
+ 	FOR EACH ROW INSERT INTO week_schedule (doctor_id,day, start_hour, end_hour)
+    VALUES (NEW.id, 'monday',8,16),
+           (NEW.id, 'tuesday', 8,16),
+           (NEW.id, 'wednesday', 8,16),
+           (NEW.id, 'thursday', 8,16),
+           (NEW.id, 'friday', 8,16),
+		   (NEW.id, 'saturday', 8,8),
+           (NEW.id, 'sunday', 8,8)";
+	executeQuery($dbc, $query);
+
+
 	header('location:../index.php');
 
 	mysqli_close($dbc); // Close the connection.

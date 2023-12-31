@@ -47,17 +47,18 @@ body {
 
 .big_title{
     
-    width: 100vw;
+    width: 100%;
     font-size: 3vw;
     text-align: center;
     font-weight: bold;
 }
 
 .doctor-list {
-    
+    width: 100%;
+    row-gap: 50%;
     color:#333;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     justify-content: space-around;
     padding: 1vw;
 }
@@ -68,12 +69,23 @@ body {
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin: 1vw;
-    width: 20vw;
+    width: 22vw;
     height: 10vw;
 }
 
+.single{
+    background-color: #f4f4f4;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 3vh;
+}
+
 .doctor-info {
-    padding: 1vw;
+    background-color:#f4f4f4 ;
+    padding: 2vw;
+    
 }
 
 .title {
@@ -94,18 +106,79 @@ body {
 }
 
 .time-block {
+    
     padding: 1vw;
     border-bottom: 0.1vw solid #ccc;
     background-color: #4CAF50; /* Default color for free time */
     color: #fff;
 }
 
-.not-free {
-    background-color: red; /* Color for not free time */
-}
-
 .dots{
     text-align: center;
     padding: 0.1vw;
     background-color: #e7e7e7;
+}
+
+.slots{
+    margin-left: 1%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    gap:1vw;
+}
+.slot{
+    cursor: pointer;
+    background-color: #4CAF50;
+    width: 13vw;
+    border: 1vh solid #ddd;
+    border-radius: 3%;
+    font-size: 2vw;
+    text-align: center;
+    display:block;
+    border:solid 0.3vw #dcdcdc;
+    color:#ddd;    
+    text-align:center;
+    line-height: 7vh;
+        
+}
+
+.check_slot:checked + .slot:before {
+    content: "✓ ";
+}
+ 
+.check_slot:checked + .slot {
+    font-size: 2vw;
+    border: solid 0.3vw rgb(103, 103, 255);
+    color: black;
+    font-weight: bold;
+}
+
+.not-free {
+    background-color: red; /* Color for not free time */
+}
+
+.check_slot{
+    display: none;
+}
+
+
+.submit_container {
+    display: flex;
+    margin-top: 10vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.form_button {
+    background-color: rgb(103, 103, 255);
+    color: #fff;
+    padding: 2vh 2vw;
+    border: none;
+    border-radius: 5%;
+    cursor: pointer;
+    font-size: 2vw;
+}
+
+.form_button:hover {
+    background-color: rgb(79, 79, 255);
 }

@@ -42,14 +42,18 @@
             echo'
             <a class="doctor" href="'.$_SERVER['REQUEST_URI'].'&index='.$doctor['id'].'">
                 <div class="doctor-info">
-                    <h2 class="title">'.$doctor['first_name'].' '.$doctor['last_name'].'</h2>
-                    <p class="address">'.$doctor['details'].'</p>
+                    <h2 class="title">Dc. '.$doctor['first_name'].' '.$doctor['last_name'].'</h2>
+                    <p class="address">Adress details: '.$doctor['details'].'</p>
                 </div>
-                <div class="time-blocks">
-                    <div class="time-block '.check_status($doctor['sequence'],$counter++).'">9:00 AM - 10:00 AM</div>
-                    <div class="time-block '.check_status($doctor['sequence'],$counter++).'">10:00 AM - 11:00 AM</div>
-                    <div class="time-block '.check_status($doctor['sequence'],$counter++).'">11:00 AM - 12:00 PM</div>
-                    <div class="dots"> ... </div>
+                <div class="time-blocks">';
+                $margin_of_hours = 0;
+                for($j=0;$j<min(strlen($doctor['sequence']),3);$j++){
+                    echo '<div class="time-block '.check_status($doctor['sequence'][$j]).'">'.
+                    float_to_hour($doctor['start_hour']+$margin_of_hours)."-"
+                    .float_to_hour($doctor['start_hour']+$margin_of_hours+0.5).'</div>';
+                    $margin_of_hours+=0.5;
+                }
+                    echo'<div class="dots"> ... </div>
                 </div>
             </a>';
             }
@@ -63,17 +67,30 @@
         $doctor = get_doctor($_GET,$dbc);
         $start_hour=9;
         echo'
-            <div class="doctor" href="'.$_SERVER['REQUEST_URI'].'&index='.$doctor['id'].'">
-                <div class="doctor-info">
-                    <h2 class="title">'.$doctor['first_name'].' '.$doctor['last_name'].'</h2>
-                    <p class="address">'.$doctor['details'].'</p>
-                </div>
-                <div class="time-blocks">';
-                for($i=0;$i<strlen($doctor['sequence']);$i++){
-                    echo '<div class="time-block '.check_status($doctor['sequence'],$i).'">'.
-                    $start_hour++.' :00 - '.$start_hour.':00 </div>';
+            <div class="single" href="'.$_SERVER['REQUEST_URI'].'&index='.$doctor['id'].'">
+                <div class="doctor-info sinlge-info">
+                    <h2 class="title">Dc. '.$doctor['first_name'].' '.$doctor['last_name'].'</h2>
+                    <p class="address">Adress Details: '.$doctor['details'].'</p>
+                </div></div>
+                <form method="POST" action="book_appointment.php">
+                <input type="hidden" name="start_hour" value="'.$doctor['start_hour'].'"/>
+                <input type="hidden" name="doctor_name" value="'.$doctor['first_name']." ".$doctor['last_name'].'"/>
+                <input type="hidden" name="date" value="'.$_GET['date'].'"/>
+                <div class="slots">
+                ';
+                $margin_of_hours = 0;
+                for($j=0;$j<strlen($doctor['sequence']);$j++){
+                    echo '<input id="'.$j.'" type="checkbox" class="check_slot" name="'.$j.'"/>
+                    <label for="'.$j.'" class="slot '.check_status($doctor['sequence'][$j]).'">'.
+                    float_to_hour($doctor['start_hour']+$margin_of_hours)."-"
+                    .float_to_hour($doctor['start_hour']+$margin_of_hours+0.5).'</label>';
+                    $margin_of_hours+=0.5;
                 }
                 echo '</div>
-            </div>';
+                <div class="submit_container">
+                <input type="submit" class="form_button" value="Book This Appointment">
+                </div>
+                </form>
+            ';
     }
 ?>

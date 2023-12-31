@@ -60,23 +60,32 @@
         $city = $data['city'];
         $specialization = $data['specialization'];
         $date = $data['date'];
-        $query = "SELECT doc.id, doc.first_name,doc.last_name,dep.city,sc.sequence,dep.details
+        $dateTime = new DateTime($date);
+        $dayOfWeek = $dateTime->format('l');
+        $dayOfWeek = strtolower($dayOfWeek);
+
+        $query = "SELECT doc.id, doc.first_name,doc.last_name,dep.city,sc.sequence,dep.details,we.start_hour,we.end_hour
                  FROM doctor doc
                  JOIN department dep ON doc.department_id = dep.id
                  LEFT JOIN schedule sc ON doc.id = sc.doctor_id AND sc.date = ? 
-                 WHERE dep.city = ? AND doc.specialization = ? ";
+                 JOIN week_schedule we ON we.doctor_id = doc.id
+                 WHERE dep.city = ? AND doc.specialization = ? AND we.day = ?";
         $stmt = $dbc->prepare($query);
-        $stmt->bind_param("sss",$date,$city,$specialization);
+        $stmt->bind_param("ssss",$date,$city,$specialization,$dayOfWeek);
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();
+
+
         $doctors = [];
         while($row = $result->fetch_assoc()){
             if($row['sequence']==null){
                 $query="INSERT INTO schedule (doctor_id,sequence,date)
                 VALUES (?,?,?)";
                 $stmt = $dbc->prepare($query);
-                $default = "FFFFFFFFFF";
+                $hours_of_work = $row['end_hour']-$row['start_hour'];
+                $hours_of_work = intval($hours_of_work*2);
+                $default = str_repeat("F",$hours_of_work);
                 $stmt->bind_param("iss",$row['id'],$default,$date);
                 $stmt->execute();
                 $stmt->close();
@@ -87,25 +96,45 @@
         return $doctors;
     }
 
-    function check_status($sequence,$i){
-        if($sequence[$i]=='B')
+    function check_status($sequence){
+        if($sequence=='B')
             return 'not-free';
         else
             return 'free';
+    }
+
+    function float_to_hour($decimalHours){
+        $hours = floor($decimalHours);
+        $minutes = ($decimalHours - $hours) * 60;
+        $time = "";
+        if($hours<10){
+            $time="0";
+        }
+        $time.= $hours.":";
+        if($minutes<10){
+            $time.="0";
+        }
+        $time.= $minutes;
+        return $time;
     }
 
     function get_doctor($data,$dbc){
         $city = $data['city'];
         $specialization = $data['specialization'];
         $date = $data['date'];
+        $dateTime = new DateTime($date);
+        $dayOfWeek = $dateTime->format('l');
+        $dayOfWeek = strtolower($dayOfWeek);
         $id = $data['index'];
-        $query = "SELECT doc.id, doc.first_name,doc.last_name,dep.city,sc.sequence,dep.details
+
+        $query = "SELECT doc.id, doc.first_name,doc.last_name,dep.city,sc.sequence,dep.details,we.start_hour,we.end_hour
         FROM doctor doc
         JOIN department dep ON doc.department_id = dep.id
+        JOIN week_schedule we ON doc.id = we.doctor_id
         LEFT JOIN schedule sc ON doc.id = sc.doctor_id AND sc.date = ? 
-        WHERE doc.id = ? AND dep.city = ? AND doc.specialization = ? ";
+        WHERE doc.id = ? AND dep.city = ? AND doc.specialization = ? AND we.day= ?";
         $stmt = $dbc->prepare($query);
-        $stmt->bind_param("siss",$date,$id,$city,$specialization);
+        $stmt->bind_param("sisss",$date,$id,$city,$specialization,$dayOfWeek);
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();
