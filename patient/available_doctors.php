@@ -89,7 +89,8 @@
                     <p class="address">'.$_GET['specialization'].'</p>
                     <p class="address">Adress Details: '.$doctor['details'].'</p>
                     <p class="address">Room number: '.$doctor['room'].'</p>
-                </div></div>';
+            </div></div>';
+        
     }
 ?>
 
