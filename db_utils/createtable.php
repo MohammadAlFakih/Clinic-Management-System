@@ -34,30 +34,42 @@
 	//Select DB 
 	selectDB($dbc, "mhamad", 1);
 
+	//Department
 	$query = 'CREATE TABLE `mhamad`.`department`
-	(`id` INT NOT NULL AUTO_INCREMENT , `city` VARCHAR(25) NOT NULL , `details` TEXT NULL , `room` INT NULL , PRIMARY KEY (`id`))';
+	(`id` INT NOT NULL AUTO_INCREMENT , `city_id` INT NOT NULL , `details` TEXT NULL , `room` INT NULL , PRIMARY KEY (`id`))';
 	executeQuery($dbc, $query);
 
+	//City
+	$query = "CREATE TABLE `mhamad`.`city` (`id` INT NOT NULL AUTO_INCREMENT , `city_name` VARCHAR(50) NOT NULL ,
+	PRIMARY KEY (`id`))";
+	executeQuery($dbc,$query);
+
+	//Foreign Key Department->city_id
+	$query="ALTER TABLE `department` ADD  CONSTRAINT `city_id in department` FOREIGN KEY (`city_id`) REFERENCES
+	 `city`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+	executeQuery($dbc,$query);
+
+	//Specializations
+	$query="CREATE TABLE `mhamad`.`specialization` (`id` INT NOT NULL AUTO_INCREMENT ,
+	 `alias` VARCHAR(50) NOT NULL , PRIMARY KEY (`id`))";
+	executeQuery($dbc,$query);
+
+	//Doctor
 	$query = 'CREATE TABLE `mhamad`.`doctor` (`id` INT NOT NULL AUTO_INCREMENT , `department_id` INT NOT NULL ,
 	`email` VARCHAR(30) NOT NULL , `password` TEXT NOT NULL , `first_name` VARCHAR(30) NOT NULL ,
 	`last_name` VARCHAR(30) NOT NULL , `age` INT NOT NULL , `gender` CHAR(1) NOT NULL , `phone` VARCHAR(30) NOT NULL ,
-	`specialization` VARCHAR(30) NOT NULL , `role` VARCHAR(30) NOT NULL DEFAULT "doctor" , PRIMARY KEY (`id`), UNIQUE (`email`))';
+	`specialization_id` INT NOT NULL , `role` VARCHAR(30) NOT NULL DEFAULT "doctor" , PRIMARY KEY (`id`), UNIQUE (`email`))';
 	executeQuery($dbc, $query);
 
+	//Foreign Key Doctor->Department id
 	$query = 'ALTER TABLE `doctor` ADD CONSTRAINT `doctor_id_department` FOREIGN KEY (`department_id`)
 	REFERENCES `department`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;';
 	executeQuery($dbc, $query);
 
-	//Schedule
-	$query = 'CREATE TABLE `mhamad`.`schedule` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NOT NULL ,
-	`date` DATE NOT NULL,`sequence` VARCHAR(30) NOT NULL DEFAULT "FFFFFFFFFFFFFFFFFFFF" ,
-	PRIMARY KEY (`id`)) ENGINE = InnoDB';
-	executeQuery($dbc, $query);
-
-	//Doctor Schedule
-	$query = 'ALTER TABLE `schedule` ADD CONSTRAINT `doctor_schedule` FOREIGN KEY (`doctor_id`)
-	REFERENCES `doctor`(`id`) ON DELETE CASCADE ON UPDATE CASCADE';
-	executeQuery($dbc, $query);
+	//Foreign Key Doctor->Specialization id
+	$query="ALTER TABLE `doctor` ADD CONSTRAINT `doctor_specialization_id` FOREIGN KEY (`specialization_id`)
+	 REFERENCES `specialization`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+	executeQuery($dbc,$query);
 
 	//Secretary
 	$query = 'CREATE TABLE `mhamad`.`secretary` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NULL , `email` VARCHAR(30) NOT NULL ,
@@ -90,8 +102,8 @@
 
 	//Appointment
 	$query = 'CREATE TABLE `mhamad`. `appointment` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NOT NULL , `patient_id` INT NOT NULL ,
-	`department_id` INT NOT NULL , `start_date` DATE NOT NULL , `end_date` DATE NOT NULL , `bill` INT NOT NULL ,
-	`status` VARCHAR(30) NOT NULL DEFAULT "upcoming" ,`book_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`department_id` INT NOT NULL , `start_date` DATETIME NOT NULL , `end_date` DATETIME NOT NULL , `bill` INT NOT NULL DEFAULT 0 ,
+	`status` VARCHAR(30) NOT NULL DEFAULT "pending" ,`book_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	 PRIMARY KEY (`id`))';
 	executeQuery($dbc, $query);
 
@@ -133,8 +145,8 @@
 	$query="CREATE TABLE `week_schedule` (
 		`day` varchar(12) NOT NULL,
 		`doctor_id` int(11) NOT NULL,
-		`start_hour` FLOAT NOT NULL,
-		`end_hour` FLOAT NOT NULL
+		`start_hour` TIME NOT NULL,
+		`end_hour` TIME NOT NULL
 	  )";
 	executeQuery($dbc, $query);
 	$query="ALTER TABLE `week_schedule`
@@ -146,14 +158,29 @@
 	//Trigger on week_schedule to add default values
 	$query="CREATE TRIGGER `Default_week_schedule` AFTER INSERT ON `doctor`
  	FOR EACH ROW INSERT INTO week_schedule (doctor_id,day, start_hour, end_hour)
-    VALUES (NEW.id, 'monday',8,16),
-           (NEW.id, 'tuesday', 8,16),
-           (NEW.id, 'wednesday', 8,16),
-           (NEW.id, 'thursday', 8,16),
-           (NEW.id, 'friday', 8,16),
-		   (NEW.id, 'saturday', 8,8),
-           (NEW.id, 'sunday', 8,8)";
+    VALUES (NEW.id, 'monday','08:00','16:00'),
+           (NEW.id, 'tuesday', '08:00','16:00'),
+           (NEW.id, 'wednesday', '08:00','16:00'),
+           (NEW.id, 'thursday', '08:00','16:00'),
+           (NEW.id, 'friday', '08:00','16:00'),
+		   (NEW.id, 'saturday', '08:00','08:00'),
+           (NEW.id, 'sunday', '08:00','08:00')";
 	executeQuery($dbc, $query);
+
+	//Unavailbale Slots
+	$query="CREATE TABLE `mhamad`.`unavailable_slots` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NOT NULL ,
+	 `start_date` DATETIME NOT NULL , `end_date` DATETIME NOT NULL , `department_id` INT NOT NULL , PRIMARY KEY (`id`))";
+	executeQuery($dbc,$query);
+	
+	//Foreign Key Unavailable Slots->doctor_id
+	$query="ALTER TABLE `unavailable_slots` ADD CONSTRAINT `unavailable_slots doctor_id` FOREIGN KEY (`doctor_id`)
+	 REFERENCES `doctor`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+	executeQuery($dbc,$query);
+	
+	//Foreign Key Unavailable Slots->department_id
+	$query="ALTER TABLE `unavailable_slots` ADD CONSTRAINT `unavailable_slots dep_id` FOREIGN KEY (`department_id`)
+	 REFERENCES `department`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+	executeQuery($dbc,$query);
 
 
 	header('location:../index.php');

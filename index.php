@@ -17,7 +17,12 @@
     if (isset($_SESSION['role'])) {
     ?>
         <div class="contain_make_app">
-            <a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment.php">New Appointment</a>
+            <?php
+            if(isset($_GET['message'])){
+                echo '<div class="message">'.$_GET['message'].'</div>';
+            }
+            ?>
+            <div><a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment.php">New Appointment</a></div>
         </div>
     <?php } ?>
 </body>

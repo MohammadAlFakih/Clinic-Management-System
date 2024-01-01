@@ -106,10 +106,10 @@ body {
 }
 
 .time-block {
-    
+    text-align: center;
     padding: 1vw;
     border-bottom: 0.1vw solid #ccc;
-    background-color: #4CAF50; /* Default color for free time */
+    background-color: #1f7f22; /* Default color for free time */
     color: #fff;
 }
 
@@ -153,8 +153,8 @@ body {
     font-weight: bold;
 }
 
-.not-free {
-    background-color: red; /* Color for not free time */
+.not_available {
+    background-color: rgb(205, 205, 205); /* Color for not available time */
 }
 
 .check_slot{
@@ -177,8 +177,29 @@ body {
     border-radius: 5%;
     cursor: pointer;
     font-size: 2vw;
+    
 }
 
 .form_button:hover {
     background-color: rgb(79, 79, 255);
+}
+
+.message_container {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;;
+}
+
+.message{
+    background-color: #f4f4f4;
+    border: none;
+    box-shadow: none;
+    color: red;
+    font-weight: bold;
+    width: fit-content;
+    text-align: center;
+    height: fit-content;
+    padding: 1vw;
+    margin-top: 1vh;
 }

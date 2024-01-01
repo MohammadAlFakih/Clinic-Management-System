@@ -1,0 +1,41 @@
+.container {
+    margin-top: 2vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+}
+
+.message {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 30vh;
+    font-size: 2vw;
+    text-align: center;
+    margin: 1vw;
+    padding: 1vw;;
+}
+
+.make_app {
+    width: 20%;
+    height: 5%;
+    padding: 1vw;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    background-color: #780174; /* Green background color */
+    color: white; /* White text color */
+    border-radius: 5%; /* Rounded corners */
+    font-size: 2vw;
+    font-weight: bold;
+    transition: background-color 0.3s; /* Add a smooth transition effect */
+}
+
+.make_app:hover {
+    background-color: #45a049; /* Darker green color on hover */
+}

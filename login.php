@@ -20,7 +20,7 @@ selectDB($dbc, $db, 1);
             <label class="form-label success"><?php
                                                 if (isset($_GET['message'])) {
                                                     if ($_GET['message'] == 'success')
-                                                        echo 'Your account has been created successfully';
+                                                        echo 'Your account has been created successfully ✅';
                                                 }
                                                 ?>
             </label>
@@ -41,6 +41,10 @@ selectDB($dbc, $db, 1);
                         $result = login($email, $password, $dbc);
                         if ($result != null) {
                             $_SESSION['role']=$result['role'];
+                            if($_SESSION['role'] == 'patient') {
+                                $_SESSION['patient_name'] = $result['first_name']." ".$result['last_name'];
+                                $_SESSION['patient_id'] = $result['id'];
+                            }
                             header('location:index.php');
                         } else {
                             echo "Invalid email or password";

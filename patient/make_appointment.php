@@ -11,6 +11,8 @@
 <body>
     <?php
     include($_SERVER['DOCUMENT_ROOT'] . '/Clinic-Management-System/includes/header.php');
+    $dbc = connectServer('localhost','root','',1);
+    selectDB($dbc,'mhamad',1);
     if (!isset($_SESSION['role']))
         header("location:../login.php");
     else if ($_SESSION['role'] != 'patient') {
@@ -21,29 +23,25 @@
         <form action="make_appointment.php" method="POST" class="login-form">
             <label for="cities" class="form-label">Select City:</label>
             <select id="cities" name="cities" class="form-input">
-                <option value="beirut">Beirut</option>
-                <option value="tripoli">Tripoli</option>
-                <option value="sidon">Sidon</option>
-                <option value="jounieh">Jounieh</option>
-                <option value="tyre">Tyre</option>
-                <option value="byblos">Byblos</option>
-                <option value="baalbek">Baalbek</option>
-                <option value="zahle">Zahle</option>
-                <option value="nabatieh">Nabatieh</option>
-                <option value="ain-dara">Ain Dara</option>
-                <option value="saida">Saida</option>
-                <option value="batroun">Batroun</option>
-                <option value="anjar">Anjar</option>
-                <option value="bcharre">Bcharre</option>
-                <option value="hermel">Hermel</option>
+                
+                <?php 
+                //Display cities
+                $cities = get_cities($dbc);
+                foreach($cities as $city){
+                    echo '<option value="'.$city.'">'.$city.'</option>';
+                }
+                ?>
             </select>
 
             <label for="specialization" class="form-label">Select Doctor's Specialization:</label>
             <select id="specialization" name="specialization" class="form-input">
-                <option value="cardiologist">Cardiologist</option>
-                <option value="dermatologist">Dermatologist</option>
-                <option value="orthopedic">Orthopedic</option>
-                <option value="pediatrician">Pediatrician</option>
+            <?php 
+                //Display Specializations
+                $specializations = get_specializations($dbc);
+                foreach($specializations as $specialization){
+                    echo '<option value="'.$specialization.'">'.$specialization.'</option>';
+                }
+                ?>
             </select>
 
             <label for="date" class="form-label">Choose Appointment Date:</label>
@@ -68,3 +66,6 @@
 
         </form>
     </div>
+    <?php
+    mysqli_close($dbc);
+    ?>

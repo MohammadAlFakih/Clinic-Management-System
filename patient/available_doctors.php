@@ -40,20 +40,32 @@
             $counter=0;
             foreach ($available_doctors as $doctor) {
             echo'
-            <a class="doctor" href="'.$_SERVER['REQUEST_URI'].'&index='.$doctor['id'].'">
+            <a class="doctor" href="'.$_SERVER['REQUEST_URI'].'&index='.$doctor['doctor_id'].'">
                 <div class="doctor-info">
                     <h2 class="title">Dc. '.$doctor['first_name'].' '.$doctor['last_name'].'</h2>
                     <p class="address">Adress details: '.$doctor['details'].'</p>
+                    <p class="address">Room number: '.$doctor['room'].'</p>
                 </div>
                 <div class="time-blocks">';
-                $margin_of_hours = 0;
-                for($j=0;$j<min(strlen($doctor['sequence']),3);$j++){
-                    echo '<div class="time-block '.check_status($doctor['sequence'][$j]).'">'.
-                    float_to_hour($doctor['start_hour']+$margin_of_hours)."-"
-                    .float_to_hour($doctor['start_hour']+$margin_of_hours+0.5).'</div>';
-                    $margin_of_hours+=0.5;
+                
+                $not_available = false;
+                //Check if doctor make this day off
+                if(count($doctor['unavailable_time'])==1){
+                    $unavailable_start_date = new DateTime($doctor['unavailable_time'][0]['start_date']);
+                    $unavailable_start_hour = $unavailable_start_date->format('H:i:s');
+                    $unavailable_end_date = new DateTime($doctor['unavailable_time'][0]['end_date']);
+                    $unavailable_end_hour = $unavailable_end_date->format('H:i:s');
+                    $not_available = $unavailable_start_hour==$doctor['start_hour'] && $unavailable_end_hour==$doctor['end_hour'];
                 }
-                    echo'<div class="dots"> ... </div>
+
+                if($doctor['start_hour']==$doctor['end_hour'] || $not_available){
+                    echo '<div class="time-block not_available">Not available on this day</div>';
+                }
+                else{
+                echo'<div class="time-block">
+                Work hours: '.substr($doctor['start_hour'],0,5).' till '.substr($doctor['end_hour'],0,5).'</div>';
+                }
+                echo '
                 </div>
             </a>';
             }
@@ -61,36 +73,26 @@
         }
     }
     else{
+        $_SESSION['last_url'] = $_SERVER['REQUEST_URI'];
         $dbc = connectServer('localhost', 'root', '', 1);
         $db = "mhamad";
         selectDB($dbc, $db, 1);
         $doctor = get_doctor($_GET,$dbc);
+        $_SESSION['doctor_id']= $doctor['doctor_id'];
+        //$_SESSION['date']=$_GET['date'];
+        $_SESSION['department_id']=$doctor['department_id'];
         $start_hour=9;
         echo'
-            <div class="single" href="'.$_SERVER['REQUEST_URI'].'&index='.$doctor['id'].'">
+            <div class="single" href="'.$_SERVER['REQUEST_URI'].'&index='.$doctor['doctor_id'].'">
                 <div class="doctor-info sinlge-info">
                     <h2 class="title">Dc. '.$doctor['first_name'].' '.$doctor['last_name'].'</h2>
+                    <p class="address">'.$_GET['specialization'].'</p>
                     <p class="address">Adress Details: '.$doctor['details'].'</p>
-                </div></div>
-                <form method="POST" action="book_appointment.php">
-                <input type="hidden" name="start_hour" value="'.$doctor['start_hour'].'"/>
-                <input type="hidden" name="doctor_name" value="'.$doctor['first_name']." ".$doctor['last_name'].'"/>
-                <input type="hidden" name="date" value="'.$_GET['date'].'"/>
-                <div class="slots">
-                ';
-                $margin_of_hours = 0;
-                for($j=0;$j<strlen($doctor['sequence']);$j++){
-                    echo '<input id="'.$j.'" type="checkbox" class="check_slot" name="'.$j.'"/>
-                    <label for="'.$j.'" class="slot '.check_status($doctor['sequence'][$j]).'">'.
-                    float_to_hour($doctor['start_hour']+$margin_of_hours)."-"
-                    .float_to_hour($doctor['start_hour']+$margin_of_hours+0.5).'</label>';
-                    $margin_of_hours+=0.5;
-                }
-                echo '</div>
-                <div class="submit_container">
-                <input type="submit" class="form_button" value="Book This Appointment">
-                </div>
-                </form>
-            ';
+                    <p class="address">Room number: '.$doctor['room'].'</p>
+                </div></div>';
     }
+?>
+
+<?php 
+mysqli_close($dbc);
 ?>
