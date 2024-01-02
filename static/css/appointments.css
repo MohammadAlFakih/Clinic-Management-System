@@ -18,7 +18,7 @@
     font-size: 2vw;
     text-align: center;
     margin: 1vw;
-    padding: 1vw;;
+    padding: 1vw;
 }
 
 .make_app {
@@ -38,4 +38,49 @@
 
 .make_app:hover {
     background-color: #45a049; /* Darker green color on hover */
+}
+
+h1 {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 3vw;
+    text-align: center;
+    color: #333;
+}
+
+table {
+    font-size: 1vw;
+    width: 90vw;
+    border-collapse: collapse;
+    margin-top: 4vh;
+    box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+th, td {
+    padding: 1.2vw;
+    text-align: left;
+    border-bottom: 0.1vw solid #ddd;
+}
+
+th {
+    background-color: #3498db;
+    color: #fff;
+}
+
+tr:hover {
+    background-color: #8a8a8a;
+}
+
+.even {
+    background-color: #f9f9f9;
+}
+
+@media (max-width: 600px) {
+    .hide{
+        display: none;
+    }
+}
+
+.even{
+    cursor: pointer;
 }

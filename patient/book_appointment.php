@@ -4,7 +4,64 @@
         header('location:../login.php');
         die();
     }
-    
+
+    if(!isset($_SESSION['date'])
+        || !isset($_SESSION['doctor_id']) || !isset($_SESSION['patient_id'])
+        || !isset($_SESSION['department_id'])
+        || !isset($_POST['start_hour']) || !isset($_POST['end_hour'])){
+    header("Location:".$_SESSION['last_url']);
+    die();
+}
+
+    $dbc = connectServer('localhost', 'root', '', 1);
+    selectDB($dbc,"mhamad",1);
+
+    $start_date = $_SESSION['date']." ".$_POST['start_hour'];
+    $end_date = $_SESSION['date']." ".$_POST['end_hour'];
+
+    //Check if the chosen date is between start and end hour
+    $valid_interval = validate_interval($_POST['start_hour'],$_POST['end_hour'],$_SESSION['work_start_hour'],$_SESSION['work_end_hour']);
+    if(!$valid_interval){
+        //header("Location:".$_SESSION['last_url']."&message=Please choose two valid start and end hour.");
+        $dbc->close();
+        die();
+    }
+
+    //Check if the patient choose an unvailable date
+    $query = "SELECT id 
+                FROM unavailable_slots
+                WHERE ( ? > start_date AND ? < end_date) OR ( ? > start_date AND ? < end_date)
+                OR ( ? = start_date AND ? = end_date ) OR ( ? <= start_date AND ? >= end_date)";
+    $stmt = $dbc->prepare($query);
+    $stmt->bind_param("ssssssss",$start_date,$start_date,$end_date,$end_date,$start_date,$end_date,$start_date,$end_date);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if($result && mysqli_num_rows($result)>0){
+        header("Location:".$_SESSION['last_url']."&message=Please make sure that your choosen date doesn't overlap with unvailable hours.");
+        $stmt->close();
+        $dbc->close();
+        die();
+    }
+
+    //Check if he is a spammer
+    $today = date("Y-m-d");
+    $query = "SELECT id
+                FROM appointment
+                WHERE patient_id = ? AND DATE(start_date) >= ?;";
+    $stmt = $dbc->prepare($query);
+    $stmt->bind_param("is",$_SESSION['patient_id'],$today);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $maximum_number_of_appointment = 5;
+    if($result && mysqli_num_rows($result)>=$maximum_number_of_appointment){
+        header("Location:".$_SESSION['last_url']."&message=You have reached your maximum available number of appointments.");
+        $stmt->close();
+        $dbc->close();
+        die();
+    }
+
+    $_SESSION['start_date'] = $_SESSION['date']." ".$_POST['start_hour'];
+    $_SESSION['end_date'] = $_SESSION['date']." ".$_POST['end_hour'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,44 +87,12 @@
     </div>
     <div class="col">Patient: <?php echo "  ".$_SESSION['patient_name']?></div>
     <div class="col">
-        <div class="date">Date: <?php echo $_POST['date'];?></div>
+        <div class="date">Date: <?php echo $_SESSION['date'];?></div>
         <div class="date">At  
         <?php 
-        $slots = [];
-        foreach($_POST['slots'] as $slot=>$value){
-            $slots[]=$value;
-        }
-        if(count($slots)==0){
-            header('location:'.$_SESSION['last_url']);
-        }
-        else if(count($slots)==1){
-            //start hour of doctor + index of choosen slot
-            $start_hour = $_POST['start_hour'] + $slots[0]/2;
-            $duration = 0.5;
-        }
-        else if(count($slots)==2 && $duration=$slots[1]-$slots[0]==1){
-            $start_hour = $_POST['start_hour'] + $slots[0]/2;
-            $duration = 1;
-        }
-        else{
-            header('location:'.$_SESSION['last_url']."&message=Please choose one or two valid slots");
-        }
-        $start_hour = float_to_hour($start_hour);
-        echo $start_hour." Duration: ";
-        if($duration==0.5){
-            echo "30 minutes";
-        }
-        else if($duration==1){
-            echo "1 hour";
-        }
-        
-        $dateTimeString = $_POST['date'] . ' ' . $start_hour;
-        // Create DateTime object
-        //$dateTimeObject = DateTime::createFromFormat('Y-m-d H:i', $dateTimeString);
-        $_SESSION['date_time'] = $dateTimeString;
-        $_SESSION['duration'] = $duration;
-
+            echo $_POST['start_hour'];
         ?>
+        <div class="date">Duration : <?php echo duration($_POST['start_hour'],$_POST['end_hour'])?></div>
     </div>
     </div>
     <div class="form_buttons">
@@ -80,3 +105,7 @@
     </div>
 </body>
 </html>
+<?php
+    $stmt->close();
+    mysqli_close($dbc);
+?>

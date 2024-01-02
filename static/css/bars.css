@@ -1,0 +1,55 @@
+.work{
+    display: flex;
+    justify-content: space-around;
+    font-size: 2vw;
+    padding-left: 2vw;
+    width: 100%;
+    font-weight: bold;
+    text-align: left;
+}
+.container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+.edges{
+    font-weight: bold;
+    font-size: 2vw;
+    padding: 2vw;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.work_hours_bar{
+    width: 96vw;
+    height: 5vh;
+    background-color: rgb(110, 255, 103);
+}
+.unavailable_hours{
+    display: flex;
+    width: 96vw;
+    height: 5vh;
+}
+
+.booked_hours_bar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    height: 5vh;
+    background-color: rgb(255, 122, 122);
+}
+.unavailable_hours_bar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    height: 5vh;
+    background-color: rgb(186, 186, 186);
+}
