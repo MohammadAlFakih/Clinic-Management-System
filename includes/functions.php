@@ -34,9 +34,8 @@
     }
 
     function login($email,$password,$dbc){
-        // $email=trim($email);
-        // $password=trim($password);
-        // echo $password;
+        $email=trim($email);
+        $password=trim($password);
         $query =   "SELECT password,role,id,first_name,last_name FROM patient WHERE email = ?
                     UNION
                     SELECT password,role,id,first_name,last_name FROM doctor WHERE email = ?
@@ -48,7 +47,6 @@
         $result1 =$stmt->get_result();
         if(mysqli_num_rows($result1) > 0){
             $row1 = mysqli_fetch_assoc($result1);
-            echo $row1['first_name'];
             if(password_verify($password,$row1['password'])){
                 return $row1;
             }
