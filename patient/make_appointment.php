@@ -52,8 +52,10 @@
             <?php
             if (isset($_POST['search'])) {
                 $current_date = date('Y-m-d');
+                $filted_date = new DateTime($_POST['date']);
+                $filted_date = $filted_date->format('Y-m-d');
                 if (!isset($_POST['cities']) || !isset($_POST['specialization']) || !isset($_POST['date'])
-                || $_POST['date']<=$current_date) {
+                || $filted_date<=$current_date) {
                     echo "<div class='error'>Please enter valid filtering information </div>";
                     die();
                 }

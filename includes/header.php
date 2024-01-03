@@ -24,7 +24,7 @@
             }
         ?>
             <div class='actions'>
-                <a href="http://localhost/Clinic-Management-System/profile.php" class='action'>Profile</a>
+                <a href="http://localhost/Clinic-Management-System/includes/profile.php" class='action'>Profile</a>
                 <a href="http://localhost/Clinic-Management-System/logout.php" class='action'>Log Out</a>
             </div>
             <?php

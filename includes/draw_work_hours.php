@@ -25,10 +25,11 @@
     $merged_bars = $result[1];
     $last_start=0;
     for($i=0;$i<count($merged_bars);$i++){
+        //echo $merged_bars[$i]['width'];
         echo '<div style="width:'.$merged_bars[$i]['start']-$last_start.'vw"></div>';
         echo '<div class="unavailable_hours_bar" style="width:'.$merged_bars[$i]['width'].'vw;">'.
-        float_to_time($merged_time[$i]['start_date']+intval($doctor['start_hour']))." till ".
-        float_to_time($merged_time[$i]['end_date']+intval($doctor['start_hour'])).'</div>';
+        float_to_time($merged_time[$i]['start_date']+time_to_float($doctor['start_hour']))." till ".
+        float_to_time($merged_time[$i]['end_date']+time_to_float($doctor['start_hour'])).'</div>';
         $last_start = $merged_bars[$i]['start']+$merged_bars[$i]['width'];
     }
     ?>
@@ -42,8 +43,8 @@
     for($i=0;$i<count($merged_bars);$i++){
         echo '<div style="width:'.$merged_bars[$i]['start']-$last_start.'vw"></div>';
         echo '<div class="booked_hours_bar" style="width:'.$merged_bars[$i]['width'].'vw;">'.
-        float_to_time($merged_time[$i]['start_date']+intval($doctor['start_hour']))." till ".
-        float_to_time($merged_time[$i]['end_date']+intval($doctor['start_hour'])).'</div>';
+        float_to_time($merged_time[$i]['start_date']+time_to_float($doctor['start_hour']))." till ".
+        float_to_time($merged_time[$i]['end_date']+time_to_float($doctor['start_hour'])).'</div>';
         $last_start = $merged_bars[$i]['start']+$merged_bars[$i]['width'];
     }
     ?>

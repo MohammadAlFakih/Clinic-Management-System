@@ -41,6 +41,7 @@ selectDB($dbc, $db, 1);
                         $result = login($email, $password, $dbc);
                         if ($result != null) {
                             $_SESSION['role']=$result['role'];
+                            $_SESSION['user_id']=$result['id'];
                             if($_SESSION['role'] == 'patient') {
                                 $_SESSION['patient_name'] = $result['first_name']." ".$result['last_name'];
                                 $_SESSION['patient_id'] = $result['id'];

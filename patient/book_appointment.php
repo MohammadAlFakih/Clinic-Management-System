@@ -22,22 +22,22 @@
     //Check if the chosen date is between start and end hour
     $valid_interval = validate_interval($_POST['start_hour'],$_POST['end_hour'],$_SESSION['work_start_hour'],$_SESSION['work_end_hour']);
     if(!$valid_interval){
-        //header("Location:".$_SESSION['last_url']."&message=Please choose two valid start and end hour.");
+        header("Location:".$_SESSION['last_url']."&message=Please choose two valid start and end hour.");
         $dbc->close();
         die();
     }
 
     //Check if the patient choose an unvailable date
-    $query = "SELECT id 
+    $query = "SELECT *
                 FROM unavailable_slots
-                WHERE ( ? > start_date AND ? < end_date) OR ( ? > start_date AND ? < end_date)
-                OR ( ? = start_date AND ? = end_date ) OR ( ? <= start_date AND ? >= end_date)";
+                WHERE doctor_id = ? AND (( ? > start_date AND ? < end_date) OR ( ? > start_date AND ? < end_date)
+                OR ( ? = start_date AND ? = end_date ) OR ( ? <= start_date AND ? >= end_date))";
     $stmt = $dbc->prepare($query);
-    $stmt->bind_param("ssssssss",$start_date,$start_date,$end_date,$end_date,$start_date,$end_date,$start_date,$end_date);
+    $stmt->bind_param("issssssss",$_SESSION['doctor_id'],$start_date,$start_date,$end_date,$end_date,$start_date,$end_date,$start_date,$end_date);
     $stmt->execute();
     $result = $stmt->get_result();
     if($result && mysqli_num_rows($result)>0){
-        header("Location:".$_SESSION['last_url']."&message=Please make sure that your choosen date doesn't overlap with unvailable hours.");
+        header("Location:".$_SESSION['last_url']."&message=".$_SESSION['doctor_id']."Please make sure that your choosen date doesn't overlap with unvailable hours.");
         $stmt->close();
         $dbc->close();
         die();
