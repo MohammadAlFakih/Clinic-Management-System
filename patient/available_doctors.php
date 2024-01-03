@@ -23,7 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && (!isset($_GET['city']) || !isset($_GE
     || !isset($_GET['date']))) {
     header('location:make_appointment.php');
     die();
-} else if (!isset($_GET['index'])) {
+} 
+
+//Display the available doctors in this city on this date with this specialization
+else if (!isset($_GET['index'])) {
     $dbc = connectServer('localhost', 'root', '', 1);
     $db = "mhamad";
     selectDB($dbc, $db, 1);
@@ -49,8 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && (!isset($_GET['city']) || !isset($_GE
                 </div>
                 <div class="time-blocks">';
 
-            $not_available = false;
             //Check if doctor make this day off
+            $not_available = false;
             if (count($doctor['unavailable_time']) == 1) {
                 $unavailable_start_date = new DateTime($doctor['unavailable_time'][0]['start_date']);
                 $unavailable_start_hour = $unavailable_start_date->format('H:i:s');
@@ -58,10 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && (!isset($_GET['city']) || !isset($_GE
                 $unavailable_end_hour = $unavailable_end_date->format('H:i:s');
                 $not_available = $unavailable_start_hour == $doctor['start_hour'] && $unavailable_end_hour == $doctor['end_hour'];
             }
-
             if ($doctor['start_hour'] == $doctor['end_hour'] || $not_available) {
                 echo '<div class="time-block not_available">Not available on this day</div>';
-            } else {
+            }
+            
+            else {
                 echo '<div class="time-block">
                 Work hours: ' . substr($doctor['start_hour'], 0, 5) . ' till ' . substr($doctor['end_hour'], 0, 5) . '</div>';
             }
@@ -71,7 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && (!isset($_GET['city']) || !isset($_GE
         }
         echo '</div>';
     }
-} else {
+} 
+
+//Display the schedule of the choosen doctor
+else {
     if(isset($_GET['message'])){
         echo '<div class="message">' . $_GET['message'] . '</div>';
     }
@@ -81,29 +88,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && (!isset($_GET['city']) || !isset($_GE
     selectDB($dbc, $db, 1);
     $doctor = get_doctor($_GET, $dbc);
     $_SESSION['doctor_id'] = $doctor['doctor_id'];
-    //$_SESSION['date']=$_GET['date'];
     $_SESSION['department_id'] = $doctor['department_id'];
-    $start_hour = 9;
     echo '
-            <div class="single" href="' . $_SERVER['REQUEST_URI'] . '&index=' . $doctor['doctor_id'] . '">
+            <div class="single">
                 <div class="doctor-info sinlge-info">
                     <h2 class="title">Dc. ' . $doctor['first_name'] . ' ' . $doctor['last_name'] . '</h2>
                     <p class="address">' . $_GET['specialization'] . '</p>
                     <p class="address">Adress Details: ' . $doctor['details'] . '</p>
                     <p class="address">Room number: ' . $doctor['room'] . '</p>
             </div></div>';
-    include '../includes/draw_work_hours.php';
+    
+            //<-----------Draw the schedule------------>
+            include '../includes/draw_work_hours.php';
+            //<-----------Draw the schedule------------>
+
     echo '
             <form method="POST" action="book_appointment.php">
             <input type="hidden" name="doctor_name" value="'. $doctor["first_name"]." ".$doctor['last_name']. '">
             <input type="hidden" name="specialization" value="'. $_GET["specialization"]. '">
             <input type="hidden" name="city" value="'. $_GET["city"]. '">
             ';
+
+            //Prepare sensitive information to book appointment
             $_SESSION['doctor_id'] = $doctor['doctor_id'];
             $_SESSION['date'] = $_GET['date'];
             $_SESSION['department_id'] = $doctor['department_id'];
             $_SESSION['work_start_hour'] = $doctor['start_hour'];
             $_SESSION['work_end_hour'] = $doctor['end_hour'];
+
+
             echo'
             <div class="choose_time">
             <div class="col">

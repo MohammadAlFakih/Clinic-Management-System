@@ -1,4 +1,5 @@
 .appointment-container{
+    padding-bottom: 20vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -37,7 +38,8 @@ h1{
 }
 
 .pers{
-    justify-content: center;
+    padding-left: 6vw;
+    justify-content: left;
     width: 100%;
 }
 
@@ -59,4 +61,50 @@ h1{
     flex-direction: column;
     align-items: left;
     justify-content: left;
+}
+
+.status{
+    font-weight: bold;
+    padding-left: 1vw;
+    font-style: italic;
+    font-size: 1vw;
+}
+
+img{
+    box-shadow: 0 0 1vw black;
+    width: 35vw;
+}
+
+.contact_container{
+    padding-bottom: 20vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.contact_info{
+    font-size: 1.2vw;
+    height: 100%;
+    width: 35vw;
+}
+
+.secretary_info{
+    font-weight: bolder;
+}
+
+.cancel{
+    margin-left: 10vw;
+    text-decoration: none;
+    font-size: 1vw;
+    background-color: #ff6262;
+    color: black;
+    padding: 1vw 1vw;
+    border: none;
+    border-radius: 10%;
+    cursor: pointer;
+    font-size: 1vw;
+}
+.cancel:hover {
+    background-color: #ff3232;
 }

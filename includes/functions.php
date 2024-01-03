@@ -34,8 +34,9 @@
     }
 
     function login($email,$password,$dbc){
-        $email=trim($email);
-        $password=trim($password);
+        // $email=trim($email);
+        // $password=trim($password);
+        // echo $password;
         $query =   "SELECT password,role,id,first_name,last_name FROM patient WHERE email = ?
                     UNION
                     SELECT password,role,id,first_name,last_name FROM doctor WHERE email = ?
@@ -47,10 +48,11 @@
         $result1 =$stmt->get_result();
         if(mysqli_num_rows($result1) > 0){
             $row1 = mysqli_fetch_assoc($result1);
+            echo $row1['first_name'];
             if(password_verify($password,$row1['password'])){
                 return $row1;
             }
-            else{
+            else{   
                 return null;
             }
         }
@@ -220,6 +222,8 @@
         $ratio = $bar_width/$ratio;
         sort($intervals);
         $merged_intervals = [];
+        // foreach($intervals as $interval)
+        // echo $interval['start_date'] . ' ' . $interval['end_date']."<br/>";
         for($i=0;$i<count($intervals);$i++){
             $unavailable_start_date = new DateTime($intervals[$i]['start_date']);
             $unavailable_start_hour = $unavailable_start_date->format('H:i');
@@ -231,12 +235,14 @@
         }
         $merged_intervals[] = $intervals[0];
         $index = 0;
-        // foreach($intervals as $interval)
-        //     echo $interval['start_date'] . ' ' . $interval['end_date']."<br/>";
+
         for($i=1;$i<count($intervals);$i++)
         {
-            if($merged_intervals[$index]['end_date']>=$intervals[$i]['start_date'] && $merged_intervals[$index]['end_date']<=$intervals[$i]['end_date']){
-                $merged_intervals[$index]['end_date'] = $intervals[$i]['end_date'];
+            if($merged_intervals[$index]['end_date']>=$intervals[$i]['start_date']){
+                if($merged_intervals[$index]['end_date']<=$intervals[$i]['end_date'])
+                    $merged_intervals[$index]['end_date'] = $intervals[$i]['end_date'];
+                else
+                    continue;
             }
             else{
                 $merged_intervals[] = $intervals[$i];
@@ -289,6 +295,7 @@
         return true;
     }
 
+    //Check if this appointment is for this patient
     function check_app_for_patient($dbc,$patient_id,$app_id){
         $query = "SELECT id FROM appointment WHERE patient_id =? AND id =?";
         $stmt = $dbc->prepare($query);
@@ -303,6 +310,7 @@
             return false;
         }
     }
+
 
     function duration($start_date,$end_date){
         $start_hour = $start_date;
@@ -331,10 +339,13 @@
     }
 
     function get_appointment($dbc,$app_id){
-        $query = "SELECT app.*,city.city_name,dep.details,doc.first_name,
-                        doc.last_name,sp.alias,dep.room,app.status,app.start_date,app.end_date
+        $query = "SELECT app.*,city.city_name,dep.details,doc.first_name,doc.last_name,sp.alias,dep.room,
+                        app.status,app.start_date,app.end_date,dm.details document,sec.first_name sec_fname,sec.last_name sec_lname
+                        ,sec.phone sec_phone
                 FROM appointment app
+                LEFT JOIN document dm ON app.id = dm.appointment_id
                 JOIN doctor doc ON app.doctor_id = doc.id
+                LEFT JOIN secretary sec ON doc.id = sec.doctor_id
                 JOIN department dep ON app.department_id = dep.id
                 JOIN city ON dep.city_id = city.id
                 JOIN specialization sp ON sp.id = doc.specialization_id
@@ -342,6 +353,31 @@
                 ORDER BY app.start_date ASC";
         $stmt = $dbc->prepare($query);
         $stmt->bind_param("i",$app_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        return $result->fetch_assoc();
+    }
+
+    function get_user_info($dbc,$user_id,$role){
+        $valid_role = $role=='patient' || $role=='doctor' || $role=='secretay';
+        if(!$valid_role){
+            return [];
+        }
+        $inserted_date = "first_name,last_name,email,role,gender,age,phone";
+        if($role == 'patient'){
+            $query = "SELECT id,".$inserted_date." FROM patient WHERE id =?";
+        }
+        else if($role == 'doctor'){
+            $query = "SELECT doc.id,".$inserted_date.",sp.alias,city.city_name,dep.room,dep.details
+            FROM doctor doc
+            JOIN department dep ON dep.id = doc.department_id
+            JOIN city ON dep.city_id = city.id
+            JOIN specialization sp ON sp.id = doc.specialization_id
+            WHERE doc.id =?";
+        }
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i",$user_id);
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();

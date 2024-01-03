@@ -1,0 +1,41 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40vw;
+    background-color: #fff;
+    padding: 5vw;
+    border-radius: 1vw;
+    box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+}
+
+.container{
+    padding-top: 10vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-photo {
+    margin: 2vw;
+    width: 12vw;
+    height: 12vw;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 1.5vw;
+    text-align: center;
+}
+
+.profile-info p{
+    padding: 0.1vw;
+}

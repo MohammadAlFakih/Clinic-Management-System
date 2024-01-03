@@ -67,7 +67,7 @@
                         }
                         else{
                             $patient=new Patient($_POST);
-                            $patient->password=hash_password($_POST['password1']);
+                            $patient->password=password_hash($_POST['password1'],PASSWORD_DEFAULT);
                             insert_patient($patient,$dbc);
                             header('location:login.php?message=success');
                         }
