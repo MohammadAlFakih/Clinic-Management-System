@@ -1,0 +1,261 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    font-size: 1vw;
+}
+
+.container {
+    margin-top: 2vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    width: 100vw;
+}
+
+.message {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 30vh;
+    font-size: 1.5vw;
+    text-align: center;
+    padding: 4vw;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.back-button {
+    text-decoration: none;
+    width: fit-content;
+    padding: 1vw 1vw;
+    margin-top: 4vw;
+    font-size: 1.5vw;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #45a049;
+}
+
+.big_title{
+    width: 100vw;
+    font-size: 3vw;
+    text-align: center;
+    font-weight: bold;
+}
+
+.doctor-list {
+    width: 100%;
+    row-gap: 50%;
+    color:#333;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: space-around;
+    padding: 1vw;
+}
+
+.doctor {
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 1vw;
+    width: 22vw;
+    height: 10vw;
+}
+
+.single{
+    background-color: #f4f4f4;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 3vh;
+}
+
+.doctor-info {
+    background-color:#f4f4f4 ;
+    padding: 2vw;
+    
+}
+
+.title {
+    font-size: 2vw;
+    color: #333;
+    margin: 0;
+}
+
+.address {
+    font-size: 1vw;
+    color: #555;
+    margin: 0.5vw 0;
+}
+
+.time-blocks {
+    display: flex;
+    flex-direction: column;
+}
+
+.time-block {
+    text-align: center;
+    padding: 1vw;
+    border-bottom: 0.1vw solid #ccc;
+    background-color: #1f7f22; /* Default color for free time */
+    color: #fff;
+}
+
+.dots{
+    text-align: center;
+    padding: 0.1vw;
+    background-color: #e7e7e7;
+}
+
+.slots{
+    margin-left: 1%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    gap:1vw;
+}
+.slot{
+    cursor: pointer;
+    background-color: #4CAF50;
+    width: 13vw;
+    border: 1vh solid #ddd;
+    border-radius: 3%;
+    font-size: 2vw;
+    text-align: center;
+    display:block;
+    border:solid 0.3vw #dcdcdc;
+    color:#ddd;    
+    text-align:center;
+    line-height: 7vh;
+        
+}
+
+.check_slot:checked + .slot:before {
+    content: "✓ ";
+}
+ 
+.check_slot:checked + .slot {
+    font-size: 2vw;
+    border: solid 0.3vw rgb(103, 103, 255);
+    color: black;
+    font-weight: bold;
+}
+
+.not_available {
+    background-color: rgb(205, 205, 205); /* Color for not available time */
+}
+
+.check_slot{
+    display: none;
+}
+
+
+.submit_container {
+    display: flex;
+    margin-top: 10vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.form_button {
+    background-color: rgb(103, 103, 255);
+    color: #fff;
+    padding: 2vh 2vw;
+    border: none;
+    border-radius: 5%;
+    cursor: pointer;
+    font-size: 2vw;
+    
+}
+
+.form_button:hover {
+    background-color: rgb(79, 79, 255);
+}
+
+.message_container {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.message{
+    background-color: #f4f4f4;
+    border: none;
+    box-shadow: none;
+    color: red;
+    font-weight: bold;
+    width: fit-content;
+    text-align: center;
+    height: fit-content;
+    padding: 1vw;
+    margin-top: 1vh;
+}
+
+.choose_time{
+    display: flex;
+    width: 80vw;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 2vw;
+    margin-top: 6vh;
+}
+
+.col{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+.row{
+    padding: 1vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.styled-input{
+    text-align: center;
+    font-size: 1.2vw;
+    padding: 1vw;
+    width: 11vw;
+    height: 5vh;
+}
+
+.styled-label{
+    font-weight: bold;
+    font-size: 1.5vw;
+    padding:1vw;
+}
+
+.styled-button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 1vw;
+    font-size: 2vw;
+    border: none;
+    border-radius: 1vw;
+    cursor: pointer;
+}
+
+.styled-button:hover {
+    background-color: #45a049;
+}
+
+.note{
+    font-size: 1.5vw;
+    color: #555;
+    width: 40vw;
+}

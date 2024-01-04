@@ -9,7 +9,6 @@
 </head>
 <?php
 include "includes/header.php";
-include "db_utils/DB_Functions.php";
 $dbc = connectServer('localhost', 'root', '', 1);
 $db = "mhamad";
 selectDB($dbc, $db, 1);
@@ -21,7 +20,7 @@ selectDB($dbc, $db, 1);
             <label class="form-label success"><?php
                                                 if (isset($_GET['message'])) {
                                                     if ($_GET['message'] == 'success')
-                                                        echo 'Your account has been created successfully';
+                                                        echo 'Your account has been created successfully ✅';
                                                 }
                                                 ?>
             </label>
@@ -41,6 +40,12 @@ selectDB($dbc, $db, 1);
                         $password = $_POST['password'];
                         $result = login($email, $password, $dbc);
                         if ($result != null) {
+                            $_SESSION['role']=$result['role'];
+                            $_SESSION['user_id']=$result['id'];
+                            if($_SESSION['role'] == 'patient') {
+                                $_SESSION['patient_name'] = $result['first_name']." ".$result['last_name'];
+                                $_SESSION['patient_id'] = $result['id'];
+                            }
                             header('location:index.php');
                         } else {
                             echo "Invalid email or password";
@@ -54,3 +59,6 @@ selectDB($dbc, $db, 1);
 </body>
 
 </html>
+<?php 
+    mysqli_close($dbc);
+?>

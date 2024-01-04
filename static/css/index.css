@@ -1,0 +1,33 @@
+.make_app {
+    padding: 1vw;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    background-color: #780174; /* Green background color */
+    color: white; /* White text color */
+    border-radius: 5%; /* Rounded corners */
+    font-size: 2vw;
+    font-weight: bold;
+    transition: background-color 0.3s; /* Add a smooth transition effect */
+}
+
+.make_app:hover {
+    background-color: #45a049; /* Darker green color on hover */
+}
+
+.contain_make_app{
+    margin-top: 10vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.message{
+    padding: 2vw;
+    font-weight: bold;
+    font-size: 2vw;
+    text-align: center;
+    color: #45a049;
+}

@@ -10,7 +10,6 @@
     <?php 
         include "classes/patient.php";
         include "includes/header.php";
-        include "db_utils/DB_Functions.php";
         $dbc=connectServer('localhost','root','',1);
         $db="mhamad";
         selectDB($dbc,$db,1);
@@ -68,7 +67,7 @@
                         }
                         else{
                             $patient=new Patient($_POST);
-                            $patient->password=hash_password($_POST['password1']);
+                            $patient->password=password_hash($_POST['password1'],PASSWORD_DEFAULT);
                             insert_patient($patient,$dbc);
                             header('location:login.php?message=success');
                         }
@@ -81,5 +80,5 @@
 </body>
 </html>
 <?php
-    $dbc->close();
+    mysqli_close($dbc);
 ?>

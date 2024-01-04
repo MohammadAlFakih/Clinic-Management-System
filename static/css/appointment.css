@@ -1,0 +1,110 @@
+.appointment-container{
+    padding-bottom: 20vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10vh;
+}
+
+.info-container{
+    font-size: 1.2vw;
+    width: 50vw;
+    border: 0.2vw solid rgb(187, 186, 186); 
+    background-color: rgb(237, 237, 237);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h1{
+    
+    width: 100%;
+    text-align: left;
+    font-size: 3vw;
+    padding-bottom: 0vw;
+}
+
+.row{
+    border-bottom: 0.1vw solid rgb(187, 186, 186);
+    padding: 1vw;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+}
+
+.pers{
+    padding-left: 6vw;
+    justify-content: left;
+    width: 100%;
+}
+
+.note {
+    color: #888;
+    font-style: italic;
+    margin-top: 1vw;
+}
+
+.bill{
+    font-weight: bold;
+    color: rgb(2, 156, 2);
+}
+
+.col{
+    padding: 1vw;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+}
+
+.status{
+    font-weight: bold;
+    padding-left: 1vw;
+    font-style: italic;
+    font-size: 1vw;
+}
+
+img{
+    box-shadow: 0 0 1vw black;
+    width: 35vw;
+}
+
+.contact_container{
+    padding-bottom: 20vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.contact_info{
+    font-size: 1.2vw;
+    height: 100%;
+    width: 35vw;
+}
+
+.secretary_info{
+    font-weight: bolder;
+}
+
+.cancel{
+    margin-left: 10vw;
+    text-decoration: none;
+    font-size: 1vw;
+    background-color: #ff6262;
+    color: black;
+    padding: 1vw 1vw;
+    border: none;
+    border-radius: 10%;
+    cursor: pointer;
+    font-size: 1vw;
+}
+.cancel:hover {
+    background-color: #ff3232;
+}
