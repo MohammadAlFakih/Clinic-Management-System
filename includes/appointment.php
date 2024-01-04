@@ -38,6 +38,10 @@ echo '
         echo '<a href="../includes/cancel_appointment.php?app_id='.$_GET['app_id'].'" class="cancel">Cancel</a>';
         echo "<a href='../includes/edit_appointment.php?app_id=".$_GET['app_id']."' class='edit' >Edit</a>";
     }
+    //Added by Mhamad
+    else if($appointment['status'] == 'delayed'){
+        echo '<a href="../includes/cancel_appointment.php?app_id='.$_GET['app_id'].'" class="cancel remove">Remove</a>';
+    }
     echo'</h1>
     <span class="note">'.$appointment['details'].'</span>
     </div>

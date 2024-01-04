@@ -12,6 +12,9 @@ if(!isset($_GET['app_id'])){
     header('location:../index.php');
     die();
 }
+
+
+// Badde shouf adde zabta hon cause mhmd shela
 if($_SESSION['role']=='patient') {
     $error = false;
 
@@ -22,6 +25,7 @@ if($_SESSION['role']=='patient') {
     if($error){
         //header location
     }
+}   
 
     $query = "SELECT status FROM appointment 
             WHERE id =? ";
@@ -32,14 +36,16 @@ if($_SESSION['role']=='patient') {
     $result = $stmt->get_result();
     $row =$result -> fetch_assoc();
 
+    // I wanna add the delayed also metl Mhammad
     //Check if this appointment is not for this patient
     if((!check_app_for_patient($dbc,$_SESSION['patient_id'],$app_id)) || ($row['status'] != 'pending')) {
+    // //Check if the status is not pending
+    // if($row['status'] != 'pending' && $row['status'] != 'delayed'){
         $stmt->close();
         mysqli_close($dbc);
         header('location:../patient/appointments.php');
         die();
     }
-}
 
 // For the doctor
 elseif ($_SESSION['role'] == 'doctor') {

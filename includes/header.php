@@ -2,6 +2,10 @@
     session_start();
     include($_SERVER['DOCUMENT_ROOT'] . '/Clinic-Management-System/includes/functions.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/Clinic-Management-System/db_utils/DB_Functions.php');
+    if($_SERVER['REQUEST_URI']!='/Clinic-Management-System/patient/inbox.php')
+        {
+            $_SESSION['last_url'] = $_SERVER['REQUEST_URI'];
+        }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,4 +46,35 @@
             <?php } ?>
             </div>
     </div>
+    <?php 
+    if(isset($_SESSION['role']) && $_SESSION['role']=='patient'){
+    ?>
+    <div class="inbox-container">
+        <div class="inbox" id="inbox">
+        <div class="notification-indicator" id="circle"></div>
+        <img src="http://localhost/Clinic-Management-System/static/media/inbox_avatar.png" onclick="go_to_inbox()">
+        </div>
+    </div>
+   <?php }?>
+    
 </body>
+<script>
+    let inbox = document.getElementById('inbox');
+    let circle = document.getElementById('circle');
+    function notifie(){
+        inbox.classList.add('inbox-animation');
+        setTimeout(function(){
+            inbox.classList.remove('inbox-animation');
+        },300);
+    }
+    function move(){
+        circle.style.display = 'block';
+        setInterval(function(){
+            console.log('hi');
+            notifie();
+        },1500);
+    }
+    function go_to_inbox(){
+        window.location.href = "http://localhost/Clinic-Management-System/patient/inbox.php";
+    }
+</script>

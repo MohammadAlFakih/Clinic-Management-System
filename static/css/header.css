@@ -5,8 +5,12 @@
 }
 
 .header{
+    position: sticky;
+    top: 0;
+    z-index: 110;
+    opacity: 90%;
     display: flex;
-    width: 100%;
+    width: 100vw;
     height: 10%;
     padding: 1%;
     background-color: rgb(60, 60, 221);
@@ -37,3 +41,55 @@
 .app{
     margin-right: 25%;
 }
+
+.inbox-container{
+    position: absolute;
+    padding: 2vw;
+    padding-right: 3vw;
+    display: flex;
+    width: 100vw;
+    align-items: end;
+    justify-content: right;
+}
+
+.inbox-container img{
+    width:5vw;
+    cursor: pointer;
+}
+
+.notification-indicator {
+    display: none;
+    position: absolute;
+    width: 1.3vw;
+    height: 1.3vw;
+    background-color: rgb(255, 68, 68);
+    border-radius: 50%;
+}
+
+.inbox{
+    border-radius: 50%;
+}
+
+.inbox-animation {
+    border-radius:50%;
+    animation: move 0.4s ease-in-out infinite;
+}
+@keyframes move {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(25deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    75% {
+        transform: rotate(-25deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+

@@ -409,4 +409,44 @@
         $stmt->close();
         return $result->fetch_assoc();
     }
+
+    function get_notifications($dbc,$patient_id){
+        $query = "SELECT nt.message,nt.date,doc.first_name,doc.last_name
+                 FROM notifications nt
+                 JOIN doctor doc ON doc.id = nt.sender
+                 WHERE receiver =? 
+                 ORDER BY nt.date DESC";
+        $query1 = "UPDATE notifications SET status = 'read' 
+                    WHERE receiver = ?";
+        
+        //Get all notifications
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i",$patient_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        //Make them readed
+        $stmt = $dbc->prepare($query1);
+        $stmt->bind_param("i",$patient_id);
+        $stmt->execute();
+
+        $stmt->close();
+        return $result;
+    }
+
+    function get_notifications_unreaded($dbc,$patient_id){
+
+        //Get the unreaded notifications
+        $query = "SELECT nt.message,nt.date,doc.first_name,doc.last_name
+                 FROM notifications nt
+                 JOIN doctor doc ON doc.id = nt.sender
+                 WHERE receiver =? AND nt.status = 'unread'
+                 ORDER BY nt.date DESC";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i",$patient_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        return $result;
+    }
 ?>

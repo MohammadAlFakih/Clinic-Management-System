@@ -1,0 +1,68 @@
+.container{
+    font-size: 1.2vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.message-container {
+    margin-top: 5vh;
+    overflow-y: auto;
+    width: 30vw;
+    max-height: 60vh;
+    border: 0.3vw solid #ccc;
+    padding: 2vw;
+    box-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.message {
+    font-size: 1vw;
+    padding-bottom: 2vw;
+    margin-bottom: 2vw;
+    border-bottom: 0.2vw solid rgb(195, 195, 195);
+}
+
+.sender {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.date {
+    color: #888;
+    font-size: 1vw;
+}
+
+.header{
+    opacity: 30%;
+}
+
+.inbox-container {
+    opacity: 30%;
+}
+
+.container a{
+    margin-top: 5vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    text-decoration: none;
+    text-align: center;
+    background-color: rgb(165, 165, 165);
+    color: rgb(221, 220, 220);
+    border: none;
+    border-radius: 10%;
+    cursor: pointer;
+    font-size: 2vw;  
+    width: 10vw; 
+}
+
+.bts{
+    position: relative;
+    width: 40vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-around  ;
+}
