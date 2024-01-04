@@ -129,6 +129,7 @@
         // }
     
         echo '
+        <div class="container">
         <div class="work_hours_bar"></div>
         <div class="unavailable_hours">
         ';
