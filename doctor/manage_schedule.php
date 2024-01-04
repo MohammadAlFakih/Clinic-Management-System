@@ -1,8 +1,16 @@
 <?php
     include '../includes/header.php';
-    $dbc = connectServer('localhost', 'root', '', 1);
-    $db = "mhamad";
-    selectDB($dbc, $db, 1);
+
+
+    if (!isset($_SESSION['role'])) {
+        header('location:../login.php');
+        die();
+    }
+
+    if ($_SESSION['role'] != 'doctor') {
+        header('location:../index.php');
+        die();
+    }
 ?>
 
 <link rel="stylesheet" href="http://localhost/Clinic-Management-System/static/css/bars.css">
@@ -14,6 +22,14 @@
 </div>
 
 <?php
+    
+    //Display all the week scedule if date is not specified
+    if (!isset($_GET['date'])) {
+
+
+    $dbc = connectServer('localhost', 'root', '', 1);
+    $db = "mhamad";
+    selectDB($dbc, $db, 1);
 
     date_default_timezone_set('Asia/Beirut');
     
@@ -65,7 +81,9 @@
 
 
         echo '
-        <p class="edges"> '. $dateTimeObject->format('l, n/j/Y') .'</p>
+        <hr>
+        <div class="weekDay">
+        <a class="no-underline" href="' . $_SERVER['REQUEST_URI'] . '?&date=' . $desiredDate . '"><p class="edges"> '. $dateTimeObject->format('l, n/j/Y') .'</p></a>
         <div class="edges">
         <p>';
         echo substr($dayInfo['start_hour'],0,5);
@@ -163,16 +181,17 @@
         }
         echo '
         </div>
-        </div>
-        ';
+        </div> 
+        <hr>
+        '; //last div for the weekDay class
 
         $index++;
     }
-
-    
-    //<-----------Draw the schedule------------>
-    // include '../includes/draw_work_hours.php';
-    //<-----------Draw the schedule------------>
-
+    }
+    // Show and configure the specific day schedule
+    else {
+        echo "HIIIII";
+    }
 
 ?>
+</div>

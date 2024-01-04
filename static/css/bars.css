@@ -12,6 +12,8 @@
     height: auto;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .edges{
     font-weight: bold;
@@ -52,4 +54,8 @@
     position: relative;
     height: 5vh;
     background-color: rgb(186, 186, 186);
+}
+
+.no-underline {
+    text-decoration: none;
 }
