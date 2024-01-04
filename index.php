@@ -22,7 +22,12 @@
                 echo '<div class="message">'.$_GET['message'].'</div>';
             }
             ?>
-            <div><a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment.php">New Appointment</a></div>
+            <div><a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment2.php">New Appointment</a></div>
+            <?php
+            if ($_SESSION['role'] == 'doctor') {
+                echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/doctor/manage_schedule.php">Manage Weekly Schedule</a></div>';
+            }
+            ?>
         </div>
     <?php } ?>
 </body>

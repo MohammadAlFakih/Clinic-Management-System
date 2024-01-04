@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "../db_utils/DB_Functions.php";
+include "./functions.php";
 $dbc = connectServer('localhost','root','',1);
 selectDB($dbc,'mhamad',1);
 if(!isset($_SESSION['role'])){
@@ -11,7 +12,7 @@ if(!isset($_GET['app_id'])){
     header('location:../index.php');
     die();
 }
-if($_SESSION['role']=='patient'){
+if($_SESSION['role']=='patient') {
     $error = false;
 
     $app_id = $_GET['app_id'];
@@ -22,32 +23,34 @@ if($_SESSION['role']=='patient'){
         //header location
     }
 
-    
-
     $query = "SELECT status FROM appointment 
-            WHERE id =? AND patient_id = ?";
+            WHERE id =? ";
+
     $stmt = $dbc->prepare($query);
-    $stmt->bind_param("ii",$_GET['app_id'],$_SESSION['patient_id']);
+    $stmt->bind_param("i",$app_id);
     $stmt->execute();
     $result = $stmt->get_result();
-
-    //Check if this appointment is not for this patient
-    if($result && mysqli_num_rows($result)==0){
-        header('location:../patient/appointments.php');
-        $stmt->close();
-        mysqli_close($dbc);
-        die();
-    }
     $row =$result -> fetch_assoc();
 
-    //Check if the status is not pending
-    if($row['status'] != 'pending'){
+    //Check if this appointment is not for this patient
+    if((!check_app_for_patient($dbc,$_SESSION['patient_id'],$app_id)) || ($row['status'] != 'pending')) {
         $stmt->close();
         mysqli_close($dbc);
         header('location:../patient/appointments.php');
         die();
     }
 }
+
+// For the doctor
+elseif ($_SESSION['role'] == 'doctor') {
+    if(!check_app_for_doctor($dbc,$_SESSION['doctor_id'],$app_id)) {
+        $stmt->close();
+        mysqli_close($dbc);
+        header('location:../doctor/appointments.php');
+        die();
+    }
+}
+
 $query = 'DELETE FROM appointment WHERE id = ? ';
 $stmt = $dbc->prepare($query);
 $stmt->bind_param("i",$_GET['app_id']);
@@ -55,5 +58,5 @@ $stmt->execute();
 
 $stmt->close();
 mysqli_close($dbc);
-header('location:../patient/appointments.php');
+header('location:../'.$_SESSION['role'].'/appointments.php');
 ?>

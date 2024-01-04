@@ -194,13 +194,21 @@
     }
 
     function get_appointments($dbc,$id){
-        $query = "SELECT app.*,city.city_name,dep.details,doc.first_name,doc.last_name,sp.alias,dep.room,app.status
-                FROM appointment app
-                JOIN doctor doc ON app.doctor_id = doc.id
-                JOIN department dep ON app.department_id = dep.id
-                JOIN city ON dep.city_id = city.id
-                JOIN specialization sp ON sp.id = doc.specialization_id
-                WHERE app.patient_id = ?";
+        if ($_SESSION['role'] == 'patient'){
+            $query = "SELECT app.*,city.city_name,dep.details,doc.first_name,doc.last_name,sp.alias,dep.room,app.status
+                    FROM appointment app
+                    JOIN doctor doc ON app.doctor_id = doc.id
+                    JOIN department dep ON app.department_id = dep.id
+                    JOIN city ON dep.city_id = city.id
+                    JOIN specialization sp ON sp.id = doc.specialization_id
+                    WHERE app.patient_id = ?";
+        }
+        elseif ($_SESSION['role'] == 'doctor') {
+            $query = "SELECT app.*, pa.first_name, pa.last_name, pa.age, pa.gender, pa.phone, pa.email
+                    FROM appointment app
+                    JOIN patient pa ON app.patient_id = pa.id
+                    WHERE app.doctor_id = ?";
+        }
         $stmt = $dbc->prepare($query);
         $stmt->bind_param("i",$id);
         $stmt->execute();
@@ -208,6 +216,8 @@
         $stmt->close();
         return $result;
     }
+
+
 
     //Merge intervals
     function merge_intervals($intervals,$start_hour,$end_hour){
@@ -309,6 +319,22 @@
         }
     }
 
+    // Check if this appointment belongs to the doctor
+    function check_app_for_doctor($dbc,$doctor_id,$app_id){
+        $query = "SELECT id FROM appointment WHERE doctor_id =? AND id =?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("ii",$doctor_id,$app_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        if($result->num_rows>0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 
     function duration($start_date,$end_date){
         $start_hour = $start_date;
@@ -338,11 +364,13 @@
 
     function get_appointment($dbc,$app_id){
         $query = "SELECT app.*,city.city_name,dep.details,doc.first_name,doc.last_name,sp.alias,dep.room,
+                        pa.first_name pa_fname, pa.last_name pa_lname,
                         app.status,app.start_date,app.end_date,dm.details document,sec.first_name sec_fname,sec.last_name sec_lname
                         ,sec.phone sec_phone
                 FROM appointment app
                 LEFT JOIN document dm ON app.id = dm.appointment_id
                 JOIN doctor doc ON app.doctor_id = doc.id
+                JOIN patient pa ON app.patient_id = pa.id
                 LEFT JOIN secretary sec ON doc.id = sec.doctor_id
                 JOIN department dep ON app.department_id = dep.id
                 JOIN city ON dep.city_id = city.id

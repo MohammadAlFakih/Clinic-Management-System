@@ -46,6 +46,11 @@ selectDB($dbc, $db, 1);
                                 $_SESSION['patient_name'] = $result['first_name']." ".$result['last_name'];
                                 $_SESSION['patient_id'] = $result['id'];
                             }
+                            elseif($_SESSION['role'] == 'doctor') {
+                                $_SESSION['doctor_name'] = $result['first_name']." ".$result['last_name'];
+                                $_SESSION['doctor_id'] = $result['id'];
+                                // We can add more attributes for the doctor if needed
+                            }
                             header('location:index.php');
                         } else {
                             echo "Invalid email or password";

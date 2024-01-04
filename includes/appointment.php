@@ -9,10 +9,19 @@ $dbc = connectServer('localhost','root','',1);
 selectDB($dbc,'mhamad',1);
 
 //Check if this appointment is for the requesting patient
-$valid = check_app_for_patient($dbc,$_SESSION['patient_id'],$_GET['app_id']);
-if(!$valid){
-    header("location:../patient/appointments.php");
-    die();
+if ($_SESSION['role'] == 'patient') {
+    $valid = check_app_for_patient($dbc,$_SESSION['patient_id'],$_GET['app_id']);
+    if(!$valid){
+        header("location:../patient/appointments.php");
+        die();
+    }
+}
+elseif ($_SESSION['role'] == 'patient') {
+    $valid = check_app_for_doctor($dbc,$_SESSION['doctor_id'],$_GET['app_id']);
+    if(!$valid){
+        header("location:../doctor/appointments.php");
+        die();
+    }
 }
 
 $appointment = get_appointment($dbc,$_GET['app_id']);
@@ -22,8 +31,12 @@ echo '
     <div class="row">
     <div class="col">
     <h1>My Appointment<span class="status">'.$appointment['status'].'</span>';
-    if($appointment['status'] == 'pending'){
+    if($appointment['status'] == 'pending' && $_SESSION['role'] == 'patient'){
         echo '<a href="../includes/cancel_appointment.php?app_id='.$_GET['app_id'].'" class="cancel">Cancel</a>';
+    }
+    elseif ($_SESSION['role'] == 'doctor') {
+        echo '<a href="../includes/cancel_appointment.php?app_id='.$_GET['app_id'].'" class="cancel">Cancel</a>';
+        echo "<a href='../includes/edit_appointment.php?app_id=".$_GET['app_id']."' class='edit' >Edit</a>";
     }
     echo'</h1>
     <span class="note">'.$appointment['details'].'</span>
@@ -37,7 +50,7 @@ echo '
 
         <div class="info-item">
             <div class="info-label">Patient Name 👨‍💼:</div>
-            <div class="info-value">'.$_SESSION['patient_name'].'</div>
+            <div class="info-value">'.$appointment['pa_fname']." ".$appointment['pa_lname'].'</div>
         </div></div>
 
         <div class="row pers">
@@ -79,15 +92,18 @@ echo '
         <p class="note">* Please arrive 15 minutes before the appointment.</p>
     </div>
     </div>';
-    echo '<div class="contact_container">
-            <img src="../static/media/secretary_default.jpg" alt="LOAD IMAGE" />
-            <p class="contact_info">
-            Your health is our priority, and we understand that circumstances may change.
-            If, for any reason, you need to edit or remove this appointment,
-            please feel free to reach out to our dedicated secretary<br><br><span class="secretary_info">
-            '.$appointment['sec_fname']." ".$appointment['sec_lname'].'<br>
-            '.$appointment['sec_phone'].'</span><br><br>
-            They will be more than happy to assist you and ensure that your healthcare needs are met seamlessly.
-            Your cooperation is greatly appreciated, and we look forward to serving you.
-            </p>
-            <div>';
+
+    if ($_SESSION['role'] == 'patient') {
+        echo '<div class="contact_container">
+                <img src="../static/media/secretary_default.jpg" alt="LOAD IMAGE" />
+                <p class="contact_info">
+                Your health is our priority, and we understand that circumstances may change.
+                If, for any reason, you need to edit or remove this appointment,
+                please feel free to reach out to our dedicated secretary<br><br><span class="secretary_info">
+                '.$appointment['sec_fname']." ".$appointment['sec_lname'].'<br>
+                '.$appointment['sec_phone'].'</span><br><br>
+                They will be more than happy to assist you and ensure that your healthcare needs are met seamlessly.
+                Your cooperation is greatly appreciated, and we look forward to serving you.
+                </p>
+                <div>';
+    }
