@@ -25,6 +25,9 @@ echo '
     if($appointment['status'] == 'pending'){
         echo '<a href="../includes/cancel_appointment.php?app_id='.$_GET['app_id'].'" class="cancel">Cancel</a>';
     }
+    else if($appointment['status'] == 'delayed'){
+        echo '<a href="../includes/cancel_appointment.php?app_id='.$_GET['app_id'].'" class="cancel remove">Remove</a>';
+    }
     echo'</h1>
     <span class="note">'.$appointment['details'].'</span>
     </div>

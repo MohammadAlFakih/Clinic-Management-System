@@ -24,7 +24,17 @@
             ?>
             <div><a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment.php">New Appointment</a></div>
         </div>
-    <?php } ?>
+    <?php } 
+    if(isset($_SESSION['role']) && $_SESSION['role'] == 'patient'){
+        $dbc = connectServer('localhost', 'root', '', 1);
+        $db = "mhamad";
+        selectDB($dbc, $db, 1);
+        $notifications = get_notifications_unreaded($dbc,$_SESSION['user_id']);
+        if($notifications && mysqli_num_rows($notifications)>0){
+            echo '<script type="text/javascript">move()</script>';
+        }
+    }
+    ?>
 </body>
 
 </html>
