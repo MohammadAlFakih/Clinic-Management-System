@@ -32,7 +32,7 @@
     }
     echo "</div>
     <div class='bts'>
-    <a href='".$_SESSION['last_url']."'>Back</a>
+    <a href='".$_SESSION['before_inbox']."'>Back</a>
     ";
     if(!$empty)
     echo "<a href='clear_messages.php'>Clear History</a>";

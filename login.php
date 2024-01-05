@@ -46,6 +46,15 @@ selectDB($dbc, $db, 1);
                                 $_SESSION['patient_name'] = $result['first_name']." ".$result['last_name'];
                                 $_SESSION['patient_id'] = $result['id'];
                             }
+                            else if($_SESSION['role'] == 'secretary') {
+                                $query = "SELECT doctor_id FROM secretary WHERE id=".$result['id'];
+                                $doctor_id = mysqli_query($dbc, $query);
+                                $doctor_id = $doctor_id->fetch_assoc();
+                                $_SESSION['doctor_id'] = $doctor_id['doctor_id'];
+                            }
+                            else{
+                                $_SESSION['doctor_id'] = $result['id'];
+                            }
                             header('location:index.php');
                         } else {
                             echo "Invalid email or password";

@@ -15,7 +15,7 @@ if(!isset($_GET['app_id'])){
     $query = "SELECT status FROM appointment 
             WHERE id =? AND patient_id = ?";
     $stmt = $dbc->prepare($query);
-    $stmt->bind_param("ii",$_GET['app_id'],$_SESSION['patient_id']);
+    $stmt->bind_param("ii",$_GET['app_id'],$_GET['patient_id']);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -29,7 +29,7 @@ if(!isset($_GET['app_id'])){
     $row =$result -> fetch_assoc();
 
     //Check if the status is not pending
-    if($row['status'] != 'pending' && $row['status'] != 'delayed'){
+    if($row['status'] != 'pending' && $row['status'] != 'delayed' && $_SESSION['role']=='patient'){
         $stmt->close();
         mysqli_close($dbc);
         header('location:../patient/appointments.php');
@@ -42,5 +42,8 @@ $stmt->execute();
 
 $stmt->close();
 mysqli_close($dbc);
-header('location:../patient/appointments.php');
+if($role == 'patient')
+    header('location:../patient/appointments.php');
+else
+    header('location:../secretary/requests.php');
 ?>

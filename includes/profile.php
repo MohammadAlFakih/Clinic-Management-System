@@ -10,7 +10,12 @@ if(!isset($_SESSION['role'])){
 $dbc = connectServer('localhost', 'root', '', 1);
 selectDB($dbc,'mhamad',1);
 
+if(isset($_GET['id']) && isset($_GET['role'])){
+    $user = get_user_info($dbc,$_GET['id'],$_GET['role']);
+}
+else{
 $user = get_user_info($dbc,$_SESSION['user_id'],$_SESSION['role']);
+}
 ?>
     <div class="container">
 <div class="profile-container">

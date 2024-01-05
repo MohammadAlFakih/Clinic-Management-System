@@ -4,7 +4,7 @@
     include($_SERVER['DOCUMENT_ROOT'] . '/Clinic-Management-System/db_utils/DB_Functions.php');
     if($_SERVER['REQUEST_URI']!='/Clinic-Management-System/patient/inbox.php')
         {
-            $_SESSION['last_url'] = $_SERVER['REQUEST_URI'];
+            $_SESSION['before_inbox'] = $_SERVER['REQUEST_URI'];
         }
 ?>
 <!DOCTYPE html>
@@ -25,6 +25,9 @@
         if (isset($_SESSION["role"])) {
             if ($_SESSION["role"] == "patient") {
                 echo "<div class='home_app app'><a class='action' href='http://localhost/Clinic-Management-System/patient/appointments.php'>Appointments</a></div>";
+            }
+            else{
+                echo "<div class='home_app app'><a class='action' href='http://localhost/Clinic-Management-System/secretary/requests.php'>Requests</a></div>";
             }
         ?>
             <div class='actions'>
