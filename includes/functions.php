@@ -410,7 +410,7 @@
     }
 
     function get_notifications($dbc,$patient_id){
-        $query = "SELECT nt.message,nt.date,doc.first_name,doc.last_name
+        $query = "SELECT nt.*,doc.first_name,doc.last_name
                  FROM notifications nt
                  JOIN doctor doc ON doc.id = nt.sender
                  WHERE receiver =? 
@@ -459,15 +459,6 @@
         $stmt = $dbc->prepare($query);
         $stmt->bind_param("i",$doctor_id);
         }
-        // else if(!$filter_date && $filter_status){
-        //     $query = "SELECT app.*,pt.email,pt.first_name,pt.last_name
-        //             FROM appointment app
-        //             JOIN patient pt ON app.patient_id = pt.id
-        //             WHERE app.status = ? AND app.doctor_id = ? 
-        //             ORDER BY app.book_date ASC";
-        //     $stmt = $dbc->prepare($query);
-        //     $stmt->bind_param("si",$filter_status,$doctor_id);
-        // }
         else if($filter_date){
             $query = "SELECT app.*,pt.email,pt.first_name,pt.last_name,pt.phone
                     FROM appointment app
@@ -477,15 +468,34 @@
             $stmt = $dbc->prepare($query);
             $stmt->bind_param("si",$filter_date,$doctor_id);
         }
-        // else{
-        //     $query = "SELECT app.*,pt.email,pt.first_name,pt.last_name
-        //         FROM appointment app
-        //         JOIN patient pt ON app.patient_id = pt.id
-        //         WHERE app.status = ? AND app.doctor_id = ? AND DATE(app.start_date)= ?
-        //         ORDER BY app.book_date ASC";
-        // $stmt = $dbc->prepare($query);
-        // $stmt->bind_param("sis",$filter_status,$doctor_id,$filter_date);
-        // }
+        $stmt->execute();
+        $requests = $stmt->get_result();
+        $stmt->close();
+        $result = [];
+        while($row = $requests->fetch_assoc())
+            $result[] = $row;
+        return $result;
+    }
+
+    function get_pending($dbc,$doctor_id,$filter_date){
+        if(!$filter_date){
+        $query = "SELECT app.*,pt.email,pt.first_name,pt.last_name,pt.phone
+                FROM appointment app
+                JOIN patient pt ON app.patient_id = pt.id
+                WHERE app.status = 'pending AND app.doctor_id = ? 
+                ORDER BY app.book_date ASC";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("i",$doctor_id);
+        }
+        else if($filter_date){
+            $query = "SELECT app.*,pt.email,pt.first_name,pt.last_name,pt.phone
+                    FROM appointment app
+                    JOIN patient pt ON app.patient_id = pt.id
+                    WHERE DATE(app.start_date) = ? AND app.doctor_id = ?  AND app.status = 'pending'
+                    ORDER BY app.book_date ASC";
+            $stmt = $dbc->prepare($query);
+            $stmt->bind_param("si",$filter_date,$doctor_id);
+        }
         $stmt->execute();
         $requests = $stmt->get_result();
         $stmt->close();
@@ -634,6 +644,15 @@
                 $stmt->bind_param("i",$all_requests[$i]['id']);
                 $stmt->execute();
                 $stmt->close();
+                
+                //Add accept notification for new appointment request
+                if($accept){
+                    $query = "INSERT INTO notifications (receiver,sender,appointment_id,reason) VALUES (?,?,?,'accepted')";
+                    $stmt = $dbc->prepare($query);
+                    $stmt->bind_param("iii",$all_requests[$i]['patient_id'],$all_requests[$i]['doctor_id'],$all_requests[$i]['id']);
+                    $stmt->execute();
+                    $stmt->close();
+                }
         }
     }
 

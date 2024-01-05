@@ -13,14 +13,19 @@
     if($notifications && mysqli_num_rows($notifications)>0){
         foreach($notifications as $message){
             echo '
-                
-                    <div class="message">
-                        <span class="sender">Secretary of Dc. '.$message['first_name']." ".$message['last_name'].'</span>
-                        <div class="date">'.$message['date'].'</div>
-                        <p>'.$message['message'].'</p>
-                    
-                </div>
-            ';
+                <div class="message">
+                    <span class="sender">Secretary of Dc. '.$message['first_name']." ".$message['last_name'].'</span>
+                    <div class="date">'.$message['date'].'</div>';
+
+            $content = "";
+            //Check the reason of the message
+            if($message['reason'] == 'accepted'){
+                $app = get_appointment($dbc,$message['appointment_id']);
+                $content = 'Your appointment on '.(new DateTime($app['start_date']))->format('Y-m-d').' has been accepted.
+                Please make sure to attend your appointment before 15 minutes.';
+            }
+
+            echo '<p>'.$content.'</p></div>';
         }
     }
     else{

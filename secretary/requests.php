@@ -68,7 +68,11 @@
             include "../includes/draw_work_hours.php";
             //<----------------------------->
             
-            $requests = get_requests($dbc,$_SESSION['doctor_id'],$filter_date);
+            if((isset($_POST['maximize_hours']) || isset($_POST['first_book']))
+             && isset($filter_date) && !empty($filter_date))
+                $requests = get_pending($dbc,$_SESSION['doctor_id'],$filter_date);
+            else
+                $requests = get_requests($dbc,$_SESSION['doctor_id'],$filter_date);
             
             //Accept All requests with first book_filter
             if(isset($_POST['first_book_accept'])){
@@ -138,6 +142,8 @@
                     <th>Start Date</th>
                     <th>Time</th>
                     <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>';
@@ -159,14 +165,16 @@
                 </td>
                 <td>'.$start_date.'</td>
                 <td>'.$start_hour.' till '.$end_hour.'</td>
-                <td class="response">';
+                <td>';
 
                 //Allow accept if request is pending
                 if($request['status'] == 'pending')
-                echo '<a class="accept" href="http://localhost/Clinic-Management-System/secretary/requests.php?accept='.$request['id'].'">Accept</a>';
-                
-                echo ' <a class="remove" href="http://localhost/Clinic-Management-System/includes/cancel_appointment.php?patient_id='.$request['patient_id'].'&app_id='.$request['id'].'">Remove</a>
-                <a class="edit" href="http://localhost/Clinic-Management-System/secretary/requests.php?edit='.$request['id'].'">Edit</a>
+                    echo '<a class="accept" href="http://localhost/Clinic-Management-System/secretary/accept_appointment.php?app_id='.$request['id'].'">Accept</a></td>';
+                else
+                    echo 'Queued</td>';
+
+                echo '<td><a class="remove" href="http://localhost/Clinic-Management-System/includes/cancel_appointment.php?patient_id='.$request['patient_id'].'&app_id='.$request['id'].'">Remove</a></td>
+                <td><a class="edit" href="http://localhost/Clinic-Management-System/secretary/requests.php?edit='.$request['id'].'">Edit</a>
                 </td>
                 </tr>';
             }
