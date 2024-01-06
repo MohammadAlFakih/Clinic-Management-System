@@ -44,7 +44,10 @@
     echo "</div>
     </div>";
     ?>
+
+<link rel="stylesheet" href="static/css/inbox.css" type="text/css">
 <link rel="stylesheet" href="../static/css/inbox.css" type="text/css">
+
 <?php
     mysqli_close($dbc);
 ?>

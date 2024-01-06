@@ -12,7 +12,9 @@
 <link href="../static/css/requests.css" rel="stylesheet" type="text/css">
 <?php
     
-    
+    if(isset($_GET['message'])){
+        echo '<div class="message">'.$_GET['message'].'</div>';
+    }
     //Get the pending requests
 
     //No filter
@@ -162,21 +164,42 @@
                 <td>'.$request['book_date'].'</td>
                 <td><a href="../includes/profile.php?id='.$request['patient_id'].'&role=patient'.'">'.$request['first_name']." ".$request['last_name'].'</a>
                 <br>'.$request['phone'].'
-                </td>
-                <td>'.$start_date.'</td>
-                <td>'.$start_hour.' till '.$end_hour.'</td>
-                <td>';
+                </td>';
+                if(!isset($_GET['edit']) || (isset($_GET['edit']) && $_GET['edit']!=$request['id'])){
+                    echo '<td>'.$start_date.'</td>
+                    <td>'.$start_hour.' till '.$end_hour.'</td>';
+                }
+                else if($_GET['edit']==$request['id']){
+                    echo '<form method="POST" action="edit_pending_appointment.php">
+                            <input type="hidden" name="app_id" value="'.$request['id'].'">
+                            <td><input type="date" value="'.$start_date.'" name="new_start_date" class="edit-input"></td>
+                            <td>
+                            <input type="time" value="'.$start_hour.'" name="new_start_hour"  class="edit-input">
+                            till
+                            <input type="time" value="'.$end_hour.'" name="new_end_hour"  class="edit-input">
+                            </td>
+                            ';
+                }
 
+
+                echo '<td>';
                 //Allow accept if request is pending
                 if($request['status'] == 'pending')
                     echo '<a class="accept" href="http://localhost/Clinic-Management-System/secretary/accept_appointment.php?app_id='.$request['id'].'">Accept</a></td>';
                 else
                     echo 'Queued</td>';
 
-                echo '<td><a class="remove" href="http://localhost/Clinic-Management-System/includes/cancel_appointment.php?patient_id='.$request['patient_id'].'&app_id='.$request['id'].'">Remove</a></td>
-                <td><a class="edit" href="http://localhost/Clinic-Management-System/secretary/requests.php?edit='.$request['id'].'">Edit</a>
-                </td>
-                </tr>';
+                echo '<td><a class="remove" href="http://localhost/Clinic-Management-System/includes/cancel_appointment.php?
+                patient_id='.$request['patient_id'].'&app_id='.$request['id'].'">Remove</a></td>';
+
+                if(isset($_GET['edit']) &&  $_GET['edit']==$request['id']){
+                    echo '<td><input type="submit" value="Save" class="edit save"></td></form>';
+                }
+                else{
+                echo '<td><a class="edit" href="http://localhost/Clinic-Management-System/secretary/requests.php?edit='.$request['id'].'">Edit</a>
+                </td>';
+                }
+                echo '</tr>';
             }
             echo '</tbody>
         </table></div>';

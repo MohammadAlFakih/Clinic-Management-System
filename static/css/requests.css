@@ -45,6 +45,12 @@ h1 {
     color: #333;
     padding-bottom: 2vw;
 }
+.edit-input{
+    padding: 0.1vw;
+    font-size: 1vw;
+    background-color: rgb(227, 227, 227);
+    border: none;
+}
 
 table {
     font-size: 1vw;
@@ -72,6 +78,9 @@ th {
 }
 
 tr:hover {
+    .edit-input{
+        background-color: #d8d7d7;
+    }
     background-color: #d8d7d7;
 }
 
@@ -223,4 +232,10 @@ tr:hover {
 
 .done{
     background-color: #63e167;
+}
+
+.message{
+    height: 10vh;
+    padding: 0vw;
+    font-size: 2vw;
 }

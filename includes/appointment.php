@@ -21,8 +21,13 @@ echo '
     <div class="info-container">
     <div class="row">
     <div class="col">
-    <h1>My Appointment<span class="status">'.$appointment['status'].'</span>';
-    if($appointment['status'] == 'pending'){
+    <h1>My Appointment<span class="status">';
+    if($appointment['status']=='queued')
+                    echo 'pending';
+                else
+                    echo $appointment['status'];
+    echo '</span>';
+    if($appointment['status'] == 'pending' || $appointment['status']=='queued'){
         echo '<a href="../includes/cancel_appointment.php?app_id='.$_GET['app_id'].'&patient_id='.$_SESSION['patient_id'].'" class="cancel">Cancel</a>';
     }
     else if($appointment['status'] == 'delayed'){

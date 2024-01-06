@@ -29,7 +29,7 @@ if(!isset($_GET['app_id'])){
     $row =$result -> fetch_assoc();
 
     //Check if the status is not pending
-    if($row['status'] != 'pending' && $row['status'] != 'delayed' && $_SESSION['role']=='patient'){
+    if($row['status'] != 'pending' && $row['status'] != 'delayed' && $row['status']!='queued' && $_SESSION['role']=='patient'){
         $stmt->close();
         mysqli_close($dbc);
         header('location:../patient/appointments.php');
@@ -42,7 +42,7 @@ $stmt->execute();
 
 $stmt->close();
 mysqli_close($dbc);
-if($role == 'patient')
+if($_SESSION['role'] == 'patient')
     header('location:../patient/appointments.php');
 else
     header('location:../secretary/requests.php');

@@ -78,6 +78,11 @@ body{
     border-radius: 50%;
 }
 
+.inbox img{
+    border-radius: 50%;
+    box-shadow: none;
+}
+
 .inbox-animation {
     border-radius:50%;
     animation: move 0.4s ease-in-out infinite;

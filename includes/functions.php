@@ -276,6 +276,7 @@
     }
 
     function time_to_float($time){
+        $time = (new DateTime($time))->format("H:i");
         $time = explode(":",$time);
         $time = $time[0]+$time[1]/60;
         return $time;
