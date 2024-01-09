@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && (!isset($_GET['city']) || !isset($_GE
 } 
 
 //Display the available doctors in this city on this date with this specialization
-else if (!isset($_GET['index'])) {
+else if (!isset($_GET['doctor_id'])) {
     $dbc = connectServer('localhost', 'root', '', 1);
     $db = "mhamad";
     selectDB($dbc, $db, 1);
@@ -39,12 +39,16 @@ else if (!isset($_GET['index'])) {
                     </div>
                 </div>';
     } else {
+        if(isset($_GET['message'])){
+            echo '<div class="message">' . $_GET['message'] . '</div>';
+        }
         echo '<div class="big_title">' . ucfirst($_GET['specialization']) . ' in ' . ucfirst($_GET['city']) . '<br> on <br>' . $_GET['date'] . '</div>';
         echo '<div class="doctor-list">';
         $counter = 0;
+        $current_url = "?date=".$_GET['date']."&specialization=".$_GET['specialization']."&city=".$_GET['city'];
         foreach ($available_doctors as $doctor) {
             echo '
-            <a class="doctor" href="' . $_SERVER['REQUEST_URI'] . '&index=' . $doctor['doctor_id'] . '">
+            <a class="doctor" href="available_doctors.php' . $current_url . '&doctor_id=' . $doctor['doctor_id'] . '">
                 <div class="doctor-info">
                     <h2 class="title">Dc. ' . $doctor['first_name'] . ' ' . $doctor['last_name'] . '</h2>
                     <p class="address">Adress details: ' . $doctor['details'] . '</p>
@@ -86,7 +90,17 @@ else {
     $dbc = connectServer('localhost', 'root', '', 1);
     $db = "mhamad";
     selectDB($dbc, $db, 1);
-    $doctor = get_doctor($_GET, $dbc);
+
+    //Check if this user make more than 2 appointments on this day with this doctor
+    $appointments_nb = count_patient_appointments($_SESSION['patient_id'],$_GET['doctor_id'], $_GET['date'], $dbc);
+    if ($appointments_nb > 2) {
+       header('location:available_doctors.php?date='.$_GET['date'].'&specialization='.$_GET['specialization'].'&city='
+        .$_GET['city']
+       .'&message=Sorry, You have already made 2 appointments on this day');
+       die();
+    }
+
+    $doctor = get_doctor($_GET, $dbc,$_SESSION['role']);
     $_SESSION['doctor_id'] = $doctor['doctor_id'];
     $_SESSION['department_id'] = $doctor['department_id'];
     echo '

@@ -182,7 +182,27 @@
 	 REFERENCES `department`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
 	executeQuery($dbc,$query);
 
+	//Notifications
+	$query = "CREATE TABLE `mhamad`.`notifications` (`id` INT NOT NULL AUTO_INCREMENT , `receiver` INT NOT NULL ,
+	 `sender` INT NOT NULL , `message` TEXT NOT NULL , `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+	 `status` VARCHAR(10) NOT NULL DEFAULT 'unread',`appointment_id` INT NULL ,`reason` VARCHAR(10) NOT NULL
+	 ,PRIMARY KEY (`id`))";
+	executeQuery($dbc, $query);
+
+	//Foreign Key Notifications->receiver
+	$query = "ALTER TABLE `notifications` ADD CONSTRAINT `message_reveiver` FOREIGN KEY (`receiver`) REFERENCES `patient`(`id`)
+	 ON DELETE CASCADE ON UPDATE CASCADE";
+	executeQuery($dbc, $query);
 	
+	//Foreign Key Notifications->sender
+	$query = "ALTER TABLE `notifications` ADD CONSTRAINT `message_sender` FOREIGN KEY (`sender`)
+	  REFERENCES `doctor`(`id`) ON DELETE NO ACTION ON UPDATE CASCADE;";
+	executeQuery($dbc, $query);
+
+	//Foreign Key Notifications->appointment_id
+	$query ="ALTER TABLE `notifications` ADD CONSTRAINT `message_app` FOREIGN KEY (`appointment_id`)
+	 REFERENCES `appointment`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;";
+	executeQuery($dbc, $query);
 
 	header('location:../index.php');
 

@@ -10,24 +10,12 @@ if(!isset($_SESSION['role'])){
 if(!isset($_GET['app_id'])){
     header('location:../index.php');
     die();
-}
-if($_SESSION['role']=='patient'){
-    $error = false;
-
-    $app_id = $_GET['app_id'];
-
-    //Friend code
-    if(!is_numeric($app_id)) $error = true;
-    if($error){
-        //header location
-    }
-
-    
+}   
 
     $query = "SELECT status FROM appointment 
             WHERE id =? AND patient_id = ?";
     $stmt = $dbc->prepare($query);
-    $stmt->bind_param("ii",$_GET['app_id'],$_SESSION['patient_id']);
+    $stmt->bind_param("ii",$_GET['app_id'],$_GET['patient_id']);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -41,13 +29,12 @@ if($_SESSION['role']=='patient'){
     $row =$result -> fetch_assoc();
 
     //Check if the status is not pending
-    if($row['status'] != 'pending'){
+    if($row['status'] != 'pending' && $row['status'] != 'delayed' && $row['status']!='queued' && $_SESSION['role']=='patient'){
         $stmt->close();
         mysqli_close($dbc);
         header('location:../patient/appointments.php');
         die();
     }
-}
 $query = 'DELETE FROM appointment WHERE id = ? ';
 $stmt = $dbc->prepare($query);
 $stmt->bind_param("i",$_GET['app_id']);
@@ -55,5 +42,8 @@ $stmt->execute();
 
 $stmt->close();
 mysqli_close($dbc);
-header('location:../patient/appointments.php');
+if($_SESSION['role'] == 'patient')
+    header('location:../patient/appointments.php');
+else
+    header('location:../secretary/requests.php');
 ?>

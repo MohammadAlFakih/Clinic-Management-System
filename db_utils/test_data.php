@@ -43,5 +43,26 @@ $query4 = 'INSERT INTO doctor (department_id, email, password, first_name, last_
     (4, "n@gmail.com", "'.$hashed_pass.'", "Roro", "Fakih", 20, "F", 6, "doctor");
 ';
 executeQuery($dbc,$query4);
+
+//Insert secretaries
+$query4 = 'INSERT INTO secretary (doctor_id,email, password, first_name, last_name, age, gender, role) VALUES 
+    (1, "sa@gmail.com", "'.$hashed_pass.'", "Amani", "Fakih", 20, "F", "secretary"),
+    (2, "sb@gmail.com", "'.$hashed_pass.'", "Yara", "Fakih", 20, "F", "secretary"),
+    (3, "sc@gmail.com", "'.$hashed_pass.'", "Chaza", "Fakih", 20, "F", "secretary"),
+    (4, "sd@gmail.com", "'.$hashed_pass.'", "Lamis", "Fakih", 20, "F", "secretary"),
+    (5, "se@gmail.com", "'.$hashed_pass.'", "Mhamad", "Fakih", 20, "F", "secretary"),
+    (6, "sf@gmail.com", "'.$hashed_pass.'", "Yo3rob", "Fakih", 20, "F", "secretary"),
+    (7, "sg@gmail.com", "'.$hashed_pass.'", "Yassin", "Fakih", 20, "F", "secretary"),
+    (8, "sh@gmail.com", "'.$hashed_pass.'", "Ayman", "Fakih", 20, "F", "secretary"),
+    (9, "si@gmail.com", "'.$hashed_pass.'", "Ali", "Fakih", 20, "F", "secretary"),
+    (10, "sj@gmail.com", "'.$hashed_pass.'", "Hasan", "Fakih", 20, "F", "secretary"),
+    (1, "sk@gmail.com", "'.$hashed_pass.'", "Romio", "Fakih", 20, "F", "secretary"),
+    (2, "sl@gmail.com", "'.$hashed_pass.'", "Sandy", "Fakih", 20, "F", "secretary"),
+    (3, "sm@gmail.com", "'.$hashed_pass.'", "Achraf", "Fakih", 20, "F","secretary"),
+    (4, "sn@gmail.com", "'.$hashed_pass.'", "Roro", "Fakih", 20, "F","secretary");
+';
+executeQuery($dbc,$query4);
+
+
 mysqli_close($dbc);
 ?>

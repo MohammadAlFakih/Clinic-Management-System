@@ -58,7 +58,12 @@
                 <td class="hide">'.$appointment['room'].'</td>
                 <td>'.$appointment['start_date'].'</td>
                 <td>'.$display_duration.'</td>
-                <td>'.$appointment['status'].'</td>
+                <td>';
+                if($appointment['status']=='queued')
+                    echo 'pending';
+                else
+                    echo $appointment['status'];
+                echo '</td>
                 </tr>';
             }
             echo '</tbody>
