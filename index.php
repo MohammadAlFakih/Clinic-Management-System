@@ -10,8 +10,8 @@
 
 <body>
     <?php
-    include "includes/header.php"; ?>
-
+    include "includes/header.php"; 
+    ?>
     <?php
     //<------MAKE APPOINTMENT------>
     if (isset($_SESSION['role'])) {

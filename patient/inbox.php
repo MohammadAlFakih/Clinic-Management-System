@@ -24,7 +24,16 @@
                 $content = 'Your appointment on '.(new DateTime($app['start_date']))->format('Y-m-d').' has been accepted.
                 Please make sure to attend your appointment before 15 minutes.';
             }
-
+            else if($message['reason'] == 'delay') {
+                $content = 'We are sorry to inform you that your appointment with doctor 
+                '.$message['first_name']." ".$message['last_name'].' has been delayed till '.$message['message'].'
+                .You have the right to decline this new appointment.<br>Please make sure to attend your appointment before 15 minutes.';
+            }
+            else if($message['reason']== 'remove'){
+                $content = 'We regret to inform you that your appointment with Dr.
+                 '.$message['first_name']." ".$message['last_name'].' has been canceled as
+                  the doctor is unavailable this week. We appreciate your understanding.';
+            }
             echo '<p>'.$content.'</p></div>';
         }
     }
