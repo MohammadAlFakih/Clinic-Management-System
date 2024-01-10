@@ -21,8 +21,14 @@
             if(isset($_GET['message'])){
                 echo '<div class="message">'.$_GET['message'].'</div>';
             }
+            if ($_SESSION['role'] == 'patient') {
+            echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment2.php">New Appointment</a></div>';
+            }
+            elseif ($_SESSION['role'] == 'doctor') {
+                echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/secretary/choose_patient.php">New Appointment</a></div>';
+                echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/doctor/manage_schedule.php">Manage Weekly Schedule</a></div>';
+            }
             ?>
-            <div><a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment.php">New Appointment</a></div>
         </div>
     <?php } 
     if(isset($_SESSION['role']) && $_SESSION['role'] == 'patient'){

@@ -7,14 +7,29 @@ if(!isset($_SESSION['role'])){
     die();
 }
 if(!isset($_SESSION['date'])
-|| !isset($_SESSION['doctor_id']) || !isset($_SESSION['patient_id'])
-|| !isset($_SESSION['department_id'])){
+|| !isset($_SESSION['selected_doctor_id']) || !isset($_SESSION['department_id'])){
     header("Location:".$_SESSION['last_url']);
     die();
 }
 
+if (($_SESSION['role'] == 'patient' && !isset($_SESSION['patient_id'])) 
+        || (in_array($_SESSION['role'], array('doctor', 'secretary')) && !isset($_SESSION['selected_patient_id']))) {
+        header("Location:".$_SESSION['last_url']);
+        die();
+}
+
+if ($_SESSION['role'] == 'patient') {
+    $patient_id = $_SESSION['patient_id'];
+    $app_status = 'pending';
+}
+elseif (in_array($_SESSION['role'], array('doctor', 'secretary'))) {
+    $patient_id = $_SESSION['selected_patient_id'];
+    $app_status = 'upcoming';
+}
+
 $dbc = connectServer('localhost', 'root', '', 1);
 selectDB($dbc,"mhamad",1);
+
 
 //Check if there exists a booked appointment that overlaps with the entered appoitnment => status = queued
 $query = "SELECT id
@@ -41,9 +56,16 @@ $stmt->execute();
 $stmt->close();
 $dbc->close();
 unset($_SESSION['date']);
-unset($_SESSION['doctor_id']);
+unset($_SESSION['selected_doctor_id']);
 unset($_SESSION['last_url']);
 unset($_SESSION['department_id']);
 unset($_SESSION['start_date']);
 unset($_SESSION['end_date']);
-header("Location:../index.php?message=Your appointment request is currently pending, and you will be notified once it is accepted ✅.");
+if (in_array($_SESSION['role'], array('doctor', 'secretary'))) {
+    unset($_SESSION['selected_patient_id']);
+    unset($_SESSION['selected_patient_name']);
+    // We have to notify the patient
+    header("Location:../index.php?message=The appointment you entered has been successfully registered. The patient will be notified ✅.");
+}
+elseif ($_SESSION['role'] == 'patient')
+    header("Location:../index.php?message=Your appointment request is currently pending, and you will be notified once it is accepted ✅.");

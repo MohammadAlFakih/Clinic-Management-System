@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "../db_utils/DB_Functions.php";
+include "./functions.php";
 $dbc = connectServer('localhost','root','',1);
 selectDB($dbc,'mhamad',1);
 if(!isset($_SESSION['role'])){
@@ -10,9 +11,9 @@ if(!isset($_SESSION['role'])){
 if(!isset($_GET['app_id'])){
     header('location:../index.php');
     die();
-}   
+}
 
-    $query = "SELECT status FROM appointment 
+$query = "SELECT status FROM appointment 
             WHERE id =? AND patient_id = ?";
     $stmt = $dbc->prepare($query);
     $stmt->bind_param("ii",$_GET['app_id'],$_GET['patient_id']);
@@ -47,3 +48,5 @@ if($_SESSION['role'] == 'patient')
 else
     header('location:../secretary/requests.php');
 ?>
+
+    

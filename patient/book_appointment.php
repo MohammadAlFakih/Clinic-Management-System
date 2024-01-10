@@ -6,12 +6,35 @@
     }
 
     if(!isset($_SESSION['date'])
-        || !isset($_SESSION['doctor_id']) || !isset($_SESSION['patient_id'])
+        || !isset($_SESSION['selected_doctor_id'])
         || !isset($_SESSION['department_id'])
         || !isset($_POST['start_hour']) || !isset($_POST['end_hour'])){
     header("Location:".$_SESSION['last_url']);
     die();
-}
+    }
+
+    if (($_SESSION['role'] == 'patient' && !isset($_SESSION['patient_id'])) 
+        || (in_array($_SESSION['role'], array('doctor', 'secretary')) && !isset($_SESSION['selected_patient_id']))) {
+        header("Location:".$_SESSION['last_url']);
+        die();
+    }
+
+    // Get the selected patient name from the selected_patient_id inside the session
+    if ($_SESSION['role'] == 'doctor' || $_SESSION['role'] == 'secretary') {
+        $dbc = connectServer('localhost', 'root', '', 1);
+        $db = "mhamad";
+        selectDB($dbc, $db, 1);
+        $query = " SELECT first_name, last_name FROM patient 
+                WHERE id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param('i', $_SESSION['selected_patient_id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $full_name = $row['first_name'] . ' ' . $row['last_name'];
+        $_SESSION['selected_patient_name'] = $full_name;
+    }
+
 
     $dbc = connectServer('localhost', 'root', '', 1);
     selectDB($dbc,"mhamad",1);
@@ -33,11 +56,11 @@
                 WHERE doctor_id = ? AND (( ? > start_date AND ? < end_date) OR ( ? > start_date AND ? < end_date)
                 OR ( ? = start_date AND ? = end_date ) OR ( ? <= start_date AND ? >= end_date))";
     $stmt = $dbc->prepare($query);
-    $stmt->bind_param("issssssss",$_SESSION['doctor_id'],$start_date,$start_date,$end_date,$end_date,$start_date,$end_date,$start_date,$end_date);
+    $stmt->bind_param("issssssss",$_SESSION['selected_doctor_id'],$start_date,$start_date,$end_date,$end_date,$start_date,$end_date,$start_date,$end_date);
     $stmt->execute();
     $result = $stmt->get_result();
     if($result && mysqli_num_rows($result)>0){
-        header("Location:".$_SESSION['last_url']."&message=".$_SESSION['doctor_id']."Please make sure that your choosen date doesn't overlap with unvailable hours.");
+        header("Location:".$_SESSION['last_url']."&message=".$_SESSION['selected_doctor_id']."Please make sure that your choosen date doesn't overlap with unvailable hours.");
         $stmt->close();
         $dbc->close();
         die();
@@ -49,7 +72,10 @@
                 FROM appointment
                 WHERE patient_id = ? AND DATE(start_date) >= ?;";
     $stmt = $dbc->prepare($query);
-    $stmt->bind_param("is",$_SESSION['patient_id'],$today);
+    if ($_SESSION['role'] == 'patient')
+        $stmt->bind_param("is",$_SESSION['patient_id'],$today);
+    elseif ($_SESSION['role'] == 'doctor' || $_SESSION['role'] == 'secretary')
+        $stmt->bind_param("is",$_SESSION['selected_patient_id'],$today);
     $stmt->execute();
     $result = $stmt->get_result();
     $maximum_number_of_appointment = 5;
@@ -85,7 +111,13 @@
             <div class="specialization"><?php echo ucfirst($_POST['city']);?></div>    
         </div>
     </div>
-    <div class="col">Patient: <?php echo "  ".$_SESSION['patient_name']?></div>
+    <?php
+        if ($_SESSION['role'] == 'patient')
+            echo'<div class="col">Patient:'.$_SESSION['patient_name'].'</div>';
+        elseif ($_SESSION['role'] == 'doctor' || $_SESSION['role'] == 'secretary')
+            echo'<div class="col">Patient:'.$_SESSION['selected_patient_name'].'</div>';
+
+    ?>
     <div class="col">
         <div class="date">Date: <?php echo $_SESSION['date'];?></div>
         <div class="date">At  

@@ -21,7 +21,7 @@
             <div class="message">
                 <p>You have no appointments 📅.</p>
             </div>
-                <a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment.php">
+                <a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment2.php">
                 New Appointment
                 </a>
             </div>';

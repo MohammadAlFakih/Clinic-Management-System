@@ -46,6 +46,7 @@ selectDB($dbc, $db, 1);
                                 $_SESSION['patient_name'] = $result['first_name']." ".$result['last_name'];
                                 $_SESSION['patient_id'] = $result['id'];
                             }
+
                             else if($_SESSION['role'] == 'secretary') {
                                 $query = "SELECT doctor_id FROM secretary WHERE id=".$result['id'];
                                 $doctor_id = mysqli_query($dbc, $query);
@@ -53,7 +54,9 @@ selectDB($dbc, $db, 1);
                                 $_SESSION['doctor_id'] = $doctor_id['doctor_id'];
                             }
                             else{
+                                $_SESSION['doctor_name'] = $result['first_name']." ".$result['last_name'];
                                 $_SESSION['doctor_id'] = $result['id'];
+                                // We can add more attributes if needed
                             }
                             header('location:index.php');
                         } else {
