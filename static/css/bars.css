@@ -1,3 +1,5 @@
+
+
 .work{
     display: flex;
     justify-content: space-around;
@@ -32,6 +34,7 @@
     background-color: rgb(110, 255, 103);
 }
 .unavailable_hours{
+    font-size: 1vw;
     display: flex;
     width: 96vw;
     height: 5vh;

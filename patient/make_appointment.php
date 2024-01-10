@@ -18,7 +18,11 @@
     else if ($_SESSION['role'] != 'patient') {
         header("location:../secretary/choose_patient.php");
     }
+    if(isset($_GET['message'])){
+        echo '<div class="message">' . $_GET['message'] . '</div>';
+    }
     ?>
+    
     <div class="container">
         <form action="make_appointment.php" method="POST" class="login-form">
             <label for="cities" class="form-label">Select City:</label>
