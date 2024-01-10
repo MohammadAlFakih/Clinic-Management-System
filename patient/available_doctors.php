@@ -87,7 +87,8 @@ else {
     $db = "mhamad";
     selectDB($dbc, $db, 1);
     $doctor = get_doctor($_GET, $dbc);
-    $_SESSION['doctor_id'] = $doctor['doctor_id'];
+    // I changed it here
+    $_SESSION['selected_doctor_id'] = $doctor['doctor_id'];
     $_SESSION['department_id'] = $doctor['department_id'];
     echo '
             <div class="single">
@@ -110,7 +111,7 @@ else {
             ';
 
             //Prepare sensitive information to book appointment
-            $_SESSION['doctor_id'] = $doctor['doctor_id'];
+            $_SESSION['selected_doctor_id'] = $doctor['doctor_id'];
             $_SESSION['date'] = $_GET['date'];
             $_SESSION['department_id'] = $doctor['department_id'];
             $_SESSION['work_start_hour'] = $doctor['start_hour'];

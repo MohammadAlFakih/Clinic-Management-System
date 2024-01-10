@@ -68,6 +68,34 @@
         return $cities;
     }
 
+    function get_patients($dbc) {
+        $query = " SELECT email FROM patient ";
+        $stmt = $dbc->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $patients = [];
+        while($row = mysqli_fetch_assoc($result)){
+            $patients[] = $row['email'];
+        }
+        $stmt->close();
+        return $patients;
+
+    }
+
+    function get_patient_id_from_email($dbc, $email) {
+        $query = " SELECT id FROM patient
+                    WHERE email = ? ";
+        $id = NULL;
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->bind_result($id);
+        $stmt->fetch();
+        $stmt->close();
+        return $id;
+
+    }
+
     function get_specializations($dbc){
         $query = "SELECT alias FROM specialization";
         $stmt = $dbc->prepare($query);

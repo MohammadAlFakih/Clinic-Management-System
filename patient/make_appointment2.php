@@ -5,7 +5,7 @@
 
     if (!isset($_SESSION['role']))
         header("location:../login.php");
-    else if ($_SESSION['role'] != 'patient') {
+    else if ($_SESSION['role'] != 'patient' && !isset($_SESSION['selected_patient_id'])) {
         header("location:../secretary/choose_patient.php");
     }
 
