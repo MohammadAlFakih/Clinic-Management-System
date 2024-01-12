@@ -56,6 +56,7 @@ selectDB($dbc, $db, 1);
                             else{
                                 $_SESSION['doctor_name'] = $result['first_name']." ".$result['last_name'];
                                 $_SESSION['doctor_id'] = $result['id'];
+                                // i can use user_id and doctor_id interchangeably for the doctor
                                 // We can add more attributes if needed
                             }
                             header('location:index.php');
