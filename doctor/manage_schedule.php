@@ -7,7 +7,7 @@
         die();
     }
 
-    if ($_SESSION['role'] != 'doctor' && $_SESSION['secretary']) {
+    if ($_SESSION['role'] == 'patient') {
         header('location:../index.php');
         die();
     }

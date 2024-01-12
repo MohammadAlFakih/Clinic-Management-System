@@ -198,19 +198,21 @@
         if($user == 'patient') {
             $query = "SELECT app.start_date, app.end_date
                     FROM appointment app
-                    WHERE app.doctor_id = ? AND DATE(app.start_date) = ? AND app.department_id = ?
+                    WHERE app.doctor_id = ? AND DATE(app.start_date) = ?
                     ORDER BY app.start_date ASC";
             $stmt = $dbc->prepare($query);
-            $stmt->bind_param("isi",$doctor['doctor_id'],$date,$doctor['department_id']);
+            $stmt->bind_param("is",$doctor['doctor_id'],$date);
+            //We don't include the department id in the query because the doctor will be busy even in another department
         }
         else{
             $query = "SELECT app.start_date, app.end_date
                     FROM appointment app
-                    WHERE app.doctor_id = ? AND DATE(app.start_date) = ? AND app.department_id = ?
+                    WHERE app.doctor_id = ? AND DATE(app.start_date) = ?
                     AND app.status != 'pending' AND app.status != 'queued'
                     ORDER BY app.start_date ASC";
             $stmt = $dbc->prepare($query);
-            $stmt->bind_param("isi",$doctor['doctor_id'],$date,$doctor['department_id']);
+            $stmt->bind_param("is",$doctor['doctor_id'],$date);
+            //We don't include the department id in the query because the doctor will be busy even in another department
         }
         $stmt->execute();
         $appointments = $stmt->get_result();
@@ -223,10 +225,11 @@
         //Doctor unavailable time
         $query = "SELECT un.start_date, un.end_date
                 FROM unavailable_slots un
-                WHERE un.doctor_id = ? AND DATE(un.start_date) =? AND un.department_id =?
+                WHERE un.doctor_id = ? AND DATE(un.start_date) =?
                 ORDER BY un.start_date ASC";
         $stmt = $dbc->prepare($query);
-        $stmt->bind_param("isi",$doctor['doctor_id'],$date,$doctor['department_id']);
+        $stmt->bind_param("is",$doctor['doctor_id'],$date);
+        //We don't include the department id in the query because the doctor will be busy even in another department
         $stmt->execute();
         $appointments = $stmt->get_result();
         $stmt->close();
@@ -414,7 +417,8 @@
     function get_appointment($dbc,$app_id){
         $query = "SELECT app.*,city.city_name,dep.details,doc.first_name,doc.last_name,sp.alias,dep.room,
                         pa.first_name pa_fname, pa.last_name pa_lname,
-                        app.status,app.start_date,app.end_date,dm.details document,sec.first_name sec_fname,sec.last_name sec_lname
+                        app.status,app.start_date,app.end_date,dm.details document_details,dm.prescription
+                        ,sec.first_name sec_fname,sec.last_name sec_lname
                         ,sec.phone sec_phone
                 FROM appointment app
                 LEFT JOIN document dm ON app.id = dm.appointment_id
@@ -726,5 +730,18 @@
         $result = $stmt->get_result();
         $stmt->close();
         return $result->fetch_assoc();
+    }
+
+    function update_appointment($dbc,$data){
+        $query = "UPDATE document SET details=?,prescription=?
+                WHERE appointment_id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("ssi",$data['new_details'],$data['new_prescription'],$data['app_id']);
+        $stmt->execute();
+        
+        $query = "UPDATE appointment SET bill=? WHERE id = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("di",$data['new_bill'],$data['app_id']);
+        $stmt->execute();
     }
 ?>

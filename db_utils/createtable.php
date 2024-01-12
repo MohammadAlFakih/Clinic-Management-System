@@ -102,7 +102,7 @@
 
 	//Appointment
 	$query = 'CREATE TABLE `mhamad`. `appointment` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NOT NULL , `patient_id` INT NOT NULL ,
-	`department_id` INT NOT NULL , `start_date` DATETIME NOT NULL , `end_date` DATETIME NOT NULL , `bill` INT NOT NULL DEFAULT 0 ,
+	`department_id` INT NOT NULL , `start_date` DATETIME NOT NULL , `end_date` DATETIME NOT NULL , `bill` FLOAT NOT NULL DEFAULT 0 ,
 	`status` VARCHAR(30) NOT NULL DEFAULT "pending" ,`book_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	 PRIMARY KEY (`id`))';
 	executeQuery($dbc, $query);
@@ -120,12 +120,17 @@
 
 	//Document
 	$query = 'CREATE TABLE `mhamad`.`document` (`id` INT NOT NULL AUTO_INCREMENT , `appointment_id` INT NOT NULL ,
-	`details` TEXT NULL , PRIMARY KEY (`id`))';
+	`details` TEXT NULL ,`prescription` TEXT NULL, PRIMARY KEY (`id`))';
 	executeQuery($dbc, $query);
 
 	//Appointment Document
 	$query = 'ALTER TABLE `document` ADD CONSTRAINT `appointment_document` FOREIGN KEY (`appointment_id`)
 	REFERENCES `appointment`(`id`) ON DELETE CASCADE ON UPDATE CASCADE';
+	executeQuery($dbc, $query);
+
+	//Trigger toCreate new document on creating new appointment
+	$query = "CREATE TRIGGER `new_document` AFTER INSERT ON `appointment` FOR EACH ROW INSERT INTO 
+	document (appointment_id,details,prescription) VALUE(NEW.id,NULL,NULL)";
 	executeQuery($dbc, $query);
 
 	//Black List

@@ -8,8 +8,10 @@
 </head>
 <?php
     include '../includes/header.php';
-    if(!isset($_SESSION['role']))
+    if(!isset($_SESSION['role'])){
         header("location:../login.php");
+        die();
+    }
     
     if($_SESSION['role']=='patient'){
         $dbc = connectServer('localhost','root','',1);
@@ -69,10 +71,7 @@
             echo '</tbody>
         </table></div>';
         }
-        
+        mysqli_close($dbc);
     }
-?>
-<?php 
-mysqli_close($dbc);
 ?>
 </html>
