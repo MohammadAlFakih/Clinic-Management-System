@@ -5,7 +5,7 @@
         die();
     }
 
-    if($_SESSION['role'] != 'doctor' && $_SESSION['secretary']) {
+    if($_SESSION['role'] == 'patient') {
         header("location:../index.php");
         die();
     }
@@ -39,27 +39,6 @@
         $dbc->close();
         die();
     }
-
-    $sql = " SELECT COUNT(*) AS overlap_count
-    FROM appointment
-    WHERE doctor_id = ? AND DAY(start_date) = DAY(?) AND (
-        (? >= start_date AND ? < end_date)
-        OR (? > start_date AND ? <= end_date))";
-
-
-    $stmt = $dbc->prepare($sql);
-    $stmt->bind_param("isssss", $_SESSION['doctor_id'],$_POST['date'], $start_date, $start_date, $end_date, $end_date);
-    $stmt->execute();
-    $stmt->bind_result($overlapCount);
-    $stmt->fetch();
-    $stmt->close();
-    
-    if($overlapCount > 0) {
-        header("Location:".$_SESSION['previous_url']."&message=Overlap with a booked appointment! To be continued...");
-        $dbc->close();
-        die();
-    }
-
 
     $_SESSION['start_date'] = $_POST['date']." ".$_POST['start_hour'];
     $_SESSION['end_date'] = $_POST['date']." ".$_POST['end_hour'];

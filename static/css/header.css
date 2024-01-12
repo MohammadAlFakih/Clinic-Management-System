@@ -29,6 +29,13 @@ body{
     align-items: center;
 }
 
+.doc-actions{
+    width: 20%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
 .action{
     padding: 2%;
     text-decoration: none;
