@@ -146,7 +146,7 @@ else {
             <button class="styled-button" type="submit">Submit</button>
             </div>
             </div>';
-            if ($_SESSION['role'] == 'pateint') {
+            if ($_SESSION['role'] == 'patient') {
                 echo ' <div class="note"> Once you select your appointment, your application will be marked as pending,
                 and you will receive a notification once it is accepted. If you choose a time slot that
                 is already booked, you will be placed in our queue system, and there is a possibility
