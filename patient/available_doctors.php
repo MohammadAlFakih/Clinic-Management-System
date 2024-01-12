@@ -21,7 +21,7 @@ if (!isset($_SESSION['role'])) {
 }
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && (!isset($_GET['city']) || !isset($_GET['specialization'])
     || !isset($_GET['date']))) {
-    header('location:make_appointment.php');
+    header('location:make_appointment2.php');
     die();
 } 
 
@@ -124,7 +124,7 @@ else {
             ';
 
             //Prepare sensitive information to book appointment
-            $_SESSION['selected_doctor_id'] = $doctor['doctor_id'];
+            $_SESSION['doctor_id'] = $doctor['doctor_id'];
             $_SESSION['date'] = $_GET['date'];
             $_SESSION['department_id'] = $doctor['department_id'];
             $_SESSION['work_start_hour'] = $doctor['start_hour'];
@@ -145,12 +145,15 @@ else {
             <div class="row">
             <button class="styled-button" type="submit">Submit</button>
             </div>
-            </div>
-            <div class="note"> Once you select your appointment, your application will be marked as pending,
-             and you will receive a notification once it is accepted. If you choose a time slot that
-              is already booked, you will be placed in our queue system, and there is a possibility
-               that you may not secure this appointment.
-            </div>
+            </div>';
+            if ($_SESSION['role'] == 'pateint') {
+                echo ' <div class="note"> Once you select your appointment, your application will be marked as pending,
+                and you will receive a notification once it is accepted. If you choose a time slot that
+                is already booked, you will be placed in our queue system, and there is a possibility
+                that you may not secure this appointment.
+                </div> ';
+            }
+            echo '
             </form></div>
         ';
 }

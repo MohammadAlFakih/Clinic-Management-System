@@ -28,6 +28,12 @@
         die();
     }
 
+
+    // I wanna add the message class
+    if(isset($_GET['message'])){
+        echo '<div class="message">' . $_GET['message'] . '</div>';
+    }
+
     $dbc = connectServer('localhost', 'root', '', 1);
     $db = "mhamad";
     selectDB($dbc, $db, 1);
@@ -42,50 +48,58 @@
 <body>
 
 <form method="post">
+
     <label for="patient_email">Patient Email:</label>
     <input type="email" name="patient_email" id="patient_email" placeholder="Enter patient email">
-    <input type="submit" name="submit_email" value="Submit">
+
+    <label for="date" class="form-label">Choose Appointment Date:</label>
+    <input type="date" id="appointmentDate" name="date" class="form-input">
+    <br><br>
+
+    <input type="submit" value="Search" name='search' class="form-button">
+
 </form>
 
-<p>OR</p>
-
-<form method="post">
-    <label for="patient_dropdown">Select Patient:</label>
-    <select name="patient_dropdown" id="patient_dropdown">
-        <?php
-
-        $patients = get_patients($dbc);
-
-        // Loop through the patients and create options for the dropdown
-        foreach ($patients as $patient) {
-            echo "<option value='$patient'>$patient</option>";
-        }
-        ?>
-    </select>
-    <input type="submit" name="submit_dropdown" value="Submit">
-</form>
 
 </body>
 
 <?php
 
-if (isset($_POST['submit_email']) && !isset($_SESSION['selected_patient_id'])) {
+$patients = get_patients($dbc);
 
-    $patientEmail = $_POST['patient_email'];
+// Bhess bala ma 7ot condition  && if !isset($_SESSION['patient_id']) balke i wanna override the patient w i didn't unset the session
+if (isset($_POST['search'])) {
+    if (!empty($_POST['date']) && isset($_POST['patient_email'])) {
 
-    if (in_array($patientEmail, $patients)) {
-        $_SESSION['selected_patient_id'] = get_patient_id_from_email($dbc, $patientEmail);
-        header('location:../patient/make_appointment2.php');
-    } else {
-        echo "Email not found.";
+        $patientEmail = $_POST['patient_email'];
+
+        date_default_timezone_set('Asia/Beirut');
+        $current_date = date('Y-m-d');
+        $filtered_date = new DateTime($_POST['date']);
+        $filtered_date = $filtered_date->format('Y-m-d');
+
+        if (in_array($patientEmail, $patients)) {
+            $_SESSION['patient_id'] = get_patient_id_from_email($dbc, $patientEmail);
+            // Get the date and check its conditions
+            if ($filtered_date > $current_date) {
+                $current_doctor = get_doctor_info($dbc, $_SESSION['doctor_id']);
+                header('location:../patient/available_doctors.php?date='.$_POST['date'].'&specialization='.$current_doctor['specialization'].
+                        '&city='.$current_doctor['city'] . '&doctor_id=' . $_SESSION['doctor_id'] );
+            }
+            else {
+                header('location:choose_patient.php?message= Date is invalid!');
+                die();
+            }
+        } else {
+            header('location:choose_patient.php?message=Email not found !');
+            die();
+        }
     }
-    
 
-} elseif (isset($_POST['submit_dropdown'])) {
-
-    $patientEmail = $_POST['patient_dropdown'];
-    $_SESSION['selected_patient_id'] = get_patient_id_from_email($dbc, $patientEmail);
-    header('location:../patient/make_appointment2.php');
+    else {
+        header('location:choose_patient.php?message=Enter both email and specific date!');
+        die();
+    }
 }
 
 ?>

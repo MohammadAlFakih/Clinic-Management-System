@@ -23,10 +23,19 @@
             }
             if ($_SESSION['role'] == 'patient') {
             echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment2.php">New Appointment</a></div>';
+
+            foreach ($_SESSION as $key => $value) {
+                echo $key . ' : ' . $value . '<br>'; 
             }
-            elseif ($_SESSION['role'] == 'doctor') {
+
+            }
+            elseif ($_SESSION['role'] == 'doctor' || $_SESSION['role'] == 'secretary') {
                 echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/secretary/choose_patient.php">New Appointment</a></div>';
                 echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/doctor/manage_schedule.php">Manage Weekly Schedule</a></div>';
+
+                foreach ($_SESSION as $key => $value) {
+                    echo $key . ' : ' . $value . '<br>'; 
+                }
             }
             ?>
         </div>
