@@ -5,7 +5,7 @@
         die();
     }
 
-    if($_SESSION['role'] != 'doctor') {
+    if($_SESSION['role'] != 'doctor' && $_SESSION['secretary']) {
         header("location:../index.php");
         die();
     }
