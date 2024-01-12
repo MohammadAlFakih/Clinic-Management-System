@@ -48,14 +48,24 @@ selectDB($dbc, $db, 1);
                             }
 
                             else if($_SESSION['role'] == 'secretary') {
-                                $query = "SELECT doctor_id FROM secretary WHERE id=".$result['id'];
-                                $doctor_id = mysqli_query($dbc, $query);
-                                $doctor_id = $doctor_id->fetch_assoc();
-                                $_SESSION['doctor_id'] = $doctor_id['doctor_id'];
+                                $query = "SELECT sec.doctor_id,doc.department_id
+                                            FROM secretary sec
+                                            JOIN doctor doc ON sec.doctor_id = doc.id
+                                            WHERE sec.id=".$result['id'];
+                                $doctor = mysqli_query($dbc, $query);
+                                $doctor = $doctor->fetch_assoc();
+                                $_SESSION['doctor_id'] = $doctor['doctor_id'];
+                                $_SESSION['doctor_department_id'] = $doctor['department_id'];
                             }
                             else{
+                                $query = "SELECT doc.department_id
+                                            FROM doctor doc
+                                            WHERE doc.id=".$result['id'];
+                                $doctor = mysqli_query($dbc, $query);
+                                $doctor = $doctor->fetch_assoc();
                                 $_SESSION['doctor_name'] = $result['first_name']." ".$result['last_name'];
                                 $_SESSION['doctor_id'] = $result['id'];
+                                $_SESSION['doctor_department_id'] = $doctor['department_id'];
                                 // i can use user_id and doctor_id interchangeably for the doctor
                                 // We can add more attributes if needed
                             }

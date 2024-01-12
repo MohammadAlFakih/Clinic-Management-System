@@ -323,6 +323,7 @@
         $row = $result->fetch_assoc();
         $dep_id = $row['department_id'];
 
+        $_SESSION['last_url'] = $_SERVER['REQUEST_URI'];
         $_SESSION['department_id'] = $dep_id;
         $_SESSION['work_start_hour'] = $schedule['start_hour'];
         $_SESSION['work_end_hour'] = $schedule['end_hour'];

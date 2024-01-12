@@ -27,8 +27,10 @@
                 echo "<div class='home_app app'><a class='action' href='http://localhost/Clinic-Management-System/patient/appointments.php'>Appointments</a></div>";
             }
             else {
-                echo "<div class='home_app app'><a class='action' href='http://localhost/Clinic-Management-System/doctor/appointments.php'>Appointments</a></div>";
-                echo "<div class='home_app app'><a class='action' href='http://localhost/Clinic-Management-System/secretary/requests.php'>Requests</a></div>";
+                echo "<div class='doc-actions'>
+                    <div class='home_app app'><a class='action' href='http://localhost/Clinic-Management-System/doctor/appointments.php'>Appointments</a></div>
+                    <div class='home_app app'><a class='action' href='http://localhost/Clinic-Management-System/secretary/requests.php'>Requests</a></div>
+                    </div>";
             }
         ?>
             <div class='actions'>
