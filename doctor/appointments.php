@@ -14,7 +14,7 @@
     if(!isset($_SESSION['role']))
         header("location:../login.php");
 
-    if($_SESSION['role'] != 'doctor') {
+    if($_SESSION['role'] != 'doctor' && $_SESSION['role'] != 'secretary') {
         header("location:../index.php");
         die();
     }

@@ -7,7 +7,7 @@
         die();
     }
 
-    if ($_SESSION['role'] != 'doctor') {
+    if ($_SESSION['role'] == 'patient') {
         header('location:../index.php');
         die();
     }
@@ -23,7 +23,7 @@
 </div>
 
 <?php
-    
+
     //Display all the week scedule if date is not specified
     if (!isset($_GET['date'])) {
 

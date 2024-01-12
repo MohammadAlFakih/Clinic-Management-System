@@ -128,9 +128,9 @@
 	REFERENCES `appointment`(`id`) ON DELETE CASCADE ON UPDATE CASCADE';
 	executeQuery($dbc, $query);
 
-	//Create new document on creating new appointment
+	//Trigger toCreate new document on creating new appointment
 	$query = "CREATE TRIGGER `new_document` AFTER INSERT ON `appointment` FOR EACH ROW INSERT INTO 
-	document (details,prescription) VALUE(NULL,NULL)";
+	document (appointment_id,details,prescription) VALUE(NEW.id,NULL,NULL)";
 	executeQuery($dbc, $query);
 
 	//Black List

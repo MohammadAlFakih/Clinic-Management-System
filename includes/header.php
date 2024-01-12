@@ -26,10 +26,8 @@
             if ($_SESSION["role"] == "patient") {
                 echo "<div class='home_app app'><a class='action' href='http://localhost/Clinic-Management-System/patient/appointments.php'>Appointments</a></div>";
             }
-            else if ($_SESSION["role"] == "doctor") {
+            else {
                 echo "<div class='home_app app'><a class='action' href='http://localhost/Clinic-Management-System/doctor/appointments.php'>Appointments</a></div>";
-            }
-            else{
                 echo "<div class='home_app app'><a class='action' href='http://localhost/Clinic-Management-System/secretary/requests.php'>Requests</a></div>";
             }
         ?>

@@ -46,7 +46,7 @@ $query = "SELECT status FROM appointment
     }
 
     //Notifie the patient that his appointment has been removed
-    if($role != 'patient'){
+    if($_SESSION['role'] != 'patient'){
         $query = 'INSERT INTO notifications (sender,receiver,reason) VALUES
         (?,?,"remove")';
         $stmt = $dbc->prepare($query);
