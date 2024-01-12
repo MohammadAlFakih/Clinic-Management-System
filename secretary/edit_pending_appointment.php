@@ -85,6 +85,8 @@ $result = $stmt->get_result();
 //Update but let status = queued
 $message="";
 if($result && mysqli_num_rows($result)>0){
+    $result = $result->fetch_assoc();
+    echo $result['id'];
     $query = "UPDATE appointment SET start_date=?,end_date=?
                 WHERE id=?";
     $stmt = $dbc->prepare($query);

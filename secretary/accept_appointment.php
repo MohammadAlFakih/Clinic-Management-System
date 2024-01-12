@@ -8,6 +8,7 @@ if(!isset($_SESSION['role'])){
 
 if($_SESSION['role'] == 'patient' || !isset($_GET['app_id']) || !isset($_SESSION['doctor_id'])){
     header('location:../index.php');
+    echo "hi";
     die();
 }
 
@@ -19,14 +20,15 @@ selectDB($dbc,'mhamad',0);
 
 $query = "SELECT app.status,app.doctor_id,app.start_date,app.end_date,app.patient_id
             FROM appointment app
-            WHERE app.id = ? AND DATE(app.start_date)>= ?";
+            WHERE app.id = ?";
 $stmt = $dbc->prepare($query);
-$stmt->bind_param('is',$app_id,$today);
+$stmt->bind_param('i',$app_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if(mysqli_num_rows($result) == 0){
-    header('location:../index.php');
+    //header('location:../index.php');
+    echo "hi";
     mysqli_close($dbc);
     die();
 }

@@ -24,9 +24,9 @@
         <form method="post" action="appointments.php">
         <label for="status">Status:</label>
         <select name="status" id="status">
-            <option value="any" <?php echo ($_POST['status'] === 'any') ? 'selected' : ''; ?>>Any</option>
-            <option value="upcoming"<?php echo ($_POST['status'] === 'upcoming') ? 'selected' : ''; ?>>Upcoming</option>
-            <option value="done"<?php echo ($_POST['status'] === 'done') ? 'selected' : ''; ?>>Done</option>
+            <option value="any" <?php echo ($_SERVER['REQUEST_METHOD']=='POST' && $_POST['status'] === 'any') ? 'selected' : ''; ?>>Any</option>
+            <option value="upcoming"<?php echo ($_SERVER['REQUEST_METHOD']=='POST' && $_POST['status'] === 'upcoming') ? 'selected' : ''; ?>>Upcoming</option>
+            <option value="done"<?php echo ($_SERVER['REQUEST_METHOD']=='POST' && $_POST['status'] === 'done') ? 'selected' : ''; ?>>Done</option>
         </select>
         <button type="submit" class="filter-icon">
             <i class="fas fa-filter"></i>
@@ -38,9 +38,9 @@
         $dbc = connectServer('localhost','root','',1);
         selectDB($dbc,'mhamad',1);
 
-        $query = "SELECT appointment.*, patient.first_name, patient.last_name, patient.age, patient.gender FROM appointment
+        $query = "SELECT appointment.*, patient.first_name, patient.last_name, patient.age, patient.gender,patient.phone FROM appointment
                 JOIN patient ON appointment.patient_id = patient.id
-                WHERE doctor_id = ? AND status != 'pending' ";
+                WHERE doctor_id = ? AND status != 'pending' AND status != 'queued'";
 
         if (!isset($_POST['status']) || ($_POST['status']) == 'any') {
             $stmt = $dbc->prepare($query);
@@ -72,7 +72,8 @@
         //Display the appointments
         else{
             echo '
-        <table class="container">
+        <div class="container">
+        <table>
             <thead>
                 <tr>
                     <th>Patient Name</th>
