@@ -27,4 +27,6 @@ $dbc->close();
 unset($_SESSION['department_id']);
 unset($_SESSION['start_date']);
 unset($_SESSION['end_date']);
+unset($_SESSION['work_start_hour']);
+unset($_SESSION['work_end_hour']);
 header("Location:".$_SESSION['previous_url']."&message=Done ✅");
