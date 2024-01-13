@@ -241,6 +241,10 @@
         $appointments = $stmt->get_result();
         $stmt->close();
 
+        if ($appointments->num_rows == 0) {
+            $full_available = true;
+        }
+
 
         while($row = $appointments->fetch_assoc()){
             $unavailable_time[] = array('start_date' => $row['start_date'], 'end_date' => $row['end_date']);
@@ -353,12 +357,31 @@
         <button class="styled-button" type="submit">Submit</button>
         </div>
         </div>
-        </form></div>
+        </form>';
+        
+        if (!$full_available) {
+            $_SESSION['date'] = $_GET['date'];
+            echo '
+            <form method="post" action="clear_unavailable_hours.php">
+                <button class="styled-button-on" type="submit">Clear Unavailable Hours</button>
+            </form>
+            
+            </div>
+            ';
+        }
+        else {
+        echo '
+        <div>
+            <div class="styled-button-off">Clear Unavailable Hours</div>
+        </div>
+        
+        </div>
         ';
+        }
 
-        // foreach ($_SESSION as $key => $value) {
-        //     echo $key . " : " . $value . "<br>";
-        // }
+        foreach ($_SESSION as $key => $value) {
+            echo $key . " : " . $value . "<br>";
+        }
     }
 
 ?>
