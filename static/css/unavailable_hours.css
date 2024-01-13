@@ -97,3 +97,27 @@
     padding: 1vw;
     margin-top: 1vh;
 }
+
+.styled-button-off {
+    background-color: #4f4f4f;
+    color: #fff;
+    padding: 1vw;
+    font-size: 2vw;
+    border: none;
+    border-radius: 1vw;
+    cursor: pointer;
+}
+
+.styled-button-on {
+    background-color: #ef1f08;
+    color: #fff;
+    padding: 1vw;
+    font-size: 2vw;
+    border: none;
+    border-radius: 1vw;
+    cursor: pointer;
+}
+
+.styled-button-on:hover {
+    background-color: #b30b0b;
+}
