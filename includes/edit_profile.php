@@ -114,6 +114,11 @@ if(isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['ph
     	header("Location:edit_profile.php?error=$em");
 	    exit;
     }
+    else if (email_exists($email, $dbc) && $email != $user['email']) {
+        $em = "Email already exists.";
+    	header("Location:edit_profile.php?error=$em");
+	    exit;
+    }
     else {
         // if image is changed
         if (isset($_FILES['pp']['name']) && !empty($_FILES['pp']['name'])) {
