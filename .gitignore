@@ -1,0 +1,6 @@
+.DS_Store
+static/.DS_Store
+static/media/.DS_Store
+static/media/profile/.DS_Store
+static/media/profile/
+!static/media/profile/default.png
