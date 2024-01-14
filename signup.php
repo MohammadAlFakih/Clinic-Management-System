@@ -15,7 +15,7 @@
         selectDB($dbc,$db,1);
     ?>
     <div class="container">
-    <form class="user-form" action="signup.php" method="POST">
+    <form class="user-form" action="signup.php" method="POST" enctype="multipart/form-data">
 
         <label class="form-label" for="firstName">First Name:</label>
         <input class="form-input" type="text" id="first_name" name="first_name" placeholder="Enter your first name">
@@ -45,6 +45,9 @@
         <label class="form-label" for="email">Verify Passowrd:</label>
         <input class="form-input" type="password" id="password2" name="password2" placeholder="Password">
 
+		<label class="form-label">Profile Picture: </label>
+		<input type="file" name="pp">
+
         <button class="form-button" type="submit" name="submit">Sign Up</button>
         <div class="error">
             <?php 
@@ -66,13 +69,43 @@
                             die();
                         }
                         else{
-                            $patient=new Patient($_POST);
-                            $patient->password=password_hash($_POST['password1'],PASSWORD_DEFAULT);
-                            insert_patient($patient,$dbc);
-                            header('location:login.php?message=success');
+                            if (isset($_FILES['pp']['name']) && !empty($_FILES['pp']['name'])) {
+         
+                                $img_name = $_FILES['pp']['name'];
+                                $tmp_name = $_FILES['pp']['tmp_name'];
+                                $error = $_FILES['pp']['error'];
+                                
+                                if($error === 0){
+                                   $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+                                   $img_ex_to_lc = strtolower($img_ex);
+                       
+                                   $allowed_exs = array('jpg', 'jpeg', 'png');
+
+                                   if(in_array($img_ex_to_lc, $allowed_exs)){
+                                        $new_img_name = uniqid($_POST['first_name'], true).'.'.$img_ex_to_lc;
+                                        $img_upload_path = './static/media/profile/'.$new_img_name;
+                                        move_uploaded_file($tmp_name, $img_upload_path);
+                                        $_POST['profile_pic'] = $new_img_name;
+                                    }
+
+                                    else {
+                                        echo "You can't upload files of this type";
+                                        die();
+                                    }
+                                }
+                            }
+                            else {
+                                $_POST['profile_pic'] = 'default.png';
+                            }
+                            }
                         }
-                    }
+                                   
+                        $patient=new Patient($_POST);
+                        $patient->password=password_hash($_POST['password1'],PASSWORD_DEFAULT);
+                        insert_patient($patient,$dbc);
+                        header('location:login.php?message=success');
                 }
+
             ?>
         </div>
     </form>
