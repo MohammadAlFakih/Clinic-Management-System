@@ -739,16 +739,83 @@
     }
 
     function update_appointment($dbc,$data){
+
+        $new_start_date = $data['new_start_date'];
+        $new_start_hour = $data['new_start_hour'];
+        $new_end_hour = $_POST['new_end_hour'];
+
+        //Validation on start and end_hour
+        $min_duration = 0.5; //min = 30 min
+        if(time_to_float($new_end_hour)-time_to_float($new_start_hour)<$min_duration){  
+            return [false,"The minimum duration of an appointment is 30 min"];
+        }
+        $max_duration = 2;
+        if(time_to_float($new_end_hour)-time_to_float($new_start_hour)>$max_duration){  
+            return [false,"The maximum duration of an appointment is 2 hours"];
+        }
+
+        $new_end_date = $new_start_date." ".$new_end_hour;
+        $new_start_date .= " ".$new_start_hour;
+
+        //Import the schedule on the given date
+        $day_of_week = strtolower(date("l",strtotime($new_start_date)));
+        $query = "SELECT *
+                    FROM week_schedule
+                    WHERE day = ?";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("s",$day_of_week);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if(!$result || mysqli_num_rows($result)==0){
+            return [false,"Error in week schedule, call the IT team"];
+        }
+        $schedule = $result->fetch_assoc();
+        //Check if the new date is outside the shcedule
+        if(time_to_float($schedule['start_hour'])>time_to_float($new_start_hour)
+        || time_to_float($schedule['end_hour'])<time_to_float($new_end_hour)){
+            return [false,"The new date is outside the work hours range"];
+        }
+        //Check if the new date overlap with some unavailable hours 
+        $query = "SELECT id
+        FROM unavailable_slots
+        WHERE doctor_id=".$_SESSION['doctor_id']." AND 
+        ( ? >= start_date AND ? < end_date) OR ( ? > start_date AND ? <= end_date)
+        OR ( ? < start_date AND ? > end_date) OR (?=start_date AND ? = end_date)";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("ssssssss",$new_start_date,$new_start_date,$new_end_date,
+        $new_end_date,$new_start_date,$new_end_date,$new_start_date,$new_end_date);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result && mysqli_num_rows($result)>0){
+            return [false,"The new appointment date overlaps with unavailabile slots."];
+        }
+
+        //Check if no upcoming appointments overlap with this appointment then put it as pending
+        $query = "SELECT id
+        FROM appointment
+        WHERE doctor_id = ? AND id!= ? AND status != 'pending' AND status!= 'queued'
+        AND (( ? >= start_date AND ? < end_date) OR ( ? > start_date AND ? <= end_date)
+        OR ( ? < start_date AND ? > end_date) OR (?=start_date AND ? = end_date))";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("iissssssss",$_SESSION['doctor_id'],$data['app_id'],$new_start_date,$new_start_date,$new_end_date,
+        $new_end_date,$new_start_date,$new_end_date,$new_start_date,$new_end_date);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result && mysqli_num_rows($result)>0){
+            return [false,"The new appointment date overlaps with some booked uppointments"];
+        }
+
         $query = "UPDATE document SET details=?,prescription=?
                 WHERE appointment_id = ?";
         $stmt = $dbc->prepare($query);
         $stmt->bind_param("ssi",$data['new_details'],$data['new_prescription'],$data['app_id']);
         $stmt->execute();
         
-        $query = "UPDATE appointment SET bill=? WHERE id = ?";
+        $query = "UPDATE appointment SET bill=?,start_date=?,end_date=? WHERE id = ?";
         $stmt = $dbc->prepare($query);
-        $stmt->bind_param("di",$data['new_bill'],$data['app_id']);
+        $stmt->bind_param("dssi",$data['new_bill'],$new_start_date,$new_end_date,$data['app_id']);
         $stmt->execute();
+        return [true,""];
     }
 
     function delay_appointment($start_date,$app_id){

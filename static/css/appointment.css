@@ -1,5 +1,5 @@
 .appointment-container{
-    padding-bottom: 20vh;
+    padding-bottom: 2vw;
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -141,4 +141,31 @@ img{
 }
 .cancel:hover {
     background-color: #ff3232;
+}
+
+.show-sc{
+    padding: 0.2vw;
+    background-color: #4989f6;
+    cursor: pointer;
+}
+
+.new-date{
+    padding-bottom: 3vw;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 3vw;
+}
+
+.message{
+    width: 100%;
+    text-align: center;
+    font-size: 2vw;
+}
+
+.success{
+    color: rgb(15, 204, 141);
+}
+.fail{
+    color: #ff6262;
 }

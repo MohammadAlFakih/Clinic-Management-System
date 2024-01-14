@@ -36,7 +36,6 @@ $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();
 
-echo mysqli_num_rows($result);
 //Delay the overlapped appointments
 if(mysqli_num_rows($result) > 0) {
     $appointmens_to_delay = [];
