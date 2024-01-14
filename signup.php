@@ -18,13 +18,13 @@
     <form class="user-form" action="signup.php" method="POST" enctype="multipart/form-data">
 
         <label class="form-label" for="firstName">First Name:</label>
-        <input class="form-input" type="text" id="first_name" name="first_name" placeholder="Enter your first name">
+        <input class="form-input" type="text" id="first_name" name="first_name" required placeholder="Enter your first name">
 
         <label class="form-label" for="lastName">Last Name:</label>
-        <input class="form-input" type="text" id="last_name" name="last_name" placeholder="Enter your last name">
+        <input class="form-input" type="text" id="last_name" name="last_name" required placeholder="Enter your last name">
 
         <label class="form-label" for="age">Age:</label>
-        <input class="form-input" type="number" id="age" name="age" placeholder="Enter your age">
+        <input class="form-input" type="number" id="age" name="age" required placeholder="Enter your age">
 
         <label class="form-label" for="gender">Gender:</label>
         <select class="form-input" id="gender" name="gender">
@@ -34,16 +34,16 @@
         </select>
 
         <label class="form-label" for="phone">Phone:</label>
-        <input class="form-input" type="tel" id="phone" name="phone" placeholder="Enter your phone number" >
+        <input class="form-input" type="tel" id="phone" name="phone" required placeholder="Enter your phone number" >
 
         <label class="form-label" for="email">Email:</label>
-        <input class="form-input" type="email" id="email" name="email" placeholder="Enter your email">
+        <input class="form-input" type="email" id="email" name="email" required placeholder="Enter your email">
 
         <label class="form-label" for="email">Password:</label>
-        <input class="form-input" type="password" id="password1" name="password1" placeholder="Password">
+        <input class="form-input" type="password" id="password1" name="password1" required placeholder="Password">
 
         <label class="form-label" for="email">Verify Passowrd:</label>
-        <input class="form-input" type="password" id="password2" name="password2" placeholder="Password">
+        <input class="form-input" type="password" id="password2" name="password2" required placeholder="Password">
 
 		<label class="form-label">Profile Picture: </label>
 		<input type="file" name="pp">
@@ -53,9 +53,9 @@
             <?php 
             if(isset($_POST['submit']))
                 {
-                    if(!isset($_POST['first_name']) || !isset($_POST['last_name']) 
-                    || !isset($_POST['email']) || !isset($_POST['age']) 
-                    || !isset($_POST['password1']) || !isset($_POST['password2']) || !isset($_POST['gender'])){
+                    if(!empty($_POST['first_name']) || !empty($_POST['last_name']) 
+                    || !empty($_POST['email']) || !empty($_POST['phone']) || !empty($_POST['age']) 
+                    || !empty($_POST['password1']) || !empty($_POST['password2']) || !isset($_POST['gender'])){
                         echo "Please enter all your information";
                         die();
                     }
