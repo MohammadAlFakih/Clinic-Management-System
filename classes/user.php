@@ -8,6 +8,8 @@
         public $gender;
         public $password;
         public $phone;
+        public $profile_pic;
+
     
         // Constructor
         public function __construct($data) {
@@ -20,6 +22,8 @@
             else
                 $this->gender ='F';
             $this->phone = trim($data['phone']);
+
+            $this->profile_pic = $data['profile_pic'] ?? null;
         }
     }
 ?>

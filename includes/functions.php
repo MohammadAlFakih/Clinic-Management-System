@@ -23,10 +23,10 @@
     }
 
     function insert_patient($patient,$dbc){
-        $query="INSERT INTO patient (first_name,last_name,email,password,gender,age,phone)
-         VALUES (?,?,?,?,?,?,?);";
+        $query="INSERT INTO patient (first_name,last_name,email,password,gender,age,phone,pp)
+         VALUES (?,?,?,?,?,?,?,?);";
         $stmt = $dbc->prepare($query);
-        $stmt->bind_param("sssssis",$patient->first_name,$patient->last_name,$patient->email,$patient->password,$patient->gender,$patient->age,$patient->phone);
+        $stmt->bind_param("sssssiss",$patient->first_name,$patient->last_name,$patient->email,$patient->password,$patient->gender,$patient->age,$patient->phone,$patient->profile_pic);
         // Execute the query
         $stmt->execute();
         // Close the statement
@@ -451,10 +451,10 @@
         }
         $inserted_date = "first_name,last_name,email,role,gender,age,phone";
         if($role == 'patient'){
-            $query = "SELECT id,".$inserted_date." FROM patient WHERE id =?";
+            $query = "SELECT id,pp,".$inserted_date." FROM patient WHERE id =?";
         }
         else if($role == 'doctor'){
-            $query = "SELECT doc.id,".$inserted_date.",sp.alias,city.city_name,dep.room,dep.details
+            $query = "SELECT doc.id,doc.pp,".$inserted_date.",sp.alias,city.city_name,dep.room,dep.details
             FROM doctor doc
             JOIN department dep ON dep.id = doc.department_id
             JOIN city ON dep.city_id = city.id
@@ -462,7 +462,7 @@
             WHERE doc.id =?";
         }
         else{
-            $query = "SELECT sec.id,sec.first_name,sec.last_name,sec.email,
+            $query = "SELECT sec.id,sec.pp,sec.first_name,sec.last_name,sec.email,
             sec.role,sec.gender,sec.age,sec.phone,doc.first_name doctor_fname,doc.last_name doctor_lname
             FROM secretary sec
             JOIN doctor doc ON doc.id = sec.doctor_id
