@@ -9,9 +9,9 @@
 </head>
 <?php
 include "includes/header.php";
-$dbc = connectServer('localhost', 'root', '', 1);
-$db = "mhamad";
-selectDB($dbc, $db, 1);
+$dbc = connectServer('localhost', 'root', '', 0);
+$db = "clinic_db";
+selectDB($dbc, $db, 0);
 ?>
 
 <body>

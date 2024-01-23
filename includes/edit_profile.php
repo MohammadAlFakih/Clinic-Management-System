@@ -5,8 +5,8 @@ if(!isset($_SESSION['role'])){
     header('location:../login.php');
     die();
 }
-$dbc = connectServer('localhost', 'root', '', 1);
-selectDB($dbc,'mhamad',1);
+$dbc = connectServer('localhost', 'root', '', 0);
+selectDB($dbc,'clinic_db',0);
 
 $user = get_user_info($dbc,$_SESSION['user_id'],$_SESSION['role']);
 

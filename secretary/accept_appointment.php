@@ -16,7 +16,7 @@ $app_id = $_GET['app_id'];
 $today = date('Y-m-d');
 
 $dbc = connectServer('localhost','root','',0);
-selectDB($dbc,'mhamad',0);
+selectDB($dbc,'clinic_db',0);
 
 $query = "SELECT app.status,app.doctor_id,app.start_date,app.end_date,app.patient_id
             FROM appointment app
@@ -56,9 +56,11 @@ else{
 
         //Make all the appointment that overlap with the current appointment queued
         $query = "UPDATE appointment SET status = 'queued'
-         WHERE start_date < ? AND end_date > ? AND id!=?";
+         WHERE id!=? AND (( ? >= start_date AND ? < end_date) OR ( ? > start_date AND ? <= end_date)
+                    OR ( ? < start_date AND ? > end_date) OR (?=start_date AND ? = end_date))";
         $stmt = $dbc->prepare($query);
-        $stmt->bind_param('ssi',$app['end_date'],$app['start_date'],$_GET['app_id']);
+        $stmt->bind_param('ssssssssi',$_GET['app_id'],$app['start_date'],$app['start_date'],$app['end_date'],
+        $app['end_date'],$app['start_date'],$app['end_date'],$app['start_date'],$app['end_date']);
         $stmt->execute();
     }
 }

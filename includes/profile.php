@@ -8,8 +8,8 @@ if(!isset($_SESSION['role'])){
     die();
 }
 
-$dbc = connectServer('localhost', 'root', '', 1);
-selectDB($dbc,'mhamad',1);
+$dbc = connectServer('localhost', 'root', '', 0);
+selectDB($dbc,'clinic_db',0);
 
 if(isset($_GET['id']) && isset($_GET['role'])){
     $user = get_user_info($dbc,$_GET['id'],$_GET['role']);

@@ -27,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && (!isset($_GET['city']) || !isset($_GE
 
 //Display the available doctors in this city on this date with this specialization
 else if (!isset($_GET['doctor_id'])) {
-    $dbc = connectServer('localhost', 'root', '', 1);
-    $db = "mhamad";
-    selectDB($dbc, $db, 1);
+    $dbc = connectServer('localhost', 'root', '', 0);
+    $db = "clinic_db";
+    selectDB($dbc, $db, 0);
     $available_doctors = get_doctors($_GET, $dbc);
     if (count($available_doctors) == 0) {
         echo '<div class="container">
@@ -87,9 +87,9 @@ else {
         echo '<div class="message">' . $_GET['message'] . '</div>';
     }
     $_SESSION['last_url'] = $_SERVER['REQUEST_URI'];
-    $dbc = connectServer('localhost', 'root', '', 1);
-    $db = "mhamad";
-    selectDB($dbc, $db, 1);
+    $dbc = connectServer('localhost', 'root', '', 0);
+    $db = "clinic_db";
+    selectDB($dbc, $db, 0);
 
     //Check if this user make more than 2 appointments on this day with this doctor
     $appointments_nb = count_patient_appointments($_SESSION['patient_id'],$_GET['doctor_id'], $_GET['date'], $dbc);

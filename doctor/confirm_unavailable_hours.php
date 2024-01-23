@@ -12,8 +12,8 @@ if(!isset($_SESSION['role'])){
 // }
 
 
-$dbc = connectServer('localhost', 'root', '', 1);
-selectDB($dbc,"mhamad",1);
+$dbc = connectServer('localhost', 'root', '', 0);
+selectDB($dbc,"clinic_db",1);
 
 $query = "INSERT INTO unavailable_slots (doctor_id,start_date,end_date,department_id)
             VALUES (?,?,?,?) ";

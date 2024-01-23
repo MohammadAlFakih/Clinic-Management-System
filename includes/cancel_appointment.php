@@ -2,8 +2,8 @@
 session_start();
 include "../db_utils/DB_Functions.php";
 include "./functions.php";
-$dbc = connectServer('localhost','root','',1);
-selectDB($dbc,'mhamad',1);
+$dbc = connectServer('localhost','root','',0);
+selectDB($dbc,'clinic_db',0);
 if(!isset($_SESSION['role'])){
     header('location:../login.php');
     die();
@@ -64,10 +64,8 @@ $stmt->close();
 mysqli_close($dbc);
 if($_SESSION['role'] == 'patient')
     header('location:../patient/appointments.php');
-else if($_SESSION['role'] == 'secretary')
-    header('location:../secretary/requests.php');
 else{
-    header('location:../doctor/appointments.php');
+    header('location:../secretary/requests.php');
 }
 ?>
 

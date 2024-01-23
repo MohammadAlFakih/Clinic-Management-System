@@ -20,8 +20,8 @@ elseif (in_array($_SESSION['role'], array('doctor', 'secretary'))) {
     $app_status = 'upcoming';
 }
 
-$dbc = connectServer('localhost', 'root', '', 1);
-selectDB($dbc,"mhamad",1);
+$dbc = connectServer('localhost', 'root', '', 0);
+selectDB($dbc,"clinic_db",1);
 
 
 //Check if there exists a booked appointment that overlaps with the entered appoitnment => status = queued

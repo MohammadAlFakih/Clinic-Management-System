@@ -14,8 +14,8 @@
     }
     
     if($_SESSION['role']=='patient'){
-        $dbc = connectServer('localhost','root','',1);
-        selectDB($dbc,'mhamad',1);
+        $dbc = connectServer('localhost','root','',0);
+        selectDB($dbc,'clinic_db',0);
         $appointments = get_appointments($dbc,$_SESSION['patient_id']);
         //No appointments
         if($appointments->num_rows == 0){

@@ -47,7 +47,9 @@
         $result1 =$stmt->get_result();
         if(mysqli_num_rows($result1) > 0){
             $row1 = mysqli_fetch_assoc($result1);
-            if(password_verify($password,$row1['password'])){
+            // Hash the entered password using the same algorithm as in the MySQL trigger
+            $hashedPassword = hash('sha256', $password);
+            if($hashedPassword==$row1['password']){
                 return $row1;
             }
             else{   
@@ -578,11 +580,9 @@
         $result[] = $requests[0];
         for($i=1;$i<count($requests);$i++){
             $valid = true;
-
             //Check if this appointment overlap with taken appointments
             for($j=0;$j<count($result);$j++){
-                if($result[$j]['start_date']>=$requests[$i]['end_date']
-                    || $result[$j]['end_date']<=$requests[$i]['start_date'])
+                if(check_overlap($requests[$i],$result[$j]))
                     continue;
                 $valid = false;
             }
@@ -593,6 +593,17 @@
         return $result;
     }
 
+    function check_overlap($date1,$date2){
+        $start_hour1 = time_to_float((new DateTime($date1['start_date']))->format('H:i'));
+        $start_hour2 = time_to_float((new DateTime($date2['start_date']))->format('H:i'));
+        $end_hour1 = time_to_float((new DateTime($date1['end_date']))->format('H:i'));
+        $end_hour2 = time_to_float((new DateTime($date2['end_date']))->format('H:i'));
+        if(( $start_hour1 >= $start_hour2 && $start_hour1 < $end_hour2) || ( $end_hour1 > $start_hour2 && $end_hour1 <= $end_hour2)
+        || ( $start_hour1 < $start_hour2 && $end_hour1 > $end_hour2) || ( $start_hour1 >= $start_hour2 && $end_hour1 <= $end_hour2)){
+            return false;
+        }
+        return true;
+    }
 
     //<--------------------Maximize-Hours-Algorithm-------------------------------------------->
 
@@ -677,6 +688,7 @@
                 $right = $mid - 1;
             }
             $mid = intval(($left+$right)/2);
+            
         }
         return $mid+1;
     }
@@ -739,6 +751,15 @@
     }
 
     function update_appointment($dbc,$data){
+
+        //Validate billing information
+        $new_bill = $data['new_bill'];
+        $new_payed = $data['new_payed'];
+        if($new_bill<$new_payed)
+        {
+            return [false,"Invalid billing information"];
+        }
+
 
         $new_start_date = $data['new_start_date'];
         $new_start_hour = $data['new_start_hour'];
@@ -811,9 +832,9 @@
         $stmt->bind_param("ssi",$data['new_details'],$data['new_prescription'],$data['app_id']);
         $stmt->execute();
         
-        $query = "UPDATE appointment SET bill=?,start_date=?,end_date=? WHERE id = ?";
+        $query = "UPDATE appointment SET bill=?,payed=?,start_date=?,end_date=? WHERE id = ?";
         $stmt = $dbc->prepare($query);
-        $stmt->bind_param("dssi",$data['new_bill'],$new_start_date,$new_end_date,$data['app_id']);
+        $stmt->bind_param("ddssi",$data['new_bill'],$data['new_payed'],$new_start_date,$new_end_date,$data['app_id']);
         $stmt->execute();
         return [true,""];
     }
@@ -829,7 +850,7 @@
     }
 
     $dbc = connectServer("localhost","root","",1);
-    selectDB($dbc,"mhamad",1);
+    selectDB($dbc,"clinic_db",1);
 
     //Get the appointment date
     $query = "SELECT start_date, end_date,patient_id FROM appointment WHERE id = ?";
@@ -994,7 +1015,6 @@
 
     if($booked)
     {
-        echo "HI";
         //Send a notification to the patient
         $query = "INSERT INTO notifications (sender,receiver,message,reason)
         VALUES (?,?,?,'delay')";
@@ -1003,7 +1023,6 @@
         $stmt->execute();
     }
     else{
-        echo "NOOOO";
         $query = "INSERT INTO notifications (sender,receiver,reason)
         VALUES (?,?,'remove')";
         $stmt = $dbc->prepare($query);

@@ -28,9 +28,9 @@
     if (!isset($_GET['date'])) {
 
 
-    $dbc = connectServer('localhost', 'root', '', 1);
-    $db = "mhamad";
-    selectDB($dbc, $db, 1);
+    $dbc = connectServer('localhost', 'root', '', 0);
+    $db = "clinic_db";
+    selectDB($dbc, $db, 0);
 
     date_default_timezone_set('Asia/Beirut');
     
@@ -214,9 +214,9 @@
         $day = date("l", strtotime($chosen_date));
         $day = strtolower($day);
 
-        $dbc = connectServer('localhost', 'root', '', 1);
-        $db = "mhamad";
-        selectDB($dbc, $db, 1);
+        $dbc = connectServer('localhost', 'root', '', 0);
+        $db = "clinic_db";
+        selectDB($dbc, $db, 0);
 
         $query = "SELECT start_hour, end_hour FROM week_schedule WHERE doctor_id = ? AND day = ? ";
         $stmt = $dbc->prepare($query);

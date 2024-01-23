@@ -17,7 +17,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' || !isset($_GET['start_date']) || !isset
 $_SESSION['doctor_id'] = 1;
 
 $dbc = connectServer("localhost","root","",1);
-selectDB($dbc,"mhamad",1);
+selectDB($dbc,"clinic_db",1);
 
 //Get the appointment date
 $query = "SELECT start_date, end_date,patient_id FROM appointment WHERE id = ?";

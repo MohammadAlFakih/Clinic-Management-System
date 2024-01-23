@@ -5,8 +5,8 @@ if(!isset($_SESSION['role'])){
     header("location:../login.php");
     die();
 }
-$dbc = connectServer('localhost','root','',1);
-selectDB($dbc,'mhamad',1);
+$dbc = connectServer('localhost','root','',0);
+selectDB($dbc,'clinic_db',0);
 
 if($_SERVER['REQUEST_METHOD'] == 'get'){
 //Check if this appointment is for the requesting patient
@@ -93,7 +93,7 @@ if(isset($_POST['save'])){
             else
                 echo "<input type='submit' class='edit' value='Save' name='save'>";
         }
-        //Added by Mhamad
+        //Added by clinic_db
         else if($appointment['status'] == 'delayed'){
             echo '<a href="../includes/cancel_appointment.php?app_id='.$app_id.'&patient_id='.$_SESSION['patient_id'].'" class="cancel remove">Remove</a>';
         }
@@ -185,6 +185,7 @@ if(isset($_POST['save'])){
 
             <div class="info-item bill">
                 <div class="info-label">Bill:</div>';
+            //Bill
             if(!isset($_GET['edit']) && !isset($_POST['show_schedule']))
                 echo '<div class="info-value"><span class="highlight">$'.$appointment['bill'].'</span></div>';
             else if(isset($_POST['show_schedule']))
@@ -193,10 +194,20 @@ if(isset($_POST['save'])){
             else
                 echo '<span class="highlight">$  <input type="number" class="new-bill" name="new_bill" value="'.$appointment['bill'].'">
                     </span>'; 
-            echo '</div>
-            </div>
-            <p class="note">* Please arrive 15 minutes before the appointment.</p>
-        </div>
+            //Payed
+            echo '<div class="info-label">Payed:</div>';
+            if(!isset($_GET['edit']) && !isset($_POST['show_schedule']))
+                echo '<div class="info-value"><span class="highlight">$'.$appointment['payed'].'</span></div>';
+            else if(isset($_POST['show_schedule']))
+                echo '<span class="highlight">$  <input type="number" class="new-bill" name="new_payed" value="'.$_POST['new_payed'].'">
+                </span>'; 
+            else
+                echo '<span class="highlight">$  <input type="number" class="new-bill" name="new_payed" value="'.$appointment['payed'].'">
+                    </span>'; 
+            echo '</div></div>';
+            if($_SESSION['role']=='patient')
+                echo '<p class="note">* Please arrive 15 minutes before the appointment.</p>';
+        echo '</div>
         </div></form>';
     
     
