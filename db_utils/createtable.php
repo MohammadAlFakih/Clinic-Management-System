@@ -10,8 +10,8 @@
 	<?php
 
 	include "DB_Functions.php";
-	$dbc = connectServer('localhost', 'root', '', 1);
-	$databaseName = "mhamad";
+	$dbc = connectServer('localhost', 'root', '', 0);
+	$databaseName = "clinic_db";
 
 	// Check if the database exists
 	$query = "SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = ?";
@@ -32,15 +32,15 @@
 	include "createdb.php";
 
 	//Select DB 
-	selectDB($dbc, "mhamad", 1);
+	selectDB($dbc, "clinic_db", 1);
 
 	//Department
-	$query = 'CREATE TABLE `mhamad`.`department`
+	$query = 'CREATE TABLE `clinic_db`.`department`
 	(`id` INT NOT NULL AUTO_INCREMENT , `city_id` INT NOT NULL , `details` TEXT NULL , `room` INT NULL , PRIMARY KEY (`id`))';
 	executeQuery($dbc, $query);
 
 	//City
-	$query = "CREATE TABLE `mhamad`.`city` (`id` INT NOT NULL AUTO_INCREMENT , `city_name` VARCHAR(50) NOT NULL ,
+	$query = "CREATE TABLE `clinic_db`.`city` (`id` INT NOT NULL AUTO_INCREMENT , `city_name` VARCHAR(50) NOT NULL ,
 	PRIMARY KEY (`id`))";
 	executeQuery($dbc,$query);
 
@@ -50,12 +50,12 @@
 	executeQuery($dbc,$query);
 
 	//Specializations
-	$query="CREATE TABLE `mhamad`.`specialization` (`id` INT NOT NULL AUTO_INCREMENT ,
+	$query="CREATE TABLE `clinic_db`.`specialization` (`id` INT NOT NULL AUTO_INCREMENT ,
 	 `alias` VARCHAR(50) NOT NULL , PRIMARY KEY (`id`))";
 	executeQuery($dbc,$query);
 
 	//Doctor
-	$query = 'CREATE TABLE `mhamad`.`doctor` (`id` INT NOT NULL AUTO_INCREMENT , `department_id` INT NOT NULL ,
+	$query = 'CREATE TABLE `clinic_db`.`doctor` (`id` INT NOT NULL AUTO_INCREMENT , `department_id` INT NOT NULL ,
 	`email` VARCHAR(30) NOT NULL , `password` TEXT NOT NULL , `first_name` VARCHAR(30) NOT NULL ,
 	`last_name` VARCHAR(30) NOT NULL , `age` INT NOT NULL , `gender` CHAR(1) NOT NULL , `phone` VARCHAR(30) NOT NULL ,
 	`specialization_id` INT NOT NULL , `role` VARCHAR(30) NOT NULL DEFAULT "doctor" , PRIMARY KEY (`id`), UNIQUE (`email`))';
@@ -72,7 +72,7 @@
 	executeQuery($dbc,$query);
 
 	//Secretary
-	$query = 'CREATE TABLE `mhamad`.`secretary` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NULL , `email` VARCHAR(30) NOT NULL ,
+	$query = 'CREATE TABLE `clinic_db`.`secretary` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NULL , `email` VARCHAR(30) NOT NULL ,
 	`password` VARCHAR(255) NOT NULL , `first_name` VARCHAR(30) NOT NULL , `last_name` VARCHAR(30) NOT NULL , `age` INT NOT NULL ,
 	`gender` CHAR(1) NOT NULL , `phone` VARCHAR(30) NOT NULL , `role` VARCHAR(30) NOT NULL DEFAULT "secretary", PRIMARY KEY (`id`), UNIQUE (`email`))';
 	executeQuery($dbc, $query);
@@ -83,13 +83,13 @@
 	executeQuery($dbc, $query);
 
 	//Patient
-	$query = 'CREATE TABLE `mhamad`.`patient` (`id` INT NOT NULL AUTO_INCREMENT , `email` VARCHAR(30) NOT NULL , `password` VARCHAR(255) NOT NULL ,
+	$query = 'CREATE TABLE `clinic_db`.`patient` (`id` INT NOT NULL AUTO_INCREMENT , `email` VARCHAR(30) NOT NULL , `password` VARCHAR(255) NOT NULL ,
 	`first_name` VARCHAR(30) NOT NULL , `last_name` VARCHAR(30) NOT NULL , `age` INT NOT NULL , `gender` CHAR(1) NOT NULL ,
 	`phone` VARCHAR(30) NULL , `role` VARCHAR(30) NOT NULL DEFAULT "patient" , PRIMARY KEY (`id`), UNIQUE (`email`))';
 	executeQuery($dbc, $query);
 
 	//Payment
-	$query = 'CREATE TABLE `mhamad`.`payment` (`patient_id` INT NOT NULL , `doctor_id` INT NOT NULL , `balance` INT NOT NULL )';
+	$query = 'CREATE TABLE `clinic_db`.`payment` (`patient_id` INT NOT NULL , `doctor_id` INT NOT NULL , `balance` INT NOT NULL )';
 	executeQuery($dbc, $query);
 
 	//Payment with doctor and patient
@@ -101,7 +101,7 @@
 	executeQuery($dbc, $query);
 
 	//Appointment
-	$query = 'CREATE TABLE `mhamad`. `appointment` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NOT NULL , `patient_id` INT NOT NULL ,
+	$query = 'CREATE TABLE `clinic_db`. `appointment` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NOT NULL , `patient_id` INT NOT NULL ,
 	`department_id` INT NOT NULL , `start_date` DATETIME NOT NULL , `end_date` DATETIME NOT NULL , `bill` FLOAT NOT NULL DEFAULT 0 ,
 	`status` VARCHAR(30) NOT NULL DEFAULT "pending" ,`book_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	 PRIMARY KEY (`id`))';
@@ -119,7 +119,7 @@
 	executeQuery($dbc, $query);
 
 	//Document
-	$query = 'CREATE TABLE `mhamad`.`document` (`id` INT NOT NULL AUTO_INCREMENT , `appointment_id` INT NOT NULL ,
+	$query = 'CREATE TABLE `clinic_db`.`document` (`id` INT NOT NULL AUTO_INCREMENT , `appointment_id` INT NOT NULL ,
 	`details` TEXT NULL ,`prescription` TEXT NULL, PRIMARY KEY (`id`))';
 	executeQuery($dbc, $query);
 
@@ -134,7 +134,7 @@
 	executeQuery($dbc, $query);
 
 	//Black List
-	$query = 'CREATE TABLE `mhamad`.`black_list` (`patient_id` INT NOT NULL ,
+	$query = 'CREATE TABLE `clinic_db`.`black_list` (`patient_id` INT NOT NULL ,
 	`doctor_id` INT NOT NULL , `end_date` DATE NOT NULL )';
 	executeQuery($dbc, $query);
 
@@ -173,7 +173,7 @@
 	executeQuery($dbc, $query);
 
 	//Unavailbale Slots
-	$query="CREATE TABLE `mhamad`.`unavailable_slots` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NOT NULL ,
+	$query="CREATE TABLE `clinic_db`.`unavailable_slots` (`id` INT NOT NULL AUTO_INCREMENT , `doctor_id` INT NOT NULL ,
 	 `start_date` DATETIME NOT NULL , `end_date` DATETIME NOT NULL , `department_id` INT NOT NULL , PRIMARY KEY (`id`))";
 	executeQuery($dbc,$query);
 	
@@ -188,7 +188,7 @@
 	executeQuery($dbc,$query);
 
 	//Notifications
-	$query = "CREATE TABLE `mhamad`.`notifications` (`id` INT NOT NULL AUTO_INCREMENT , `receiver` INT NOT NULL ,
+	$query = "CREATE TABLE `clinic_db`.`notifications` (`id` INT NOT NULL AUTO_INCREMENT , `receiver` INT NOT NULL ,
 	 `sender` INT NOT NULL , `message` TEXT NOT NULL , `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 	 `status` VARCHAR(10) NOT NULL DEFAULT 'unread',`appointment_id` INT NULL ,`reason` VARCHAR(10) NOT NULL
 	 ,PRIMARY KEY (`id`))";

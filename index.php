@@ -23,27 +23,18 @@
             }
             if ($_SESSION['role'] == 'patient') {
             echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/patient/make_appointment2.php">New Appointment</a></div>';
-
-            foreach ($_SESSION as $key => $value) {
-                echo $key . ' : ' . $value . '<br>'; 
-            }
-
             }
             elseif ($_SESSION['role'] == 'doctor' || $_SESSION['role'] == 'secretary') {
                 echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/secretary/choose_patient.php">New Appointment</a></div>';
                 echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/doctor/manage_schedule.php">Manage Weekly Schedule</a></div>';
-
-                foreach ($_SESSION as $key => $value) {
-                    echo $key . ' : ' . $value . '<br>'; 
-                }
             }
             ?>
         </div>
     <?php } 
     if(isset($_SESSION['role']) && $_SESSION['role'] == 'patient'){
-        $dbc = connectServer('localhost', 'root', '', 1);
-        $db = "mhamad";
-        selectDB($dbc, $db, 1);
+        $dbc = connectServer('localhost', 'root', '', 0);
+        $db = "clinic_db";
+        selectDB($dbc, $db, 0);
         $notifications = get_notifications_unreaded($dbc,$_SESSION['user_id']);
         if($notifications && mysqli_num_rows($notifications)>0){
             echo '<script type="text/javascript">move()</script>';

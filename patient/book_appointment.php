@@ -15,9 +15,9 @@
 
     // Get the patient name from patient_id if doc or secretary chose the patient
     if ($_SESSION['role'] == 'doctor' || $_SESSION['role'] == 'secretary') {
-        $dbc = connectServer('localhost', 'root', '', 1);
-        $db = "mhamad";
-        selectDB($dbc, $db, 1);
+        $dbc = connectServer('localhost', 'root', '', 0);
+        $db = "clinic_db";
+        selectDB($dbc, $db, 0);
         $query = " SELECT first_name, last_name FROM patient 
                 WHERE id = ?";
         $stmt = $dbc->prepare($query);
@@ -30,8 +30,8 @@
     }
 
 
-    $dbc = connectServer('localhost', 'root', '', 1);
-    selectDB($dbc,"mhamad",1);
+    $dbc = connectServer('localhost', 'root', '', 0);
+    selectDB($dbc,"clinic_db",1);
 
     $start_date = $_SESSION['date']." ".$_POST['start_hour'];
     $end_date = $_SESSION['date']." ".$_POST['end_hour'];

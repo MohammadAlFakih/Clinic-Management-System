@@ -1,8 +1,8 @@
 <?php
 
 include "DB_Functions.php";
-$dbc = connectServer('localhost', 'root', '', 1);
-selectDB($dbc,'mhamad',1);
+$dbc = connectServer('localhost', 'root', '', 0);
+selectDB($dbc,'clinic_db',0);
 
 $query1 = "ALTER TABLE `patient` ADD `pp` VARCHAR(255) NOT NULL DEFAULT 'default.png' ;";
 

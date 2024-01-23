@@ -66,8 +66,8 @@
         
 <?php
 
-        $dbc = connectServer('localhost','root','',1);
-        selectDB($dbc,'mhamad',1);
+        $dbc = connectServer('localhost','root','',0);
+        selectDB($dbc,'clinic_db',0);
 
         $query = "SELECT appointment.*, patient.first_name, patient.last_name, patient.age, patient.gender,patient.phone FROM appointment
                 JOIN patient ON appointment.patient_id = patient.id

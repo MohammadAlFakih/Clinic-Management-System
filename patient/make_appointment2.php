@@ -1,7 +1,7 @@
 <?php
     include($_SERVER['DOCUMENT_ROOT'] . '/Clinic-Management-System/includes/header.php');
-    $dbc = connectServer('localhost', 'root', '', 1);
-    selectDB($dbc, 'mhamad', 1);
+    $dbc = connectServer('localhost', 'root', '', 0);
+    selectDB($dbc, 'clinic_db', 1);
 
     if (!isset($_SESSION['role']))
         header("location:../login.php");

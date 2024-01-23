@@ -10,8 +10,8 @@
         die();
     }
 
-    $dbc = connectServer('localhost', 'root', '', 1);
-    selectDB($dbc,"mhamad",1);
+    $dbc = connectServer('localhost', 'root', '', 0);
+    selectDB($dbc,"clinic_db",1);
 
     $start_date = $_POST['date']." ".$_POST['start_hour'];
     $end_date = $_POST['date']." ".$_POST['end_hour'];

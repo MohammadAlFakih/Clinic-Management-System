@@ -34,9 +34,9 @@
         echo '<div class="message">' . $_GET['message'] . '</div>';
     }
 
-    $dbc = connectServer('localhost', 'root', '', 1);
-    $db = "mhamad";
-    selectDB($dbc, $db, 1);
+    $dbc = connectServer('localhost', 'root', '', 0);
+    $db = "clinic_db";
+    selectDB($dbc, $db, 0);
 
     // foreach ($_SESSION as $key => $value) {
     //     echo $key . " : " . $value . "<br>" ;

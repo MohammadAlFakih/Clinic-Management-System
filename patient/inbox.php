@@ -6,7 +6,7 @@
     }
 
     $dbc = connectServer('localhost','root','',0);
-    selectDB($dbc,'mhamad',0);
+    selectDB($dbc,'clinic_db',0);
     $notifications = get_notifications($dbc , $_SESSION['patient_id']);
     echo "<div class='container'><div class='message-container'>";
     $empty = false;

@@ -7,7 +7,7 @@ if(!isset($_SESSION['role']) && $_SESSION['role']!='patient'){
 }
 
 $dbc = connectServer('localhost','root','',0);
-selectDB($dbc,'mhamad',0);
+selectDB($dbc,'clinic_db',0);
 
 $query = "DELETE FROM notifications WHERE receiver = ? AND status = 'read'";
 $stmt = $dbc->prepare($query);

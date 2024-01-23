@@ -43,8 +43,8 @@ if ($_SESSION['role'] == 'patient') {
 <?php
     if (isset($_POST["confirm"])) {
 
-        $dbc = connectServer('localhost', 'root', '', 1);
-        selectDB($dbc,"mhamad",1);
+        $dbc = connectServer('localhost', 'root', '', 0);
+        selectDB($dbc,"clinic_db",1);
 
         $query = " DELETE FROM unavailable_slots
                     WHERE doctor_id = ? AND DATE(start_date) = ? ";

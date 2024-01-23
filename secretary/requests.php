@@ -20,7 +20,7 @@
     //No filter
     if($_SERVER['REQUEST_METHOD'] == 'GET'  && !isset($_SESSION['filter_date'])){
         $dbc = connectServer('localhost','root','',0);
-        selectDB($dbc,'mhamad',0);
+        selectDB($dbc,'clinic_db',0);
         $requests = get_requests($dbc,$_SESSION['doctor_id'],NULL);
         echo '<div class="filter-container">
         <div class="date"></div>
@@ -59,7 +59,7 @@
             }
 
             $dbc = connectServer('localhost','root','',0);
-            selectDB($dbc,'mhamad',0);
+            selectDB($dbc,'clinic_db',0);
 
             //<----------------------------->
             echo '<br><br>';

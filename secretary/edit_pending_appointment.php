@@ -25,8 +25,8 @@ if($new_end_date <= $new_start_date){
     die();
 }
 
-$dbc = connectServer('localhost','root','',1);
-selectDB($dbc,'mhamad',1);
+$dbc = connectServer('localhost','root','',0);
+selectDB($dbc,'clinic_db',0);
 
 //Import the schedule on the given date
 $day_of_week = strtolower(date("l",strtotime($new_start_date)));
@@ -87,7 +87,7 @@ $message="";
 if($result && mysqli_num_rows($result)>0){
     $result = $result->fetch_assoc();
     echo $result['id'];
-    $query = "UPDATE appointment SET start_date=?,end_date=?
+    $query = "UPDATE appointment SET start_date=?,end_date=?,status='queued'
                 WHERE id=?";
     $stmt = $dbc->prepare($query);
     $stmt->bind_param("ssi",$new_start_date,$new_end_date,$_POST['app_id']);

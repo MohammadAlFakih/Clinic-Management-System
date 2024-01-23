@@ -10,8 +10,8 @@
     <?php 
         include "classes/patient.php";
         include "includes/header.php";
-        $dbc=connectServer('localhost','root','',1);
-        $db="mhamad";
+        $dbc=connectServer('localhost','root','',0);
+        $db="clinic_db";
         selectDB($dbc,$db,1);
     ?>
     <div class="container">
@@ -101,7 +101,8 @@
                         }
                                    
                         $patient=new Patient($_POST);
-                        $patient->password=password_hash($_POST['password1'],PASSWORD_DEFAULT);
+                        // Hash the entered password using the same algorithm as in the MySQL trigger
+                        $patient->password = hash('sha256', $_POST['password1']);
                         insert_patient($patient,$dbc);
                         header('location:login.php?message=success');
                 }
