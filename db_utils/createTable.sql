@@ -1,20 +1,21 @@
 -- Use Database
 USE clinic_db;
 
+-- Create Table: city
+CREATE TABLE IF NOT EXISTS `city` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `city_name` VARCHAR(50) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
 -- Create Table: department
 CREATE TABLE IF NOT EXISTS `department` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `city_id` INT NOT NULL,
     `details` TEXT NULL,
     `room` INT NULL,
-    PRIMARY KEY (`id`)
-);
-
--- Create Table: city
-CREATE TABLE IF NOT EXISTS `city` (
-    `id` INT NOT NULL AUTO_INCREMENT,
-    `city_name` VARCHAR(50) NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`city_id`) REFERENCES `city`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- Create Table: specialization
@@ -78,15 +79,6 @@ CREATE TABLE IF NOT EXISTS `patient` (
     UNIQUE (`email`)
 );
 
--- Create Table: payment
-CREATE TABLE IF NOT EXISTS `payment` (
-    `patient_id` INT NOT NULL,
-    `doctor_id` INT NOT NULL,
-    `balance` INT NOT NULL,
-    FOREIGN KEY (`doctor_id`) REFERENCES `doctor`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (`patient_id`) REFERENCES `patient`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
 -- Create Table: appointment
 CREATE TABLE IF NOT EXISTS `appointment` (
     `id` INT NOT NULL AUTO_INCREMENT,
@@ -113,16 +105,6 @@ CREATE TABLE IF NOT EXISTS `document` (
     `prescription` TEXT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`appointment_id`) REFERENCES `appointment`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
--- Create Table: black_list
-CREATE TABLE IF NOT EXISTS `black_list` (
-    `patient_id` INT NOT NULL,
-    `doctor_id` INT NOT NULL,
-    `end_date` DATE NOT NULL,
-    PRIMARY KEY (`patient_id`, `doctor_id`),
-    FOREIGN KEY (`patient_id`) REFERENCES `patient`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`doctor_id`) REFERENCES `doctor`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Create Table: week_schedule
