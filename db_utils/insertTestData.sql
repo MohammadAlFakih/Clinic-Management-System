@@ -50,6 +50,7 @@ INSERT INTO secretary (doctor_id,email, password, first_name, last_name, age, ge
 
 INSERT INTO patient (first_name, last_name, email, password, age, gender, role)
 VALUES
+('Mhamad', 'fakih', 'fakih@gmail.com', '123', 25, 'M', 'patient'),
 ('Mohamed', 'Ali', 'mohamed.ali1@example.com', 'password123', 25, 'M', 'patient'),
 ('Fatima', 'Khaled', 'fatima.khaled2@example.com', 'password456', 30, 'F', 'patient'),
 ('Ahmed', 'Hassan', 'ahmed.hassan3@example.com', 'password789', 22, 'M', 'patient'),
@@ -105,6 +106,11 @@ VALUES
 
 INSERT INTO appointment (department_id,doctor_id, patient_id, start_date, end_date)
 VALUES
+    -- Appointment used to show the functionnality of delay appointments
+    (1,1, 11, '2024-01-26 08:30:00', '2024-01-26 09:30:00'),
+    (1,1, 1, '2024-01-26 10:00:00', '2024-01-26 11:00:00'),
+    (1,1, 2, '2024-01-26 12:00:00', '2024-01-26 14:00:00'),
+
     (1,1, 11, '2024-02-15 08:30:00', '2024-02-15 09:30:00'),
     (1,1, 1, '2024-02-15 08:00:00', '2024-02-15 09:00:00'),
     (1,1, 2, '2024-02-15 10:00:00', '2024-02-15 11:00:00'),

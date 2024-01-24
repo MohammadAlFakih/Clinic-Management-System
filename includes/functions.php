@@ -17,11 +17,6 @@
         }
     }
 
-    function hash_password($password){
-        $digest=password_hash($password,PASSWORD_DEFAULT);
-        return $digest;
-    }
-
     function insert_patient($patient,$dbc){
         $query="INSERT INTO patient (first_name,last_name,email,password,gender,age,phone,pp)
          VALUES (?,?,?,?,?,?,?,?);";
