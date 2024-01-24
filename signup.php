@@ -12,7 +12,7 @@
         include "includes/header.php";
         $dbc=connectServer('localhost','root','',0);
         $db="clinic_db";
-        selectDB($dbc,$db,1);
+        selectDB($dbc,$db,0);
     ?>
     <div class="container">
     <form class="user-form" action="signup.php" method="POST" enctype="multipart/form-data">
