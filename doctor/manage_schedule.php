@@ -243,7 +243,7 @@
         $stmt->execute();
         $appointments = $stmt->get_result();
         $stmt->close();
-
+        $full_available = false;
         if ($appointments->num_rows == 0) {
             $full_available = true;
         }

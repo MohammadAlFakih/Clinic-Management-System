@@ -1,5 +1,6 @@
 <?php
     include "../includes/header.php";
+    echo '<link rel="stylesheet" href="../static/css/book_appointment.css">';
     if(!isset($_SESSION['role'])){
         header('location:../login.php');
         die();
@@ -31,7 +32,7 @@
 
 
     $dbc = connectServer('localhost', 'root', '', 0);
-    selectDB($dbc,"clinic_db",1);
+    selectDB($dbc,"clinic_db",0);
 
     $start_date = $_SESSION['date']." ".$_POST['start_hour'];
     $end_date = $_SESSION['date']." ".$_POST['end_hour'];
@@ -83,10 +84,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/book_appointment.css">
-    <title>Document</title>
 <body>
 <div class="big_container">
 <div class="container">

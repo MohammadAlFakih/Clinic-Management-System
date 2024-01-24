@@ -18,7 +18,8 @@
     <title>Header</title>
 </head>
 
-<body>
+<body style="background-image: url('./static/media/backgrnd_clinic.jpeg'); background-size: cover; background-repeat: no-repeat;">
+
     <div class='header'>
     <div class='home_app'><a class='action' href='http://localhost/Clinic-Management-System/index.php'>Home</a></div>
         <?php

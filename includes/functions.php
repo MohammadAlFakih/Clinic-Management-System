@@ -17,11 +17,6 @@
         }
     }
 
-    function hash_password($password){
-        $digest=password_hash($password,PASSWORD_DEFAULT);
-        return $digest;
-    }
-
     function insert_patient($patient,$dbc){
         $query="INSERT INTO patient (first_name,last_name,email,password,gender,age,phone,pp)
          VALUES (?,?,?,?,?,?,?,?);";
@@ -279,6 +274,8 @@
         $start_hour = time_to_float($start_hour);
         $end_hour = time_to_float($end_hour);
         $ratio = $end_hour - $start_hour;
+        if($ratio==0)
+            $ratio=1;
         $bar_width = 96;
         $ratio = $bar_width/$ratio;
         sort($intervals);
@@ -839,6 +836,7 @@
         return [true,""];
     }
 
+    // ----------------------------Delay appointment------------------------------------
     function delay_appointment($start_date,$app_id){
     if(!isset($_SESSION['role'])){
         header('location:../login.php');
@@ -911,7 +909,6 @@
                 $booked_slots[] = $row;
             }
         }
-
         //Get unavailable hour on this day
         $query = "SELECT start_date,end_date
                 FROM unavailable_slots
@@ -960,8 +957,8 @@
         $end_hour = $schedule['end_hour'];
 
         //Date of next day
-        $start_date->modify("+1 day");
-        $new_date = $start_date->format('Y-m-d');
+        $start_date=$day;
+        $new_date = (new DateTime($start_date))->format('Y-m-d');
         //Two pointers
         $last_end = $new_date." ".$start_hour;
         if(count($sorted_busy_slots)>0){
