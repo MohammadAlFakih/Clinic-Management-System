@@ -22,7 +22,7 @@ $user = get_user_info($dbc,$_SESSION['user_id'],$_SESSION['role']);
     <link href="../static/css/profile.css" rel="stylesheet" type="text/css">
 </head>
 
-<body>
+<body style="background-image: url('../static/media/light_blue_bck_img.avif'); background-size: cover; background-repeat: no-repeat;">
 
 <div class="container">
     <div class="profile-container">
@@ -51,28 +51,42 @@ $user = get_user_info($dbc,$_SESSION['user_id'],$_SESSION['role']);
         
         <div class="profile-info">
 
-            <label class="form-label">First Name</label>
-            <input type="text" class="form-control" name="first_name" value="<?php echo $user['first_name']?>">
-
+            <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control" name="first_name" value="<?php echo $user['first_name']?>">
+            </div>
+            
+            <div class="form-group">
             <label class="form-label">Last Name</label>
             <input type="text" class="form-control" name="last_name" value="<?php echo $user['last_name']?>">
+            </div>
 
-            <label class="form-label">Phone Number</label>
-            <input type="text" class="form-control" name="phone" value="<?php echo $user['phone']?>">
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="text" class="form-control" name="phone" value="<?php echo $user['phone']?>">
+            </div>
 
-            <label class="form-label">Age</label>
-            <input type="number" class="form-control" name="age" value="<?php echo $user['age']?>">
+            <div class="form-group">
+                <label class="form-label">Age</label>
+                <input type="number" class="form-control" name="age" value="<?php echo $user['age']?>">
+            </div>
 
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" value="<?php echo $user['email']?>">
-
-            <label class="form-label">Profile Picture</label>
-            <input type="file" class="form-control" name="pp">
-            <input type="text" hidden="hidden" name="old_pp" value="<?=$user['pp']?>" >
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" value="<?php echo $user['email']?>">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Profile Picture</label>
+                <input type="file" class="form-control" name="pp">
+                <input type="text" hidden="hidden" name="old_pp" value="<?=$user['pp']?>" >
+            </div>
         </div>
-
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="profile.php" class="link-secondary">Back</a>
+        
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Update</button>
+            <a href="profile.php" class="link-secondary">Back</a>
+        </div>
 
         </form>
 
@@ -114,6 +128,11 @@ if(isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['ph
     	header("Location:edit_profile.php?error=$em");
 	    exit;
     }
+    else if (email_exists($email, $dbc) && $email != $user['email']) {
+        $em = "Email already exists.";
+    	header("Location:edit_profile.php?error=$em");
+	    exit;
+    }
     else {
         // if image is changed
         if (isset($_FILES['pp']['name']) && !empty($_FILES['pp']['name'])) {
@@ -149,12 +168,15 @@ if(isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['ph
                     }
 
                 // Update the Database if image is changed
-                $sql = "UPDATE patient SET first_name=?, last_name=?, phone=?, age=?, email=?, pp=?
+                $sql = "UPDATE ".$user['role']." SET first_name=?, last_name=?, phone=?, age=?, email=?, pp=?
                         WHERE id=?";
                 $stmt = $dbc->prepare($sql);
                 $stmt->bind_param("sssissi",$first_name,$last_name,$phone,$age,$email,$new_img_name,$_SESSION['user_id']);
                 $stmt->execute();
-                $_SESSION['patient_name'] = $first_name.' '.$last_name;
+                if ($user['role'] == 'patient')
+                    $_SESSION['patient_name'] = $first_name.' '.$last_name;
+                elseif ($user['role'] == 'doctor')
+                    $_SESSION['doctor_name'] = $first_name.' '.$last_name;
                 header("Location:edit_profile.php?success=Your account has been updated successfully");
                 exit;
                 }
@@ -173,12 +195,15 @@ if(isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['ph
         }
         // image is unchanged
         else {
-            $sql = "UPDATE patient SET first_name=?, last_name=?, phone=?, age=?, email=?
+            $sql = "UPDATE ".$user['role']." SET first_name=?, last_name=?, phone=?, age=?, email=?
                         WHERE id=?";
             $stmt = $dbc->prepare($sql);
             $stmt->bind_param("sssisi",$first_name,$last_name,$phone,$age,$email,$_SESSION['user_id']);
             $stmt->execute();
-            $_SESSION['patient_name'] = $first_name.' '.$last_name;
+            if ($user['role'] == 'patient')
+                $_SESSION['patient_name'] = $first_name.' '.$last_name;
+            elseif ($user['role'] == 'doctor')
+                $_SESSION['doctor_name'] = $first_name.' '.$last_name;
             header("Location:edit_profile.php?success=Your account has been updated successfully");
             exit;
         }

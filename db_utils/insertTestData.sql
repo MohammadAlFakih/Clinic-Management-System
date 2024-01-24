@@ -24,29 +24,29 @@ INSERT INTO specialization (alias) VALUES
 ("Neurology"),
 ("Ophthalmology");
 
-INSERT INTO doctor (department_id, email, password, first_name, last_name, age, gender, specialization_id, role) VALUES 
-    (1, "alijaber@gmail.com", "123", "Ali", "Jaber", 20, "M", 1, "doctor"),
-    (2, "b@gmail.com", "123", "Ahmad", "Fakih", 20, "M", 1, "doctor"),
-    (3, "c@gmail.com", "123", "Sandy", "Shiha", 20, "F", 1, "doctor"),
-    (4, "d@gmail.com", "123", "Lamis", "Oghlo", 20, "F", 2, "doctor"),
-    (5, "e@gmail.com", "123", "Asaad", "Chehine", 20, "M", 3, "doctor"),
-    (6, "f@gmail.com", "123", "Fatima", "Hamade", 20, "F", 4, "doctor"),
-    (7, "g@gmail.com", "123", "Lara", "Ayoub", 20, "F", 2, "doctor"),
-    (8, "h@gmail.com", "123", "Ayman", "Mokh", 20, "M", 5, "doctor"),
-    (9, "i@gmail.com", "123", "Ali", "Assi", 20, "M", 6, "doctor"),
-    (10, "j@gmail.com", "123", "Hasan", "Hameyeh", 20, "M", 7, "doctor");
+INSERT INTO doctor (department_id, email, password, first_name, last_name, age, gender, specialization_id, role, phone) VALUES 
+    (1, "alijaber@gmail.com", "123", "Ali", "Jaber", 20, "M", 1, "doctor", "00000000"),
+    (2, "b@gmail.com", "123", "Ahmad", "Fakih", 20, "M", 1, "doctor", "00000000"),
+    (3, "c@gmail.com", "123", "Sandy", "Shiha", 20, "F", 1, "doctor", "00000000"),
+    (4, "d@gmail.com", "123", "Lamis", "Oghlo", 20, "F", 2, "doctor", "00000000"),
+    (5, "e@gmail.com", "123", "Asaad", "Chehine", 20, "M", 3, "doctor", "00000000"),
+    (6, "f@gmail.com", "123", "Fatima", "Hamade", 20, "F", 4, "doctor", "00000000"),
+    (7, "g@gmail.com", "123", "Lara", "Ayoub", 20, "F", 2, "doctor", "00000000"),
+    (8, "h@gmail.com", "123", "Ayman", "Mokh", 20, "M", 5, "doctor", "00000000"),
+    (9, "i@gmail.com", "123", "Ali", "Assi", 20, "M", 6, "doctor", "00000000"),
+    (10, "j@gmail.com", "123", "Hasan", "Hameyeh", 20, "M", 7, "doctor", "00000000");
 
-INSERT INTO secretary (doctor_id,email, password, first_name, last_name, age, gender, role) VALUES 
-    (1, "sa@gmail.com", "123", "Assan", "Fakih", 20, "F", "secretary"),
-    (2, "sb@gmail.com", "123", "Yara", "Ali", 20, "F", "secretary"),
-    (3, "sc@gmail.com", "123", "Chaza", "Mhamud", 20, "F", "secretary"),
-    (4, "sd@gmail.com", "123", "Lamis", "Abdulla", 20, "F", "secretary"),
-    (5, "se@gmail.com", "123", "Mhamad", "Hoteit", 20, "M", "secretary"),
-    (6, "sf@gmail.com", "123", "Yo3rob", "Tala", 20, "M", "secretary"),
-    (7, "sg@gmail.com", "123", "Yassin", "Fakih", 20, "M", "secretary"),
-    (8, "sh@gmail.com", "123", "Ayman", "Shamas", 20, "M", "secretary"),
-    (9, "si@gmail.com", "123", "Ali", "Fawaz", 20, "M", "secretary"),
-    (10, "sj@gmail.com", "123", "Hasan", "Ayoub", 20, "M", "secretary");
+INSERT INTO secretary (doctor_id,email, password, first_name, last_name, age, gender, role, phone) VALUES 
+    (1, "sa@gmail.com", "123", "Assan", "Fakih", 20, "F", "secretary", "11111111"),
+    (2, "sb@gmail.com", "123", "Yara", "Ali", 20, "F", "secretary", "11111111"),
+    (3, "sc@gmail.com", "123", "Chaza", "Mhamud", 20, "F", "secretary", "11111111"),
+    (4, "sd@gmail.com", "123", "Lamis", "Abdulla", 20, "F", "secretary", "11111111"),
+    (5, "se@gmail.com", "123", "Mhamad", "Hoteit", 20, "M", "secretary", "11111111"),
+    (6, "sf@gmail.com", "123", "Yo3rob", "Tala", 20, "M", "secretary", "11111111"),
+    (7, "sg@gmail.com", "123", "Yassin", "Fakih", 20, "M", "secretary", "11111111"),
+    (8, "sh@gmail.com", "123", "Ayman", "Shamas", 20, "M", "secretary", "11111111"),
+    (9, "si@gmail.com", "123", "Ali", "Fawaz", 20, "M", "secretary", "11111111"),
+    (10, "sj@gmail.com", "123", "Hasan", "Ayoub", 20, "M", "secretary", "11111111");
 
 INSERT INTO patient (first_name, last_name, email, password, age, gender, role)
 VALUES

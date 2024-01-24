@@ -39,3 +39,25 @@
 .profile-info p{
     padding: 0.1vw;
 }
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.link-secondary {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background-color: #206210;
+    color: #fff;
+    border: 1px solid #206210;
+    border-radius: 5px;
+    text-decoration: none;
+}

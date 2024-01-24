@@ -74,7 +74,6 @@ body {
 }
 
 .single{
-    background-color: #f4f4f4;
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -83,7 +82,7 @@ body {
 }
 
 .doctor-info {
-    background-color:#f4f4f4 ;
+    background-color:#a9e6df ;
     padding: 2vw;
     
 }

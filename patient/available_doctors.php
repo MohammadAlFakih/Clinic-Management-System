@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../static/css/available_doctors.css">
 </head>
 
-<body>
+<body style="background-image: url('../static/media/light_blue_bck_img.avif'); background-size: cover; background-repeat: no-repeat;">
 
 </body>
 

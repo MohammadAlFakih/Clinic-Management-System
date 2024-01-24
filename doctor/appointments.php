@@ -22,6 +22,7 @@
         echo '<div class="message">' . $_GET['message'] . '</div>';
     }
 ?>
+<body style="background-image: url('../static/media/light_blue_bck_img.avif'); background-size: cover; background-repeat: no-repeat;">
     <div class="container">
         <h1>Appointments List</h1>
         <form method="post" action="appointments.php">
@@ -34,9 +35,9 @@
 
         <label for="filter_option">Filter By Date:</label>
         <!-- <select name="filter_option" id="filter_option">
-            <option value="all" <?php echo ($_POST['filter_option'] === 'all') ? 'selected' : ''; ?>>All Days</option>
-            <option value="between_2_days" <?php echo ($_POST['filter_option'] === 'between_2_days') ? 'selected' : ''; ?>>Between 2 Days</option>
-            <option value="single_day" <?php echo ($_POST['filter_option'] === 'single_day') ? 'selected' : ''; ?>>Single Day</option>
+            <option value="all" <?php //echo ($_POST['filter_option'] === 'all') ? 'selected' : ''; ?>>All Days</option>
+            <option value="between_2_days" <?php //echo ($_POST['filter_option'] === 'between_2_days') ? 'selected' : ''; ?>>Between 2 Days</option>
+            <option value="single_day" <?php //echo ($_POST['filter_option'] === 'single_day') ? 'selected' : ''; ?>>Single Day</option>
         </select> -->
 
         <select name="filter_option" id="filter_option">
@@ -47,15 +48,15 @@
 
         <div id="dateFilter" style="display: none;">
             <label for="start_date">Start Date:</label>
-            <input type="date" name="start_date" id="start_date" value="<?php echo isset($_POST['start_date']) ? $_POST['start_date'] : ''; ?>">
+            <input type="date" required name="start_date" id="start_date" value="<?php echo isset($_POST['start_date']) ? $_POST['start_date'] : ''; ?>">
 
             <label for="end_date">End Date:</label>
-            <input type="date" name="end_date" id="end_date" value="<?php echo isset($_POST['end_date']) ? $_POST['end_date'] : ''; ?>">
+            <input type="date" required name="end_date" id="end_date" value="<?php echo isset($_POST['end_date']) ? $_POST['end_date'] : ''; ?>">
         </div>
 
         <div id="singleDayFilter" style="display: none;">
             <label for="single_date">Specific Date:</label>
-            <input type="date" name="single_date" id="single_date" value="<?php echo isset($_POST['single_date']) ? $_POST['single_date'] : ''; ?>">
+            <input type="date" required name="single_date" id="single_date" value="<?php echo isset($_POST['single_date']) ? $_POST['single_date'] : ''; ?>">
         </div>
 
         <button type="submit" class="filter-icon">
@@ -196,6 +197,7 @@
         </table></div>';
         }
 ?>
+</body>
 <?php 
 mysqli_close($dbc);
 ?>

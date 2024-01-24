@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="../static/css/appointment.css" type="text/css">
+<body style="background-image: url('../static/media/light_blue_bck_img.avif'); background-size: cover; background-repeat: no-repeat;">
 <?php
 include '../includes/header.php';
 if(!isset($_SESSION['role'])){
@@ -238,3 +239,4 @@ else if(isset($_POST['show_schedule'])){
 }
 mysqli_close($dbc);
 ?>
+</body>

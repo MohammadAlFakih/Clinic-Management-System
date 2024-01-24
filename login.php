@@ -14,7 +14,10 @@ $db = "clinic_db";
 selectDB($dbc, $db, 0);
 ?>
 
-<body>
+<body style="background-image: url('./static/media/backgrnd_clinic.jpeg'); background-size: cover; background-repeat: no-repeat;">
+    <div style= "text-align: center; padding: 50px; color: #180b7f; font-family: 'Roboto', sans-serif;">
+        <h1 style = "font-size: 3em;">Clinic Management System</h1>
+    </div>
     <div class="container">
         <form action="login.php" method="POST" class="login-form">
             <label class="form-label success"><?php
