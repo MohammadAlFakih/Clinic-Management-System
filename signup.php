@@ -102,7 +102,7 @@
                                    
                         $patient=new Patient($_POST);
                         // Hash the entered password using the same algorithm as in the MySQL trigger
-                        $patient->password = hash('sha256', $_POST['password1']);
+                        $patient->password = $_POST['password1'];
                         insert_patient($patient,$dbc);
                         header('location:login.php?message=success');
                 }
