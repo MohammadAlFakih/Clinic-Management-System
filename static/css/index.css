@@ -31,3 +31,19 @@
     text-align: center;
     color: #45a049;
 }
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.title-container {
+    text-align: center;
+    padding: 50px;
+    color: #180b7f;
+    font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+    font-size: 3em;
+}

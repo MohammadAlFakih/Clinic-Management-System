@@ -10,6 +10,7 @@
     }
 ?>
 <link href="../static/css/requests.css" rel="stylesheet" type="text/css">
+<body style="background-image: url('../static/media/light_blue_bck_img.avif'); background-size: cover; background-repeat: no-repeat;">
 <?php
     
     if(isset($_GET['message'])){
@@ -218,6 +219,7 @@
     }
     
 ?>
+</body>
 
 <?php
     mysqli_close($dbc);

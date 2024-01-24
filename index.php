@@ -8,10 +8,13 @@
     <title>Home</title>
 </head>
 
-<body>
+<body style="background-image: url('./static/media/backgrnd_clinic.jpeg'); background-size: cover; background-repeat: no-repeat;">
     <?php
     include "includes/header.php"; 
     ?>
+    <div class="title-container">
+        <h1>Clinic Management System</h1>
+    </div>
     <?php
     //<------MAKE APPOINTMENT------>
     if (isset($_SESSION['role'])) {
@@ -26,7 +29,7 @@
             }
             elseif ($_SESSION['role'] == 'doctor' || $_SESSION['role'] == 'secretary') {
                 echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/secretary/choose_patient.php">New Appointment</a></div>';
-                echo '<div><a class="make_app" href="http://localhost/Clinic-Management-System/doctor/manage_schedule.php">Manage Weekly Schedule</a></div>';
+                echo '<div style="margin-top: 30px; "><a class="make_app" href="http://localhost/Clinic-Management-System/doctor/manage_schedule.php">Manage Weekly Schedule</a></div>';
             }
             ?>
         </div>

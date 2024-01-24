@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../static/css/appointments.css">
     <title>Appointments</title>
 </head>
+<body style="background-image: url('../static/media/light_blue_bck_img.avif'); background-size: cover; background-repeat: no-repeat;">
 <?php
     include '../includes/header.php';
     if(!isset($_SESSION['role'])){
@@ -74,4 +75,5 @@
         mysqli_close($dbc);
     }
 ?>
+</body>
 </html>

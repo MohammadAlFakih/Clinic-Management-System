@@ -4,6 +4,11 @@
         header('location:../index.php');
         die();
     }
+?>
+    <body style="background-image: url('../static/media/backgrnd_clinic.jpeg'); background-size: cover; background-repeat: no-repeat;">
+
+<?php
+
 
     $dbc = connectServer('localhost','root','',0);
     selectDB($dbc,'clinic_db',0);
@@ -53,6 +58,7 @@
     echo "</div>
     </div>";
     ?>
+    </body>
 
 <link rel="stylesheet" href="static/css/inbox.css" type="text/css">
 <link rel="stylesheet" href="../static/css/inbox.css" type="text/css">

@@ -19,7 +19,7 @@ if ($_SESSION['role'] == 'patient') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="../static/css/confirm_unavailable_hours.css"> -->
+    <link rel="stylesheet" href="../static/css/clear_unavailable_hours.css">
     <title>Clear Unavailable Hours</title>
 <body>
 <div class="big_container">
@@ -29,15 +29,14 @@ if ($_SESSION['role'] == 'patient') {
     <div class="col">
         <div class="date">For The Day: <?php echo $_SESSION['date'];?></div>
     </div>
-    </div>
     <div class="form_buttons">
-    <a href="<?php echo $_SESSION['previous_url']?>" class="form_button back">Back</a>
-    <form method="post" action="clear_unavailable_hours.php">
-    <input type="submit" name='confirm' value="Confirm" class="form_button">
-    </form>
+        <a href="<?php echo $_SESSION['previous_url']?>" class="form_button back">Back</a>
+        <form method="post" action="clear_unavailable_hours.php">
+        <input type="submit" name='confirm' value="Confirm" class="form_button">
+        </form>
     </div>
-    </div>
-    </div>
+</div>
+</div>
 </body>
 </html>
 <?php

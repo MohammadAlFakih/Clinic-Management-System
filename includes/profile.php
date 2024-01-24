@@ -7,6 +7,11 @@ if(!isset($_SESSION['role'])){
     header('location:../login.php');
     die();
 }
+?>
+
+<body style="background-image: url('../static/media/light_blue_bck_img.avif'); background-size: cover; background-repeat: no-repeat;">
+<!-- <body style="  background-color: #7fc9e6;" > -->
+<?php
 
 $dbc = connectServer('localhost', 'root', '', 0);
 selectDB($dbc,'clinic_db',0);
@@ -47,6 +52,7 @@ $user = get_user_info($dbc,$_SESSION['user_id'],$_SESSION['role']);
     </a>
     </div>
 </div>
+</body>
 <?php
 mysqli_close($dbc);
 ?>

@@ -53,6 +53,9 @@
 
     $stmt->close();
 
+    // Sort the $weekScheduleArray using the custom comparison function
+    usort($weekScheduleArray, 'compareDays');
+
     $weekDays = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
 
     $currentIndex = array_search(($day_name), $weekDays);
@@ -377,10 +380,6 @@
         
         </div>
         ';
-        }
-
-        foreach ($_SESSION as $key => $value) {
-            echo $key . " : " . $value . "<br>";
         }
     }
 
