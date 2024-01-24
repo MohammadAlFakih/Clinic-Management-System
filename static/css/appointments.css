@@ -93,3 +93,39 @@ tr:hover {
     font-size: 16px;
     cursor: pointer;
 }
+
+/* Apply styles to labels */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+/* Apply styles to select elements */
+select, input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+/* Apply styles to the date filter divs */
+#dateFilter, #singleDayFilter {
+    margin-top: 12px;
+}
+
+/* Apply additional styles for the specific date input */
+#singleDayFilter label {
+    display: block;
+}
+
+/* Apply styles to the container div */
+#dateFilter, #singleDayFilter, #filter_option {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Apply styles for hiding and showing the date filters based on the selected option */
+#dateFilter[style="display: none;"], #singleDayFilter[style="display: none;"] {
+    display: none;
+}

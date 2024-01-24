@@ -22,7 +22,7 @@ $user = get_user_info($dbc,$_SESSION['user_id'],$_SESSION['role']);
     <link href="../static/css/profile.css" rel="stylesheet" type="text/css">
 </head>
 
-<body>
+<body style="background-image: url('../static/media/light_blue_bck_img.avif'); background-size: cover; background-repeat: no-repeat;">
 
 <div class="container">
     <div class="profile-container">
@@ -51,28 +51,42 @@ $user = get_user_info($dbc,$_SESSION['user_id'],$_SESSION['role']);
         
         <div class="profile-info">
 
-            <label class="form-label">First Name</label>
-            <input type="text" class="form-control" name="first_name" value="<?php echo $user['first_name']?>">
-
+            <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control" name="first_name" value="<?php echo $user['first_name']?>">
+            </div>
+            
+            <div class="form-group">
             <label class="form-label">Last Name</label>
             <input type="text" class="form-control" name="last_name" value="<?php echo $user['last_name']?>">
+            </div>
 
-            <label class="form-label">Phone Number</label>
-            <input type="text" class="form-control" name="phone" value="<?php echo $user['phone']?>">
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="text" class="form-control" name="phone" value="<?php echo $user['phone']?>">
+            </div>
 
-            <label class="form-label">Age</label>
-            <input type="number" class="form-control" name="age" value="<?php echo $user['age']?>">
+            <div class="form-group">
+                <label class="form-label">Age</label>
+                <input type="number" class="form-control" name="age" value="<?php echo $user['age']?>">
+            </div>
 
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" value="<?php echo $user['email']?>">
-
-            <label class="form-label">Profile Picture</label>
-            <input type="file" class="form-control" name="pp">
-            <input type="text" hidden="hidden" name="old_pp" value="<?=$user['pp']?>" >
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" value="<?php echo $user['email']?>">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Profile Picture</label>
+                <input type="file" class="form-control" name="pp">
+                <input type="text" hidden="hidden" name="old_pp" value="<?=$user['pp']?>" >
+            </div>
         </div>
-
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="profile.php" class="link-secondary">Back</a>
+        
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Update</button>
+            <a href="profile.php" class="link-secondary">Back</a>
+        </div>
 
         </form>
 

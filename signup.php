@@ -6,7 +6,7 @@
     <title>User Information Form</title>
     <link rel="stylesheet" href="static/css/signup.css">
 </head>
-<body>
+<body style="background-image: url('./static/media/backgrnd_clinic.jpeg'); background-size: cover; background-repeat: no-repeat;">
     <?php 
         include "classes/patient.php";
         include "includes/header.php";
@@ -14,6 +14,11 @@
         $db="clinic_db";
         selectDB($dbc,$db,0);
     ?>
+
+    <div class="title-container" style= "text-align: center; padding: 50px; color: #180b7f; font-family: 'Roboto', sans-serif;">
+        <h1 style = "font-size: 3em;">Clinic Management System</h1>
+    </div>
+
     <div class="container">
     <form class="user-form" action="signup.php" method="POST" enctype="multipart/form-data">
 
@@ -53,9 +58,9 @@
             <?php 
             if(isset($_POST['submit']))
                 {
-                    if(!empty($_POST['first_name']) || !empty($_POST['last_name']) 
-                    || !empty($_POST['email']) || !empty($_POST['phone']) || !empty($_POST['age']) 
-                    || !empty($_POST['password1']) || !empty($_POST['password2']) || !isset($_POST['gender'])){
+                    if(empty($_POST['first_name']) || empty($_POST['last_name']) 
+                    || empty($_POST['email']) || empty($_POST['phone']) || empty($_POST['age']) 
+                    || empty($_POST['password1']) || empty($_POST['password2']) || !isset($_POST['gender'])){
                         echo "Please enter all your information";
                         die();
                     }
@@ -69,6 +74,7 @@
                             die();
                         }
                         else{
+                            // if profile pic is provided
                             if (isset($_FILES['pp']['name']) && !empty($_FILES['pp']['name'])) {
          
                                 $img_name = $_FILES['pp']['name'];
@@ -94,6 +100,7 @@
                                     }
                                 }
                             }
+                            // profile pic is not provided
                             else {
                                 $_POST['profile_pic'] = 'default.png';
                             }
@@ -101,8 +108,7 @@
                         }
                                    
                         $patient=new Patient($_POST);
-                        // Hash the entered password using the same algorithm as in the MySQL trigger
-                        $patient->password = hash('sha256', $_POST['password1']);
+                        $patient->password = $_POST['password1'];
                         insert_patient($patient,$dbc);
                         header('location:login.php?message=success');
                 }

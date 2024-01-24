@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="../static/css/login.css">
     <title>Make_appointment</title>
 </head>
-<body>
+<body style="background-image: url('../static/media/light_blue_bck_img.avif'); background-size: cover; background-repeat: no-repeat;">
     <div class="container">
         <form action="make_appointment2.php" method="POST" class="login-form">
             <label for="cities" class="form-label">Select City:</label>

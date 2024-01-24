@@ -1032,4 +1032,16 @@
     $stmt->close();
     mysqli_close($dbc);
     }
+
+
+    function compareDays($a, $b) {
+        $daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    
+        $aIndex = array_search($a['day'], $daysOrder);
+        $bIndex = array_search($b['day'], $daysOrder);
+    
+        return $aIndex - $bIndex;
+    }
+
+
 ?>
