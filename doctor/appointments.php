@@ -25,7 +25,7 @@
 <body style="background-image: url('../static/media/light_blue_bck_img.avif'); background-size: cover; background-repeat: no-repeat;">
     <div class="container">
         <h1>Appointments List</h1>
-        <form method="post" action="appointments.php">
+        <form method="post" action="appointments.php" id="filter-form">
         <label for="status">Status:</label>
         <select name="status" id="status">
             <option value="any" <?php echo ($_SERVER['REQUEST_METHOD']=='POST' && $_POST['status'] === 'any') ? 'selected' : ''; ?>>Any</option>
@@ -35,7 +35,7 @@
 
         <label for="filter_option">Filter By Date:</label>
         <!-- <select name="filter_option" id="filter_option">
-            <option value="all" <?php //echo ($_POST['filter_option'] === 'all') ? 'selected' : ''; ?>>All Days</option>
+            <option value="all" <?php // echo ($_POST['filter_option'] === 'all') ? 'selected' : ''; ?>>All Days</option>
             <option value="between_2_days" <?php //echo ($_POST['filter_option'] === 'between_2_days') ? 'selected' : ''; ?>>Between 2 Days</option>
             <option value="single_day" <?php //echo ($_POST['filter_option'] === 'single_day') ? 'selected' : ''; ?>>Single Day</option>
         </select> -->
@@ -48,15 +48,15 @@
 
         <div id="dateFilter" style="display: none;">
             <label for="start_date">Start Date:</label>
-            <input type="date" required name="start_date" id="start_date" value="<?php echo isset($_POST['start_date']) ? $_POST['start_date'] : ''; ?>">
+            <input type="date" name="start_date" id="start_date" value="<?php echo isset($_POST['start_date']) ? $_POST['start_date'] : ''; ?>">
 
             <label for="end_date">End Date:</label>
-            <input type="date" required name="end_date" id="end_date" value="<?php echo isset($_POST['end_date']) ? $_POST['end_date'] : ''; ?>">
+            <input type="date" name="end_date" id="end_date" value="<?php echo isset($_POST['end_date']) ? $_POST['end_date'] : ''; ?>">
         </div>
 
         <div id="singleDayFilter" style="display: none;">
             <label for="single_date">Specific Date:</label>
-            <input type="date" required name="single_date" id="single_date" value="<?php echo isset($_POST['single_date']) ? $_POST['single_date'] : ''; ?>">
+            <input type="date" name="single_date" id="single_date" value="<?php echo isset($_POST['single_date']) ? $_POST['single_date'] : ''; ?>">
         </div>
 
         <button type="submit" class="filter-icon">
@@ -203,22 +203,49 @@ mysqli_close($dbc);
 ?>
 
 <script>
-    document.getElementById('filter_option').addEventListener('change', function() {
-        var dateFilter = document.getElementById('dateFilter');
-        var singleDayFilter = document.getElementById('singleDayFilter');
 
-        if (this.value === 'between_2_days') {
-            dateFilter.style.display = 'block';
-            singleDayFilter.style.display = 'none';
-        } else if (this.value === 'single_day') {
-            dateFilter.style.display = 'none';
-            singleDayFilter.style.display = 'block';
-            singleDayInput.value = ''; // Clear the input value
-        } else {
-            dateFilter.style.display = 'none';
-            singleDayFilter.style.display = 'none';
-        }
-    });
+document.getElementById('filter_option').addEventListener('change', function() {
+    var dateFilter = document.getElementById('dateFilter');
+    var singleDayFilter = document.getElementById('singleDayFilter');
+    var startDateInput = document.getElementById('start_date');
+    var endDateInput = document.getElementById('end_date');
+    var singleDateInput = document.getElementById('single_date');
+
+    if (this.value === 'between_2_days') {
+        dateFilter.style.display = 'block';
+        singleDayFilter.style.display = 'none';
+        startDateInput.removeAttribute('disabled');
+        endDateInput.removeAttribute('disabled');
+        singleDateInput.removeAttribute('required');
+        startDateInput.setAttribute('required', 'true');
+        endDateInput.setAttribute('required', 'true');
+    } else if (this.value === 'single_day') {
+        dateFilter.style.display = 'none';
+        singleDayFilter.style.display = 'block';
+        startDateInput.setAttribute('disabled', 'true');
+        endDateInput.setAttribute('disabled', 'true');
+        singleDateInput.setAttribute('required', 'true');
+        startDateInput.removeAttribute('required');
+        endDateInput.removeAttribute('required');
+        startDateInput.value = ''; // Clear the input value
+        endDateInput.value = ''; // Clear the input value
+    } else {
+        dateFilter.style.display = 'none';
+        singleDayFilter.style.display = 'none';
+        startDateInput.setAttribute('disabled', 'true');
+        endDateInput.setAttribute('disabled', 'true');
+        singleDateInput.removeAttribute('required');
+        startDateInput.removeAttribute('required');
+        endDateInput.removeAttribute('required');
+    }
+});
+
+// Add this function to handle form submission
+document.getElementById('filter-form').addEventListener('submit', function(event) {
+    // You can add additional validation logic here if needed
+    console.log('Form submitted!');
+});
+
 </script>
 
 </html>
