@@ -21,7 +21,7 @@ if($_SESSION['role'] != 'patient' && !isset($_GET['patient_id'])){
     die();
 }
 
-$query = "SELECT status FROM appointment 
+$query = "SELECT status,start_date,end_date,id FROM appointment 
             WHERE id =? AND patient_id = ?";
     $stmt = $dbc->prepare($query);
     $stmt->bind_param("ii",$_GET['app_id'],$_GET['patient_id']);
@@ -54,12 +54,43 @@ $query = "SELECT status FROM appointment
         $stmt->execute();
     }
 
+//No need to check overlapped appointment
+if($row['status'] == 'pending' || $row['status'] == 'queued'){
+    $query = 'DELETE FROM appointment WHERE id = ? ';
+    $stmt = $dbc->prepare($query);
+    $stmt->bind_param("i",$_GET['app_id']);
+    $stmt->execute();
+}
+else{
+    //Get all the appointments that overlap with the new unavailabile slot
+    $sql = " SELECT *
+    FROM appointment
+    WHERE doctor_id = ? AND status='queued' AND
+            (( ? >= start_date AND ? < end_date) OR ( ? > start_date AND ? <= end_date)
+            OR ( ? < start_date AND ? > end_date) OR (? >= start_date AND ? <= end_date))";
+    $stmt = $dbc->prepare($sql);
+    $stmt->bind_param("issssssss", $_SESSION['doctor_id'], $row['start_date'],$row['start_date'],$row['end_date'],
+    $row['end_date'],$row['start_date'],$row['end_date'],$row['start_date'],$row['end_date']);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-$query = 'DELETE FROM appointment WHERE id = ? ';
-$stmt = $dbc->prepare($query);
-$stmt->bind_param("i",$_GET['app_id']);
-$stmt->execute();
+    //Remove the appointment
+    $query = 'DELETE FROM appointment WHERE id = ? ';
+    $stmt = $dbc->prepare($query);
+    $stmt->bind_param("i",$_GET['app_id']);
+    $stmt->execute();
 
+    //Iterate through this appointment and check if there is no other accepted appointment overlap with them
+    //then update them to pending again
+    while($app = $result->fetch_assoc()){
+        if(!overlap_with_accepted($dbc,$app['start_date'],$app['end_date'],$_SESSION['doctor_id'])){
+            $query = 'UPDATE appointment set status="pending" WHERE id = ? ';
+            $stmt = $dbc->prepare($query);
+            $stmt->bind_param("i",$app['id']);
+            $stmt->execute();
+        }
+    }
+}
 $stmt->close();
 mysqli_close($dbc);
 if($_SESSION['role'] == 'patient')

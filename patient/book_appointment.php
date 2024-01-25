@@ -55,7 +55,7 @@
     $stmt->execute();
     $result = $stmt->get_result();
     if($result && mysqli_num_rows($result)>0){
-        header("Location:".$_SESSION['last_url']."&message=".$_SESSION['doctor_id']."Please make sure that your choosen date doesn't overlap with unvailable hours.");
+        header("Location:".$_SESSION['last_url']."&message=Please make sure that your choosen date doesn't overlap with unvailable hours.");
         $stmt->close();
         $dbc->close();
         die();

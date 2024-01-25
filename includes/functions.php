@@ -624,6 +624,7 @@
         $maximum = 0;
         $maximum_index = 0;
         for($i=0;$i<$length;$i++){
+            //echo $dp['hours'][$i],"<br/>";
             if($dp['hours'][$i] > $maximum){
                 $maximum = $dp['hours'][$i];
                 $maximum_index = $i;
@@ -1040,5 +1041,18 @@
         return $aIndex - $bIndex;
     }
 
-
+    function overlap_with_accepted($dbc,$start_date,$end_date,$doctor_id){
+        $query = "SELECT id FROM appointment WHERE doctor_id = ? 
+        AND status!='pending' AND status !='queued' 
+        AND (( ? >= start_date AND ? < end_date) OR ( ? > start_date AND ? <= end_date)
+        OR ( ? < start_date AND ? > end_date) OR (?>=start_date AND ? <= end_date))";
+        $stmt = $dbc->prepare($query);
+        $stmt->bind_param("issssssss",$doctor_id,$start_date,$start_date,$end_date,
+        $end_date,$start_date,$end_date,$start_date,$end_date);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if(mysqli_num_rows($result) > 0)
+            return true;
+        return false;
+    }
 ?>
